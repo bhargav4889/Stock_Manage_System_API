@@ -1,0 +1,51 @@
+﻿using Stock_Manage_System_API.DAL;
+using Stock_Manage_System_API.Models;
+
+namespace Stock_Manage_System_API.BAL
+{
+    public class Payment_BALBase
+    {
+        private readonly Payment_DALBase payment_DALBase = new Payment_DALBase();
+
+        #region Method : Get Payment Info By Stock Id And Customer Id 
+
+        public Payment_Model Get_Payment_Info_By_Stock_Customer_PK(int Stock_ID , int Customer_ID)
+        {
+            Payment_Model payment_Model = payment_DALBase.Get_Payment_Info_By_Stock_Customer_PK(Stock_ID, Customer_ID);
+
+            return payment_Model;
+        }
+
+        public List<Pending_Customers_Payments> Pending_Customers_Payments()
+        {
+            List<Pending_Customers_Payments> pending_Customers_Payments = payment_DALBase.Pending_Customers_Payments();
+
+            return pending_Customers_Payments;
+        }
+
+        #endregion
+
+        #region Method : Create Payment 
+
+        public bool Create_Payment(Payment_Model payment_Model)
+        {
+            try
+            {
+                if (payment_DALBase.Create_Payment(payment_Model))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        #endregion
+    }
+}
