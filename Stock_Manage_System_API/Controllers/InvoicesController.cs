@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Stock_Manage_System_API.BAL;
+using Stock_Manage_System_API.DAL;
 using Stock_Manage_System_API.Models;
+using static Stock_Manage_System_API.Models.InvoicesModel;
 
 
 namespace Stock_Manage_System_API.Controllers
@@ -388,8 +390,8 @@ namespace Stock_Manage_System_API.Controllers
         #endregion
 
 
-    
 
+      
 
 
 

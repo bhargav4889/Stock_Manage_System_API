@@ -1,8 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using iTextSharp.text.pdf;
+using iTextSharp.text;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Practices.EnterpriseLibrary.Data.Sql;
 using Stock_Manage_System_API.Models;
 using System.Data;
 using System.Data.Common;
+using static Stock_Manage_System_API.Models.InvoicesModel;
+using System.Text;
+using System.Drawing;
 
 namespace Stock_Manage_System_API.DAL
 {
@@ -946,6 +951,8 @@ namespace Stock_Manage_System_API.DAL
 
         #endregion
 
+
+      
 
     }
 }

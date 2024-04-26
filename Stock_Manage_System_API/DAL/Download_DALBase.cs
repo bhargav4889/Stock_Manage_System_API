@@ -6,6 +6,7 @@ using Microsoft.Practices.EnterpriseLibrary.Data.Sql;
 using Stock_Manage_System_API.Models;
 using System.Data;
 using System.Data.Common;
+using System.Drawing;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Xml.Linq;
@@ -326,7 +327,7 @@ namespace Stock_Manage_System_API.DAL
 
         #endregion
 
-        
+
 
         #region Method : Download PDf All Invoices Statements
 
@@ -1138,6 +1139,431 @@ namespace Stock_Manage_System_API.DAL
                 }
             }
 
+        }
+
+        #endregion
+
+        #region Method : Download Purchase Invoice 
+
+        public byte[] Purchase_InvoiceCreate_PDf(Purchase_Invoice_Model invoiceModel)
+        {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                // Create the document
+                using (Document document = new Document(iTextSharp.text.PageSize.A4, 0, 0, 0, 0))
+                {
+                    // Create PdfWriter instance
+                    using (PdfWriter pdfWriter = PdfWriter.GetInstance(document, memoryStream))
+                    {
+                        // Open the document
+                        document.Open();
+
+                        // Get PdfContentByte
+                        PdfContentByte contentByte = pdfWriter.DirectContent;
+
+
+
+                        BaseFont defaultfont = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.EMBEDDED);
+                        iTextSharp.text.Font dfont = new iTextSharp.text.Font(defaultfont, 18);
+
+                        BaseFont boldfont = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.WINANSI, BaseFont.EMBEDDED);
+                        iTextSharp.text.Font bfont = new iTextSharp.text.Font(boldfont, 18);
+
+
+                        BaseFont inrfont = BaseFont.CreateFont("D:\\Font\\ITF Rupee.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED, true);
+                        iTextSharp.text.Font ifont = new iTextSharp.text.Font(inrfont, 18);
+
+
+                        BaseFont gujaratifont = BaseFont.CreateFont("D:\\Font\\NotoSansGujarati-Bold.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED, true);
+                        iTextSharp.text.Font font = new iTextSharp.text.Font(gujaratifont, 18);
+                        font.Color = new BaseColor(Color.Red);
+
+
+
+
+                        contentByte.BeginText();
+
+                        contentByte.SetFontAndSize(gujaratifont, 14);
+                        contentByte.SetTextMatrix(250, 820); // X, Y position
+                        contentByte.ShowText("|| ગણેશાય નમઃ ||"); //header
+
+                        contentByte.SetFontAndSize(boldfont, 13);
+                        contentByte.SetTextMatrix(460, 810); // X, Y position
+                        contentByte.ShowText("Mo: +91 98254 22091");
+
+                        contentByte.SetFontAndSize(boldfont, 13);
+                        contentByte.SetTextMatrix(460, 790); // X, Y position
+                        contentByte.ShowText("Mo: +91 94277 23092");
+
+                        iTextSharp.text.Image image = iTextSharp.text.Image.GetInstance("C:\\Users\\bharg\\Desktop\\Icons\\Logo-Size_M.png");
+
+                        iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("C:\\Users\\bharg\\Desktop\\Icons\\Backimg.png");
+
+
+                        image.ScaleToFit(60, 60); // Adjust width and height
+
+                        image.SetAbsolutePosition(275, 765); // Position Of Image
+
+                        document.Add(image); // Add the image to the PDF
+
+
+                        backimage.ScaleToFit(300, 300); // Adjust width and height 
+
+                        backimage.SetAbsolutePosition(145, 230); // Position Of Image
+
+
+
+                        document.Add(backimage); // Add the image to the PDF
+
+
+
+
+                        contentByte.SetFontAndSize(boldfont, 20);
+                        contentByte.SetTextMatrix(155, 725); // X, Y position
+                        contentByte.ShowText("Shree Ganesh Agro Industries"); // name
+
+                        contentByte.SetFontAndSize(boldfont, 15);
+                        contentByte.SetTextMatrix(165, 690); // X, Y position
+                        contentByte.ShowText("Address:- GIDC Plot No.36,Porbandar Road,"); // address
+
+                        contentByte.SetFontAndSize(boldfont, 15);
+                        contentByte.SetTextMatrix(260, 670); // X, Y position
+                        contentByte.ShowText("Upleta(Dist.Rajkot)360-490."); // address of city
+
+                        contentByte.SetFontAndSize(boldfont, 15);
+                        contentByte.SetTextMatrix(275, 640); // X, Y position
+                        contentByte.ShowText("Invoice"); // invoice
+
+
+                        DateTime? invoiceDate = invoiceModel.PurchaseInvoiceDate;
+                        DateTime? onlyDate = invoiceDate?.Date;
+
+                        string? formattedDate = onlyDate?.ToString("dd-MM-yyyy");
+
+                        contentByte.SetFontAndSize(boldfont, 15);
+                        contentByte.SetTextMatrix(450, 600); // X, Y position
+                        contentByte.ShowText("Date: " + formattedDate); // date
+
+
+                        contentByte.SetFontAndSize(boldfont, 15);
+                        contentByte.SetTextMatrix(25, 565); // X, Y position
+                        contentByte.ShowText("Farmer Name: -"); // farmer
+
+
+                        contentByte.SetFontAndSize(boldfont, 15);
+                        contentByte.SetTextMatrix(150, 568); // X, Y position
+                        contentByte.ShowText(invoiceModel.CustomerName); // farmer name
+
+
+                        // -- Table Content -- //
+
+                        contentByte.SetFontAndSize(boldfont, 15);
+                        contentByte.SetTextMatrix(25, 515); // X, Y position
+                        contentByte.ShowText("No.");  // No.
+
+
+
+                        contentByte.SetFontAndSize(boldfont, 15);
+                        contentByte.SetTextMatrix(65, 515); // X, Y position
+                        contentByte.ShowText("Product Name"); // product name
+
+
+
+                        contentByte.SetFontAndSize(boldfont, 15);
+                        contentByte.SetTextMatrix(190, 515); // X, Y position
+                        contentByte.ShowText("Bags"); // bags 
+
+
+                        contentByte.SetFontAndSize(boldfont, 15);
+                        contentByte.SetTextMatrix(245, 525); // X, Y position
+                        contentByte.ShowText("Bags"); // pbags +
+
+                        //+//
+
+                        contentByte.SetFontAndSize(boldfont, 15);
+                        contentByte.SetTextMatrix(245, 505); // X, Y position
+                        contentByte.ShowText("Per Kg"); // per kg
+
+
+                        contentByte.SetFontAndSize(boldfont, 15);
+                        contentByte.SetTextMatrix(310, 515); // X, Y position
+                        contentByte.ShowText("Weight"); // bags 
+
+                        contentByte.SetFontAndSize(boldfont, 15);
+                        contentByte.SetTextMatrix(385, 525); // X, Y position
+                        contentByte.ShowText("Product"); // product +
+
+                        //+//
+
+                        contentByte.SetFontAndSize(boldfont, 15);
+                        contentByte.SetTextMatrix(385, 508); // X, Y position
+                        contentByte.ShowText("Price(  )"); // pr price
+
+                        //+//
+                        contentByte.SetFontAndSize(inrfont, 15);
+                        contentByte.SetTextMatrix(427, 506); // X, Y position
+                        contentByte.ShowText("K"); // ₹ symbol added
+
+                        contentByte.SetFontAndSize(boldfont, 15);
+                        contentByte.SetTextMatrix(470, 515); // X, Y position
+                        contentByte.ShowText("Total Price(  )"); // total price 
+
+                        //+//
+                        contentByte.SetFontAndSize(inrfont, 15);
+                        contentByte.SetTextMatrix(552, 515); // X, Y position
+                        contentByte.ShowText("K"); // ₹ symbol added
+
+
+                        // ---- Details Invoice ---= //
+
+
+                        contentByte.SetFontAndSize(boldfont, 13);
+                        contentByte.SetTextMatrix(27, 475); // X, Y position
+                        contentByte.ShowText("1."); // No.of items +
+
+                        contentByte.SetFontAndSize(gujaratifont, 14);
+                        contentByte.SetTextMatrix(90, 475); // X, Y position
+                        contentByte.ShowText(Convert.ToString(invoiceModel.ProductName)); //  Product Type
+
+                        contentByte.SetFontAndSize(boldfont, 13);
+                        contentByte.SetTextMatrix(200, 475); // X, Y position
+
+
+                        contentByte.ShowText(!string.IsNullOrWhiteSpace(Convert.ToString(invoiceModel.Bags)) ? Convert.ToString(invoiceModel.Bags) : "--");
+
+
+
+
+
+
+                        contentByte.SetFontAndSize(boldfont, 13);
+                        contentByte.SetTextMatrix(260, 475); // X, Y position
+                        contentByte.ShowText(!string.IsNullOrWhiteSpace(Convert.ToString(invoiceModel.BagPerKg)) ? Convert.ToString(invoiceModel.BagPerKg) : "--");
+
+
+
+                        contentByte.SetFontAndSize(boldfont, 13);
+                        contentByte.SetTextMatrix(316, 475); // X, Y position
+                        contentByte.ShowText(invoiceModel.TotalWeight.ToString()); // weight
+
+
+                        contentByte.SetFontAndSize(boldfont, 13);
+                        contentByte.SetTextMatrix(400, 475); // X, Y position
+                        contentByte.ShowText(invoiceModel.ProductPrice.ToString()); // product price
+
+                        contentByte.SetFontAndSize(boldfont, 13);
+                        contentByte.SetTextMatrix(490, 475); // X, Y position
+                        contentByte.ShowText(invoiceModel.TotalPrice.ToString()); // total price
+
+
+                        // ------xxxxxxxxxxx------ //
+
+
+                        //  -- footer table content -- //
+
+
+
+                        contentByte.SetFontAndSize(boldfont, 15);
+                        contentByte.SetTextMatrix(490, 105); // X, Y position
+                        contentByte.ShowText(invoiceModel.TotalPrice.ToString()); // final total
+
+
+                        contentByte.SetFontAndSize(boldfont, 15);
+                        contentByte.SetTextMatrix(355, 105); // X, Y position
+                        contentByte.ShowText("Final Total(  )"); // final total title
+
+
+                        contentByte.SetFontAndSize(inrfont, 15);
+                        contentByte.SetTextMatrix(435, 105); // X, Y position
+                        contentByte.ShowText("K"); // ₹ symbol added
+
+
+
+                        // --- main footwer -- //
+
+
+                        contentByte.SetFontAndSize(boldfont, 14);
+                        contentByte.SetTextMatrix(490, 60); // X, Y position
+                        contentByte.ShowText("(Signature)."); // sign.
+
+
+                        contentByte.SetFontAndSize(boldfont, 14);
+                        contentByte.SetTextMatrix(445, 40); // X, Y position
+                        contentByte.ShowText("Bhavesh S. Kachhela"); // sign name
+
+                        contentByte.SetFontAndSize(boldfont, 14);
+                        contentByte.SetTextMatrix(225, 15); // X, Y position
+                        contentByte.ShowText("Thanks For Selling Us!."); // thanks you label 
+
+
+
+
+
+                        contentByte.EndText();  // ---- Text End ---- //
+
+                        // ---- Design Format Of Invoice ---- //
+
+                        //-- Name Above line --//
+                        contentByte.MoveTo(0, 750); // Starting point (x, y) x--> starting line start  
+                        contentByte.LineTo(600, 750); // Ending point (x, y) x--> straight line 
+                        contentByte.Stroke();
+
+                        //-- Name Below line --//
+                        contentByte.MoveTo(0, 710); // Starting point (x, y) x--> starting line start  
+                        contentByte.LineTo(600, 710); // Ending point (x, y) x--> straight line 
+                        contentByte.Stroke();
+
+                        //-- Invoice Above line --//
+                        contentByte.MoveTo(0, 660); // Starting point (x, y) x--> starting line start  
+                        contentByte.LineTo(600, 660); // Ending point (x, y) x--> straight line 
+                        contentByte.Stroke();
+
+
+                        //-- Invoice Below line --//
+                        contentByte.MoveTo(0, 630); // Starting point (x, y) x--> starting line start  
+                        contentByte.LineTo(600, 630); // Ending point (x, y) x--> straight line 
+                        contentByte.Stroke();
+
+                        //-- Farmer Name Right line --//
+                        contentByte.MoveTo(145, 562); // Starting point (x, y) x--> starting line start  
+                        contentByte.LineTo(450, 562); // Ending point (x, y) x--> straight line 
+                        contentByte.Stroke();
+
+
+                        // -- Table Design -- //
+
+
+                        // ------ //
+
+                        contentByte.MoveTo(20, 540); // Starting point (x, y) x--> starting line start  
+                        contentByte.LineTo(575, 540); // Ending point (x, y) x--> straight line 
+                        contentByte.Stroke();
+
+                        /*    *//*
+                             * |
+                             * | |||| 1
+                             * |
+                             * |
+                             *//**/
+
+                        contentByte.MoveTo(575, 95); // Starting point (x, y) x--> starting line start  
+                        contentByte.LineTo(575, 540); // Ending point (x, y) x--> straight line 
+                        contentByte.Stroke();
+                        /*
+                                                *//*
+                                                * |
+                                                * ||||| 2
+                                                * |
+                                                * |
+                                                *//**/
+
+                        contentByte.MoveTo(20, 125); // Starting point (x, y) x--> starting line start  
+                        contentByte.LineTo(20, 540); // Ending point (x, y) x--> straight line 
+                        contentByte.Stroke();
+
+
+                        // ------ // - 2 
+
+                        contentByte.MoveTo(20, 500); // Starting point (x, y) x--> starting line start  
+                        contentByte.LineTo(575, 500); // Ending point (x, y) x--> straight line 
+                        contentByte.Stroke();
+
+
+                        /*         *//*
+                                 * |
+                                 * ||||| 3
+                                 * |
+                                 * |
+                                 *//**/
+
+                        contentByte.MoveTo(55, 125); // Starting point (x, y) x--> starting line start  
+                        contentByte.LineTo(55, 540); // Ending point (x, y) x--> straight line 
+                        contentByte.Stroke();
+
+                        /*  *//*
+                           * |
+                           * ||||| 4
+                           * |
+                           * |
+                           *//**/
+
+                        contentByte.MoveTo(180, 125); // Starting point (x, y) x--> starting line start  
+                        contentByte.LineTo(180, 540); // Ending point (x, y) x--> straight line 
+                        contentByte.Stroke();
+
+                        /**//*
+                         * |
+                         * ||||| 5
+                         * |
+                         * |
+                         *//**/
+
+                        contentByte.MoveTo(240, 125); // Starting point (x, y) x--> starting line start  
+                        contentByte.LineTo(240, 540); // Ending point (x, y) x--> straight line 
+                        contentByte.Stroke();
+
+
+                        /*  *//*
+                           * |
+                           * ||||| 6
+                           * |
+                           * |
+                           *//**/
+
+                        contentByte.MoveTo(300, 125); // Starting point (x, y) x--> starting line start  
+                        contentByte.LineTo(300, 540); // Ending point (x, y) x--> straight line 
+                        contentByte.Stroke();
+
+                        /*  *//*
+                          * |
+                          * ||||| 7
+                          * |
+                          * |
+                          *//**/
+
+                        contentByte.MoveTo(375, 125); // Starting point (x, y) x--> starting line start  
+                        contentByte.LineTo(375, 540); // Ending point (x, y) x--> straight line 
+                        contentByte.Stroke();
+
+                        /**//*
+                      * |
+                      * ||||| 8
+                      * |
+                      * |
+                      *//**/
+
+                        contentByte.MoveTo(460, 95); // Starting point (x, y) x--> starting line start  
+                        contentByte.LineTo(460, 540); // Ending point (x, y) x--> straight line 
+                        contentByte.Stroke();
+
+
+                        // ------ // - 3
+
+                        contentByte.MoveTo(20, 125); // Starting point (x, y) x--> starting line start  
+                        contentByte.LineTo(575, 125); // Ending point (x, y) x--> straight line 
+                        contentByte.Stroke();
+
+
+                        // ------ // - 4
+
+                        contentByte.MoveTo(460, 95); // Starting point (x, y) x--> starting line start  
+                        contentByte.LineTo(575, 95); // Ending point (x, y) x--> straight line 
+                        contentByte.Stroke();
+
+
+                        // Close the document
+                        document.Close();
+                    }
+                }
+
+
+
+                return memoryStream.ToArray();
+
+
+            }
         }
 
         #endregion

@@ -1,6 +1,7 @@
 ﻿using Stock_Manage_System_API.DAL;
 using Stock_Manage_System_API.Models;
 using System.Data;
+using static Stock_Manage_System_API.Models.InvoicesModel;
 
 namespace Stock_Manage_System_API.BAL
 {
@@ -236,6 +237,10 @@ namespace Stock_Manage_System_API.BAL
 
 
         #endregion
+
+
+       
+
     }
 
 }
