@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure;
+using Microsoft.AspNetCore.Mvc;
 using Stock_Manage_System_API.BAL; // Business Logic Layer
 using Stock_Manage_System_API.Models; // Data Models
 
@@ -110,7 +111,7 @@ namespace Stock_Manage_System_API.Controllers
         // Update purchased stock
         [HttpPut]
         public IActionResult Update_Purchase_Stock(Purchase_Stock_With_Customer_Model stock)
-        {
+            {
             // Update operation
             bool is_Success = _stock_BAL.PURCHASE_STOCK_UPDATE(stock);
 
@@ -165,9 +166,36 @@ namespace Stock_Manage_System_API.Controllers
         }
 
 
+        [HttpGet("{Stock_ID}&{Customer_ID}")]
+
+        public IActionResult Fetch_Stock_And_Customer_Details(int Stock_ID, int Customer_ID)
+        {
+            Purchase_Stock_With_Customer_Model purchase_Stock_With_Customer_Model = _stock_BAL.Fetch_Stock_And_Customer_Details(Stock_ID, Customer_ID);
+
+            // Response container
+            Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();
+
+            // Check stock existence
+            if (purchase_Stock_With_Customer_Model != null && purchase_Stock_With_Customer_Model.Purchase_Stock.PurchaseStockId != 0 && purchase_Stock_With_Customer_Model.Customers_Model.CustomerId != 0)
+            {
+                response.Add("status", true);
+                response.Add("message", "Data Found!.");
+                response.Add("data", purchase_Stock_With_Customer_Model);
+                return Ok(response);
+            }
+            else
+            {
+                response.Add("status", false);
+                response.Add("message", "Data Not Found!.");
+                response.Add("data", "No Data");
+                return NotFound(response);
+            }
+
+        }
+
         #endregion
 
 
-      
+
     }
 }

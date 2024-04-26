@@ -55,6 +55,13 @@ namespace Stock_Manage_System_API.BAL
             }
         }
 
+        public Purchase_Stock_With_Customer_Model Fetch_Stock_And_Customer_Details(int Stock_ID , int Customer_ID)
+        {
+            Purchase_Stock_With_Customer_Model purchase_Stock_With_Customer_Model = _stockDalBase.Fetch_Stock_And_Customer_Details(Stock_ID,Customer_ID);
+
+            return purchase_Stock_With_Customer_Model;
+        }
+
         #endregion
 
 

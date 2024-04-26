@@ -10,9 +10,6 @@ namespace Stock_Manage_System_API.BAL
     {
         private readonly Customers_DALBase Customers_DAL = new Customers_DALBase();
 
-
-
-
         public bool CREATE_CUSTOMER(Customer_Model customers)
         {
             try

@@ -176,17 +176,13 @@ namespace Stock_Manage_System_API.DAL
         [HttpPost]
         public bool CREATE_CUSTOMER(Customer_Model customers)
         {
-
+            int generatedCustomerId = 0;
 
             DbCommand dbCommand = Command_Name("API_CUSTOMER_INSERT");
 
-
             sqlDatabase.AddInParameter(dbCommand, "@CUSTOMER_NAME", SqlDbType.NVarChar, customers.CustomerName);
-
             sqlDatabase.AddInParameter(dbCommand, "@CUSTOMER_TYPE", SqlDbType.NVarChar, customers.CustomerType);
-
             sqlDatabase.AddInParameter(dbCommand, "@CUSTOMER_ADDRESS", SqlDbType.NVarChar, customers.CustomerAddress);
-
             sqlDatabase.AddInParameter(dbCommand, "@CUSTOMER_CONTACT", SqlDbType.NVarChar, customers.CustomerContact);
 
             var cidParameter = new System.Data.SqlClient.SqlParameter("@CUSTOMER_ID", SqlDbType.Int)
@@ -195,17 +191,18 @@ namespace Stock_Manage_System_API.DAL
             };
             dbCommand.Parameters.Add(cidParameter);
 
+            // Execute the command
             if (Convert.ToBoolean(sqlDatabase.ExecuteNonQuery(dbCommand)))
             {
+                // Retrieve the generated CID
+                generatedCustomerId = Convert.ToInt32(cidParameter.Value);
+                customers.CustomerId = generatedCustomerId; // Set the generated ID in the customer model
                 return true;
             }
             else
             {
                 return false;
             }
-
-
-
         }
 
 

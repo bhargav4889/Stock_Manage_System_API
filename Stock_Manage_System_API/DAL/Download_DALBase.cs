@@ -358,7 +358,7 @@ namespace Stock_Manage_System_API.DAL
                     document.Add(new Chunk("\n"));
 
                     // Image
-                    iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("C:\\Users\\bharg\\OneDrive\\Desktop\\Icons\\Backimg.png");
+                    iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("C:\\Users\\bharg\\Desktop\\Icons\\Backimg.png");
                     backimage.ScaleToFit(500, 500);
                     backimage.SetAbsolutePosition(900, 400);
                     document.Add(backimage);
@@ -816,7 +816,7 @@ namespace Stock_Manage_System_API.DAL
 
 
 
-                    iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("C:\\Users\\bharg\\OneDrive\\Desktop\\Icons\\Backimg.png");
+                    iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("C:\\Users\\bharg\\Desktop\\Icons\\Backimg.png");
 
 
 

@@ -21,7 +21,7 @@ namespace Stock_Manage_System_API.Controllers
 
         public IActionResult Customers_List()
         {
-           
+
 
             List<Customer_Model> customers = customers_BALBase.SHOW_ALL_CUSTOMERS();
 
@@ -62,7 +62,7 @@ namespace Stock_Manage_System_API.Controllers
 
         public IActionResult Account_Details(int Customer_ID)
         {
-          
+
 
             CustomerDetails_With_Purchased_Stock_Model customerDetails_With_Purchased_Stock = customers_BALBase.Account_Details(Customer_ID);
 
@@ -110,7 +110,7 @@ namespace Stock_Manage_System_API.Controllers
         {
             Customers_BALBase customers_BALBase = new Customers_BALBase();
 
-            bool IsSuccess = customers_BALBase.CREATE_CUSTOMER(customers);
+                bool IsSuccess = customers_BALBase.CREATE_CUSTOMER(customers);
 
             Dictionary<string, dynamic> res = new Dictionary<string, dynamic>();
 
@@ -119,6 +119,7 @@ namespace Stock_Manage_System_API.Controllers
 
                 res.Add("status", true);
                 res.Add("message", "Data Insert Successfully!");
+                res.Add("data", customers);
                 return Ok(res);
             }
             else
@@ -238,7 +239,7 @@ namespace Stock_Manage_System_API.Controllers
 
         public IActionResult CUSTOMER_EXIST_IN_SYSTEM(string Customer_Name)
         {
-           
+
             List<Customer_Model> List_Of_Exist_Customers = customers_BALBase.CUSTOMER_EXIST_IN_SYSTEM(Customer_Name);
 
 

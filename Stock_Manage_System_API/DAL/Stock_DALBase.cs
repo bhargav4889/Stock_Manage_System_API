@@ -303,6 +303,64 @@ namespace Stock_Manage_System_API.DAL
         #endregion
 
 
+        #region Method : Fetch Stock And Customer Information By Those IDs
+
+
+        public Purchase_Stock_With_Customer_Model Fetch_Stock_And_Customer_Details(int Stock_ID, int Customer_ID)
+        {
+            try
+            {
+                Purchase_Stock_With_Customer_Model purchase_Stock_With_Customer_Model = new Purchase_Stock_With_Customer_Model();
+
+                DbCommand dbCommand = Command_Name("API_FETCH_PURCHASE_STOCK_AND_CUSTOMER_DETAILS_BY_STOCK_AND_CUSTOMER_ID");
+
+                sqlDatabase.AddInParameter(dbCommand, "@STOCK_ID", SqlDbType.Int, Stock_ID);
+                sqlDatabase.AddInParameter(dbCommand, "@CUSTOMER_ID", SqlDbType.Int, Customer_ID);
+
+                using (IDataReader dataReader = sqlDatabase.ExecuteReader(dbCommand))
+                {
+                    if (dataReader.Read())
+                    {
+                        purchase_Stock_With_Customer_Model.Purchase_Stock = new Insert_And_Update_Purchase_Stock(); // Assuming PurchaseStock is the correct class name
+                        purchase_Stock_With_Customer_Model.Customers_Model = new Customer_Model(); // Assuming CustomerModel is the correct class name
+
+                        purchase_Stock_With_Customer_Model.Purchase_Stock.PurchaseStockId = Convert.ToInt32(dataReader["STOCK_ID"]);
+                        purchase_Stock_With_Customer_Model.Purchase_Stock.PurchaseStockDate = Convert.ToDateTime(dataReader["PUR_STOCK_DATE"]);
+                        purchase_Stock_With_Customer_Model.Customers_Model.CustomerId = Convert.ToInt32(dataReader["CUSTOMER_ID"]);
+                        purchase_Stock_With_Customer_Model.Customers_Model.CustomerName = dataReader["CUSTOMER_NAME"].ToString();
+                        purchase_Stock_With_Customer_Model.Customers_Model.CustomerType = dataReader["CUSTOMER_TYPE"].ToString();
+                        purchase_Stock_With_Customer_Model.Customers_Model.CustomerContact = dataReader["CUSTOMER_CONTACT"].ToString();
+                        purchase_Stock_With_Customer_Model.Customers_Model.CustomerAddress = dataReader["CUSTOMER_ADDRESS"].ToString();
+                        purchase_Stock_With_Customer_Model.Purchase_Stock.ProductId = Convert.ToInt32(dataReader["PRODUCT_ID"]);
+                        purchase_Stock_With_Customer_Model.Purchase_Stock.ProductGradeId = Convert.ToInt32(dataReader["PRODUCT_GRADE_ID"]);
+                        purchase_Stock_With_Customer_Model.Purchase_Stock.PurchaseStockLocation = dataReader["LOCATION"].ToString();
+                        purchase_Stock_With_Customer_Model.Purchase_Stock.Bags = Convert.ToDecimal(dataReader["BAGS"]);
+                        purchase_Stock_With_Customer_Model.Purchase_Stock.BagPerKg = Convert.ToDecimal(dataReader["BAG_PER_KG"]);
+                        purchase_Stock_With_Customer_Model.Purchase_Stock.TotalWeight = Convert.ToDecimal(dataReader["TOTAL_WEIGHT"]);
+                        purchase_Stock_With_Customer_Model.Purchase_Stock.ProductPrice = Convert.ToDecimal(dataReader["PRODUCT_PRICE"]);
+                        purchase_Stock_With_Customer_Model.Purchase_Stock.TotalPrice = Convert.ToDecimal(dataReader["TOTAL_PRICE"]);
+                        purchase_Stock_With_Customer_Model.Purchase_Stock.VehicleId = Convert.ToInt32(dataReader["VEHICLE_ID"]);
+                        purchase_Stock_With_Customer_Model.Purchase_Stock.VehicleNo = dataReader["VEHICLE_NO"].ToString();
+                        purchase_Stock_With_Customer_Model.Purchase_Stock.DriverName = dataReader["DRIVER_NAME"].ToString();
+                        purchase_Stock_With_Customer_Model.Purchase_Stock.TolatName = dataReader["TOLAT_NAME"].ToString();
+                        purchase_Stock_With_Customer_Model.Purchase_Stock.PaymentStatus = dataReader["PAYMENT_STATUS"].ToString();
+                    }
+                }
+
+                return purchase_Stock_With_Customer_Model;
+            }
+            catch (Exception ex)
+            {
+                // Optionally, log the error or handle it as needed
+                return null;
+            }
+        }
+
+
+
+
+        #endregion
+
         #region Method : Purchase Stock Details Update  
 
 
@@ -320,7 +378,7 @@ namespace Stock_Manage_System_API.DAL
 
                 DateTime? onlyDate = invoiceDate?.Date;
 
-                sqlDatabase.AddInParameter(dbCommand, "@STOCK_ID", SqlDbType.Date, purchase_Stock_With_Customer_Model.Purchase_Stock.PurchaseStockId);
+                sqlDatabase.AddInParameter(dbCommand, "@STOCK_ID", SqlDbType.Int, purchase_Stock_With_Customer_Model.Purchase_Stock.PurchaseStockId);
                 sqlDatabase.AddInParameter(dbCommand, "@PUR_STOCK_DATE", SqlDbType.Date, onlyDate);
                 sqlDatabase.AddInParameter(dbCommand, "@CUSTOMER_ID", SqlDbType.Int, purchase_Stock_With_Customer_Model.Customers_Model.CustomerId);
                 sqlDatabase.AddInParameter(dbCommand, "@PRODUCT_ID", SqlDbType.Int, purchase_Stock_With_Customer_Model.Purchase_Stock.ProductId);
@@ -335,7 +393,7 @@ namespace Stock_Manage_System_API.DAL
                 sqlDatabase.AddInParameter(dbCommand, "@VEHICLE_NO", SqlDbType.VarChar, purchase_Stock_With_Customer_Model.Purchase_Stock.VehicleNo);
                 sqlDatabase.AddInParameter(dbCommand, "@DRIVER_NAME", SqlDbType.NVarChar, purchase_Stock_With_Customer_Model.Purchase_Stock.DriverName);
                 sqlDatabase.AddInParameter(dbCommand, "@TOLAT_NAME", SqlDbType.NVarChar, purchase_Stock_With_Customer_Model.Purchase_Stock.TolatName);
-                sqlDatabase.AddInParameter(dbCommand, "@PAYMENT_STATUS", SqlDbType.VarChar, purchase_Stock_With_Customer_Model.Purchase_Stock.PaymentStatus);
+                
 
                 if (Convert.ToBoolean(sqlDatabase.ExecuteNonQuery(dbCommand)))
                 {
