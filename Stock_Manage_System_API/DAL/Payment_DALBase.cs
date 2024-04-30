@@ -167,6 +167,99 @@ namespace Stock_Manage_System_API.DAL
             }
         }
 
+        public List<Remain_Payment_Model> Remain_Customers_Payments()
+        {
+            List<Remain_Payment_Model> _Customers_Payment_List = new List<Remain_Payment_Model>();
+
+
+
+            DbCommand dbCommand = Command_Name("API_DISPLAY_ALL_REMAIN_PAYMENTS_CUSTOMER_LIST");
+
+            using (IDataReader reader = sqlDatabase.ExecuteReader(dbCommand))
+            {
+                while (reader.Read())
+                {
+                    Remain_Payment_Model remain_Payment_Model = new Remain_Payment_Model();
+                    remain_Payment_Model.Payment_Id = Convert.ToInt32(reader[0].ToString());
+                    remain_Payment_Model.Stock_Id = Convert.ToInt32(reader[1].ToString());
+                    remain_Payment_Model.Payment_Date = Convert.ToDateTime(reader[2].ToString());
+                    remain_Payment_Model.Customer_Id = Convert.ToInt32(reader[3].ToString());
+                    remain_Payment_Model.Customer_Name = reader[4].ToString();
+                    remain_Payment_Model.Product_Id = Convert.ToInt32(reader[5].ToString());
+                    remain_Payment_Model.Product_Name = reader[6].ToString();
+                    remain_Payment_Model.Total_Amount = Convert.ToDecimal(reader[7].ToString());
+                    remain_Payment_Model.Paid_Amount = Convert.ToDecimal(reader[8].ToString());
+                    remain_Payment_Model.First_Payment_Method = (reader[9].ToString());
+                    remain_Payment_Model.Remain_Payment_Status = reader[10].ToString();
+
+                    _Customers_Payment_List.Add(remain_Payment_Model);
+
+
+                }
+
+                return _Customers_Payment_List;
+            }
+        }
+
+
+        public List<Show_Payment_Info> Paid_Customers_Payments()
+        {
+            List<Show_Payment_Info> paymentInfoList = new List<Show_Payment_Info>();
+            DbCommand dbCommand = Command_Name("API_DISPLAY_ALL_PAID_PAYMENTS_CUSTOMER_LIST");
+
+            using (IDataReader reader = sqlDatabase.ExecuteReader(dbCommand))
+            {
+                while (reader.Read())
+                {
+                    Show_Payment_Info paymentInfo = new Show_Payment_Info
+                    {
+                        PaymentID = reader.GetInt32(reader.GetOrdinal("PAYMENT_ID")),
+                        PaymentDate = reader.GetDateTime(reader.GetOrdinal("PAYMENT_DATE")),
+                        CustomerID = reader.GetInt32(reader.GetOrdinal("CUSTOMER_ID")),
+                        CustomerName = reader.GetString(reader.GetOrdinal("CUSTOMER_NAME")),
+                        ProductID = reader.GetInt32(reader.GetOrdinal("PRODUCT_ID")),
+                        ProductName = reader.GetString(reader.GetOrdinal("PRODUCT_NAME_IN_GUJARATI")),
+                        StockID = reader.GetInt32(reader.GetOrdinal("PUR_STOCK_ID")),
+                        TotalPrice = reader.GetDecimal(reader.GetOrdinal("TOTAL_PRICE")),
+                        AmountPaid = reader.GetDecimal(reader.GetOrdinal("AMOUNT_PAID")),
+                        PaymentMethod = reader.GetString(reader.GetOrdinal("PAYMENT_METHOD")),
+                        BankID = reader.GetInt32(reader.GetOrdinal("BANK_ID")),
+                        BankName = reader.GetString(reader.GetOrdinal("BANK_NAME")),
+                        BankIcon = reader.GetString(reader.GetOrdinal("BANK_ICON")),
+                        BankAcNo = reader.GetString(reader.GetOrdinal("BANK_AC_NO")),
+                        CheqNo = reader.GetString(reader.GetOrdinal("CHEQ_NO")),
+                        RtgsNo = reader.GetString(reader.GetOrdinal("RTGS_NO")),
+                        Payment_Status = reader.GetString(reader.GetOrdinal("PAYMENT_STATUS"))
+                    };
+
+                    int remainPaymentIdOrdinal = reader.GetOrdinal("REMAIN_PAYMENT_ID");
+                    if (!reader.IsDBNull(remainPaymentIdOrdinal))
+                    {
+                        paymentInfo.RemainPaymentID = reader.GetInt32(remainPaymentIdOrdinal);
+                        int remainPaymentDateOrdinal = reader.GetOrdinal("REMAIN_PAYMENT_DATE");
+
+                        if (!reader.IsDBNull(remainPaymentDateOrdinal))
+                        {
+                            paymentInfo.RemainPaymentDate = reader.GetDateTime(remainPaymentDateOrdinal);
+                        }
+
+                        paymentInfo.RemainPaymentAmount = reader.GetDecimal(reader.GetOrdinal("REMAIN_PAYMENT_AMOUNT"));
+                        paymentInfo.RemainPaymentMethod = reader.GetString(reader.GetOrdinal("REMAIN_PAYMENT_METHOD"));
+                        paymentInfo.RemainBankID = reader.GetInt32(reader.GetOrdinal("REMAIN_BANK_ID"));
+                        paymentInfo.RemainBankName = reader.GetString(reader.GetOrdinal("REMAIN_BANK_NAME"));
+                        paymentInfo.RemainBankIcon = reader.GetString(reader.GetOrdinal("REMAIN_BANK_ICON"));
+                        paymentInfo.RemainBankAcNo = reader.GetString(reader.GetOrdinal("REMAIN_BANK_AC_NO"));
+                        paymentInfo.RemainCheqNo = reader.GetString(reader.GetOrdinal("REMAIN_CHEQ_NO"));
+                        paymentInfo.RemainRtgsNo = reader.GetString(reader.GetOrdinal("REMAIN_RTGS_NO"));
+                    }
+
+                    paymentInfoList.Add(paymentInfo);
+                }
+            }
+
+            return paymentInfoList;
+        }
+
 
         #endregion
 

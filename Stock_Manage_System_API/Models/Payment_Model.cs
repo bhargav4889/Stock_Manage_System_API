@@ -162,7 +162,9 @@ namespace Stock_Manage_System_API.Models
         public string RemainCheqNo { get; set; }
         public string RemainRtgsNo { get; set; }
 
-        
+        public string Payment_Status { get; set; }
+
+
     }
 
 

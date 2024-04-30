@@ -32,43 +32,46 @@ namespace Stock_Manage_System_API.DAL
                 while (reader.Read())
                 {
                     string itemName = reader["ItemName"].ToString();
+                    int count = Convert.ToInt32(reader["ActualCount"]);
+                    decimal totalPrice = reader["TotalPrice"] != DBNull.Value ? Convert.ToDecimal(reader["TotalPrice"]) : 0;
 
                     switch (itemName)
                     {
                         case "PURCHASE_INVOICE":
-                            allCountsModel.TotalPurchaseInvoice = Convert.ToInt32(reader["ActualCount"]);
-                            allCountsModel.AmountOfPurchaseInvoice = Convert.ToDecimal(reader["TotalPrice"]);
+                            allCountsModel.TotalPurchaseInvoice = count;
+                            allCountsModel.AmountOfPurchaseInvoice = totalPrice;
                             break;
                         case "SALE_INVOICE":
-                            allCountsModel.TotalSalesInvoice = Convert.ToInt32(reader["ActualCount"]);
-                            allCountsModel.AmountOfSalesInvoice = Convert.ToDecimal(reader["TotalPrice"]);
+                            allCountsModel.TotalSalesInvoice = count;
+                            allCountsModel.AmountOfSalesInvoice = totalPrice;
                             break;
                         case "CUSTOMERS":
-                            allCountsModel.TotalCustomers = Convert.ToInt32(reader["ActualCount"]);
+                            allCountsModel.TotalCustomers = count;
                             break;
-                        case "PAID PAYMENTS":
-                            allCountsModel.TotalPayments = Convert.ToInt32(reader["ActualCount"]);
-                            allCountsModel.AmountOfPaidPayments = Convert.ToDecimal(reader["TotalPrice"]);
+                        case "TOTAL_PAYMENTS":
+                            allCountsModel.TotalPayments = count;
+                            allCountsModel.AmountOfPaidPayments = totalPrice;  // Assuming total payments equals total paid amount.
                             break;
-                        case "COMPLETE PAYMENTS":
-                            allCountsModel.PaidPayments = Convert.ToInt32(reader["ActualCount"]);
-                            allCountsModel.AmountOfPaidPayments = Convert.ToDecimal(reader["TotalPrice"]);
+                        case "PAID_PAYMENTS":
+                            allCountsModel.PaidPayments = count;
+                            allCountsModel.AmountOfPaidPayments = totalPrice;
                             break;
-                        case "REMAIN PAYMENTS":
-                            allCountsModel.RemainPayments = Convert.ToInt32(reader["ActualCount"]);
+                        case "REMAIN_PAYMENTS":
+                            allCountsModel.RemainPayments = count;
+                            allCountsModel.AmountOfRemainingPayments = totalPrice;
                             break;
-                        case "PENDING PAYMENTS":
-                            allCountsModel.PendingPayments = Convert.ToInt32(reader["ActualCount"]);
-                            allCountsModel.AmountOfPendingPayments = Convert.ToDecimal(reader["TotalPrice"]);
+                        case "PENDING_PAYMENTS":
+                            allCountsModel.PendingPayments = count;
+                            allCountsModel.AmountOfPendingPayments = totalPrice;
                             break;
                         case "PURCHASE_STOCK":
-                            allCountsModel.AmountOfPurchasedStock = Convert.ToDecimal(reader["TotalPrice"]);
+                            allCountsModel.AmountOfPurchasedStock = totalPrice;
                             break;
                         case "TOTAL_BAGS":
-                            allCountsModel.TotalBags = Convert.ToInt32(reader["ActualCount"]);
+                            allCountsModel.TotalBags = count;
                             break;
                         case "TOTAL_WEIGHT":
-                            allCountsModel.TotalWeight = Convert.ToDecimal(reader["ActualCount"]);
+                            allCountsModel.TotalWeight = count;
                             break;
                     }
                 }
@@ -80,5 +83,6 @@ namespace Stock_Manage_System_API.DAL
 
 
 
-    }
+
+}
 }

@@ -163,10 +163,10 @@ namespace Stock_Manage_System_API.Controllers
 
         #region Method : Download PDF & Excel Customer Account Statements
 
-        [HttpGet("{Customer_ID}")]
-        public IActionResult Customer_Account_Statement_PDF(int Customer_ID)
+        [HttpGet("{Customer_ID}&{Customer_Type}")]
+        public IActionResult Customer_Account_Statement_PDF(int Customer_ID, string Customer_Type)
         {
-            var customerDetails = customers_DALBase.Customer_Info_By_PK(Customer_ID);
+            var customerDetails = customers_DALBase.Customer_Info_By_PK(Customer_ID, Customer_Type);
 
             using (MemoryStream memoryStream = new MemoryStream())
             {
@@ -175,32 +175,32 @@ namespace Stock_Manage_System_API.Controllers
                 // After generating the PDF into memoryStream
 
                 // Prepare the memoryStream for reading
-                byte[] content = download_BALbase.Customer_Account_Statement_PDF(Customer_ID);
+                byte[] content = download_BALbase.Customer_Account_Statement_PDF(Customer_ID, Customer_Type);
 
                 // Set the filename for the PDF
-                string fileName = $"{customerDetails.CustomerName}-{customerDetails.CustomerType}-Account-Statement.pdf";
+                string fileName = $"{customerDetails.CustomerName}-{Customer_Type}-Account-Statement.pdf";
 
                 // Return the file
                 return File(content, "application/pdf", fileName);
             }
         }
 
-        [HttpGet("{Customer_ID}")]
-        public IActionResult Customer_Account_Statement_EXCEL(int Customer_ID)
+        [HttpGet("{Customer_ID}&{Customer_Type}")]
+        public IActionResult Customer_Account_Statement_EXCEL(int Customer_ID, string Customer_Type)
         {
             using (MemoryStream memoryStream = new MemoryStream())
             {
                 // Custom page size and PDF generation code remains the same...
 
-                var customerDetails = customers_DALBase.Customer_Info_By_PK(Customer_ID);
+                var customerDetails = customers_DALBase.Customer_Info_By_PK(Customer_ID, Customer_Type);
 
                 // After generating the PDF into memoryStream
 
                 // Prepare the memoryStream for reading
-                byte[] content = download_BALbase.Customer_Account_Statement_EXCEL(Customer_ID);
+                byte[] content = download_BALbase.Customer_Account_Statement_EXCEL(Customer_ID,Customer_Type);
 
                 // Set the filename for the PDF
-                string fileName = $"{customerDetails.CustomerName}-{customerDetails.CustomerType}-Account-Statement.xlsx";
+                string fileName = $"{customerDetails.CustomerName}-{Customer_Type}-Account-Statement.xlsx";
 
                 // Return the file
                 return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);

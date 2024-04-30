@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DocumentFormat.OpenXml.Office2013.Excel;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.Practices.EnterpriseLibrary.Data;
 using Microsoft.Practices.EnterpriseLibrary.Data.Sql;
@@ -7,6 +8,7 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Windows.Input;
+using DbCommand = System.Data.Common.DbCommand;
 
 namespace Stock_Manage_System_API.DAL
 {
@@ -70,7 +72,7 @@ namespace Stock_Manage_System_API.DAL
 
         #region ACCOUNT DETAILS BY CUSTOMER ID
 
-        public CustomerDetails_With_Purchased_Stock_Model Account_Details(int Customer_ID)
+        public CustomerDetails_With_Purchased_Stock_Model Account_Details(int Customer_ID, string Customer_Type)
         {
 
             CustomerDetails_With_Purchased_Stock_Model customerDetails_With_Purchased_Stock = new CustomerDetails_With_Purchased_Stock_Model();
@@ -81,7 +83,7 @@ namespace Stock_Manage_System_API.DAL
             {
                 database.AddInParameter(dbCommand, "@CUSTOMER_ID", SqlDbType.Int, Customer_ID);
 
-
+                database.AddInParameter(dbCommand, "@CUSTOMER_TYPE", SqlDbType.VarChar, Customer_Type);
 
                 using (IDataReader reader = database.ExecuteReader(dbCommand))
                 {
@@ -164,6 +166,63 @@ namespace Stock_Manage_System_API.DAL
 
 
             }
+
+            using (DbCommand dbCommand2 = Command_Name("API_SALE_BY_CUSTOMER_ID"))
+            {
+                database.AddInParameter(dbCommand2, "@CUSTOMER_ID", SqlDbType.Int, Customer_ID);
+
+                List<Show_Sale> List_Sale_Info = new List<Show_Sale>();
+
+                using (IDataReader reader = sqlDatabase.ExecuteReader(dbCommand2))
+                {
+                    int saleStockIdOrdinal = reader.GetOrdinal("SALE_STOCK_ID");
+                    int saleStockDateOrdinal = reader.GetOrdinal("SALE_STOCK_DATE");
+                    int customerIdOrdinal = reader.GetOrdinal("CUSTOMER_ID");
+                    // Add other necessary columns in the same way...
+
+                    while (reader.Read())
+                    {
+                        Show_Sale Sale_Info = new Show_Sale();
+
+                        Sale_Info.saleId = Convert.ToInt32(reader[saleStockIdOrdinal]);
+
+                        Sale_Info.Create_Sales = Convert.ToDateTime(reader[saleStockDateOrdinal]);
+                        Sale_Info.Receive_Payment_Date = Convert.ToDateTime(reader["RECEIVE_PAYMENT_DATE"].ToString());
+                        Sale_Info.CustomerId = Convert.ToInt32(reader[customerIdOrdinal]);
+                        Sale_Info.CustomerName = reader["CUSTOMER_NAME"].ToString();
+                        Sale_Info.CustomerType = reader["CUSTOMER_TYPE"].ToString();
+                        Sale_Info.Product_Id = Convert.ToInt32(reader["PRODUCT_ID"]);
+                        Sale_Info.Product_Name = reader["PRODUCT_NAME_IN_ENGLISH"].ToString();
+                        Sale_Info.Brand_Name = reader["PRODUCT_BRAND_NAME"].ToString();
+                        Sale_Info.Bags = reader["BAGS"] is DBNull ? null : Convert.ToDecimal(reader["BAGS"]);
+                        Sale_Info.BagPerKg = reader["BAG_PER_KG"] is DBNull ? null : Convert.ToDecimal(reader["BAG_PER_KG"]);
+                        Sale_Info.Rate = Convert.ToDecimal(reader["RATE"]);
+                        Sale_Info.Total_Weight = Convert.ToDecimal(reader["TOTAL_WEIGHT"]);
+                        Sale_Info.Total_Price = Convert.ToDecimal(reader["TOTAL_AMOUNT"]);
+                        Sale_Info.Receive_Amount = Convert.ToDecimal(reader["RECEIVE_AMOUNT"]);
+                        Sale_Info.Discount = reader["DISCOUNT"] is DBNull ? null : Convert.ToDecimal(reader["DISCOUNT"]);
+                        bool isFullPaymentReceive = !reader.IsDBNull(reader.GetOrdinal("IS_FULL_AMOUNT_RECEIVE")) && reader.GetBoolean(reader.GetOrdinal("IS_FULL_AMOUNT_RECEIVE"));
+                        Sale_Info.IsFullPaymentReceive = isFullPaymentReceive;  // Corrected boolean logic
+
+                        Sale_Info.Payment_Method = reader["RECEIVE_PAYMENT_METHOD"].ToString();
+                        Sale_Info.Deducted_Amount = reader["DEDUCT_AMOUNT"] is DBNull ? null : Convert.ToDecimal(reader["DEDUCT_AMOUNT"].ToString());
+
+                        Sale_Info.Receive_Information_ID = Convert.ToInt32(reader["INFORMATION_ID"].ToString());
+                        Sale_Info.Remain_Receive_Information_ID = Convert.ToInt32(reader["REMAIN_INFORMATION_ID"].ToString());
+
+                        Sale_Info.Receive_Account_No = reader["BANK_ACCOUNT_NO"].ToString();
+                        Sale_Info.Bank_Icon = reader["BANK_ICON_ACTUAL"].ToString();
+                        Sale_Info.Account_Holder_Name = reader["BANK_ACCOUNT_HOLDER_NAME"].ToString();
+
+                        // Continue handling other fields as already defined...
+
+                        List_Sale_Info.Add(Sale_Info);
+                    }
+                    customerDetails_With_Purchased_Stock.Show_Sales = List_Sale_Info;
+                }
+            }
+
+
 
             return customerDetails_With_Purchased_Stock;
         }
@@ -274,12 +333,49 @@ namespace Stock_Manage_System_API.DAL
         #endregion
 
 
-        public List<Customer_Model> CUSTOMER_EXIST_IN_SYSTEM(string Customer_Name)
+        public List<Customer_Model> BUYER_CUSTOMER_EXIST_IN_SYSTEM(string Customer_Name)
         {
 
             List<Customer_Model> List_Of_Customers = new List<Customer_Model>();
 
-            DbCommand dbCommand = Command_Name("API_CUSTOMER_EXIST_IN_SYSTEM");
+            DbCommand dbCommand = Command_Name("API_CUSTOMER_EXIST_IN_SYSTEM_FOR_BUYER");
+
+
+            sqlDatabase.AddInParameter(dbCommand, "@CUSTOMER_NAME", SqlDbType.NVarChar, Customer_Name);
+
+            using (IDataReader reader = sqlDatabase.ExecuteReader(dbCommand))
+            {
+                while (reader.Read())
+                {
+                    Customer_Model customers = new Customer_Model();
+
+                    customers.CustomerId = Convert.ToInt32(reader[0]);
+                    customers.CustomerName = reader[1].ToString();
+                    customers.CustomerType = reader[2].ToString();
+                    customers.CustomerContact = reader[3].ToString();
+                    customers.CustomerAddress = reader[4].ToString();
+
+                    List_Of_Customers.Add(customers);
+
+                }
+
+
+
+                return List_Of_Customers;
+
+            }
+
+
+
+        }
+
+
+        public List<Customer_Model> SELLER_CUSTOMER_EXIST_IN_SYSTEM(string Customer_Name)
+        {
+
+            List<Customer_Model> List_Of_Customers = new List<Customer_Model>();
+
+            System.Data.Common.DbCommand dbCommand = Command_Name("API_CUSTOMER_EXIST_IN_SYSTEM_FOR_SELLER");
 
 
             sqlDatabase.AddInParameter(dbCommand, "@CUSTOMER_NAME", SqlDbType.NVarChar, Customer_Name);
@@ -312,7 +408,7 @@ namespace Stock_Manage_System_API.DAL
 
 
 
-        public Customer_Model Customer_Info_By_PK(int Customer_ID)
+        public Customer_Model Customer_Info_By_PK(int Customer_ID, string Customer_Type)
         {
             Customer_Model Customer_Info_By_PK = new Customer_Model();
 
@@ -320,7 +416,7 @@ namespace Stock_Manage_System_API.DAL
             {
                 sqlDatabase.AddInParameter(dbCommand, "@CUSTOMER_ID", SqlDbType.Int, Customer_ID);
 
-
+                sqlDatabase.AddInParameter(dbCommand, "@CUSTOMER_TYPE", SqlDbType.VarChar, Customer_Type);
 
                 using (IDataReader reader = sqlDatabase.ExecuteReader(dbCommand))
                 {

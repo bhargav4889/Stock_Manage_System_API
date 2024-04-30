@@ -48,13 +48,16 @@ namespace Stock_Manage_System_API.Models
     }
 
 
-    // ----------- Account Details.cshtml for  ------------------------//
+    // ----------- Account Details.cshtml   ------------------------//
 
     public class CustomerDetails_With_Purchased_Stock_Model
     {
         public Customer_Model Customers { get; set; }
 
         public List<Purchased_Stock_Model> Purchased_Stocks { get; set; }
+
+        public List<Show_Sale> Show_Sales { get; set; }
+
     }
 
 

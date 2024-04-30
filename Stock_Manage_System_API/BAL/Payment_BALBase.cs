@@ -31,6 +31,21 @@ namespace Stock_Manage_System_API.BAL
             return pending_Customers_Payments;
         }
 
+        public List<Remain_Payment_Model> Remain_Customers_Payments()
+        {
+            List<Remain_Payment_Model> remain_Payment_Model = payment_DALBase.Remain_Customers_Payments();
+
+            return remain_Payment_Model;
+        }
+
+        public List<Show_Payment_Info> Paid_Customers_Payments()
+        {
+            List<Show_Payment_Info> show_Payment_Infos = payment_DALBase.Paid_Customers_Payments();
+
+            return show_Payment_Infos;
+        }
+
+
         #endregion
 
 

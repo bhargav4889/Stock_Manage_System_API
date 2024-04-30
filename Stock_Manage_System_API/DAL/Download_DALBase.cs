@@ -1,8 +1,10 @@
 ﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Spreadsheet;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Practices.EnterpriseLibrary.Data.Sql;
+using Org.BouncyCastle.Asn1.X509.Qualified;
 using Stock_Manage_System_API.Models;
 using System.Data;
 using System.Data.Common;
@@ -12,6 +14,7 @@ using System.Text;
 using System.Xml.Linq;
 using static Stock_Manage_System_API.Models.InvoicesModel;
 using Document = iTextSharp.text.Document;
+using Font = iTextSharp.text.Font;
 
 namespace Stock_Manage_System_API.DAL
 {
@@ -185,13 +188,15 @@ namespace Stock_Manage_System_API.DAL
 
         #region Method : Customer Account Details Statement DataTable 
 
-        public (DataTable, DataTable) Convert_Model_To_DataTable_For_Customers_Account_Details_Statement(CustomerDetails_With_Purchased_Stock_Model customerDetails_With_Purchased_Stock_)
+        public (DataTable, DataTable, DataTable) Convert_Model_To_DataTable_For_Customers_Account_Details_Statement(CustomerDetails_With_Purchased_Stock_Model customerDetails_With_Purchased_Stock_)
         {
 
 
             DataTable Customers_Info = new DataTable();
 
             DataTable Statements = new DataTable();
+
+            DataTable Sales = new DataTable();
 
 
             Customers_Info.Columns.Add("Customer-ID", typeof(int));
@@ -260,7 +265,51 @@ namespace Stock_Manage_System_API.DAL
 
             }
 
-            return (Customers_Info, Statements);
+
+
+            // Sales 
+
+            Sales.Columns.Add("Sale-Date", typeof(string));
+            Sales.Columns.Add("Payment-Receive-Date", typeof(string));
+            Sales.Columns.Add("Product", typeof(string));
+            Sales.Columns.Add("Brand", typeof(string));
+            Sales.Columns.Add("Bags", typeof(string));
+            Sales.Columns.Add("Bag-Per-Kg", typeof(string));
+            Sales.Columns.Add("Weight", typeof(string));
+            Sales.Columns.Add("Rate",typeof(string));
+            Sales.Columns.Add("Total-Amount", typeof(string));
+            Sales.Columns.Add("Received-Amount", typeof(string));
+            Sales.Columns.Add("Discount", typeof(string));
+            Sales.Columns.Add("Remain-Payment-Date", typeof(string));
+            Sales.Columns.Add("Remain-Amount", typeof(string));
+            Sales.Columns.Add("Deducted-Amount", typeof(string));
+            
+            foreach(var sale in customerDetails_With_Purchased_Stock_.Show_Sales)
+            {
+                DataRow salerow = Sales.NewRow();
+
+                salerow["Sale-Date"] = sale.Create_Sales.ToString("dd/MM/yyyy");
+                salerow["Payment-Receive-Date"] = sale.Receive_Payment_Date.ToString("dd/MM/yyyy");
+                salerow["Product"] = sale.Product_Name;
+                salerow["Brand"] = string.IsNullOrEmpty(sale.Brand_Name) ? "--" : sale.Brand_Name;
+                salerow["Bags"] = sale.Bags.HasValue ? sale.Bags.Value.ToString() : "--";
+                salerow["Bag-Per-Kg"] = sale.BagPerKg.HasValue ? sale.BagPerKg.Value.ToString() : "--";
+                salerow["Weight"] = sale.Total_Weight;
+                salerow["Rate"] = sale.Rate;
+                salerow["Total-Amount"] = sale.Total_Price;
+                salerow["Received-Amount"] = sale.Receive_Amount;
+                salerow["Discount"] = string.IsNullOrEmpty(sale.Discount.ToString()) ? "--" : sale.Discount;
+                salerow["Remain-Payment-Date"] = string.IsNullOrEmpty(sale.Remain_Payment_Date.ToString()) ? "--" : sale.Remain_Payment_Date;
+                salerow["Remain-Amount"] = string.IsNullOrEmpty(sale.Receive_Remain_Amount.ToString()) ? "--" : sale.Receive_Remain_Amount; ;
+                salerow["Deducted-Amount"] = string.IsNullOrEmpty(sale.Deducted_Amount.ToString()) ? "--" : sale.Deducted_Amount; ;
+                
+                    
+                    
+            }
+
+
+
+            return (Customers_Info, Statements,Sales);
         }
 
 
@@ -324,6 +373,9 @@ namespace Stock_Manage_System_API.DAL
         }
 
         #endregion
+
+
+
 
         #endregion
 
@@ -651,7 +703,7 @@ namespace Stock_Manage_System_API.DAL
 
 
 
-                    iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("C:\\Users\\bharg\\OneDrive\\Desktop\\Icons\\Backimg.png");
+                    iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("C:\\Users\\bharg\\Desktop\\Icons\\Backimg.png");
 
 
 
@@ -731,13 +783,13 @@ namespace Stock_Manage_System_API.DAL
             }
         }
 
-        public byte[] Customer_Account_Statement_PDF(int Customer_ID)
+        public byte[] Customer_Account_Statement_PDF(int Customer_ID, string Customer_Type)
         {
             using (MemoryStream memoryStream = new MemoryStream())
             {
-                CustomerDetails_With_Purchased_Stock_Model customerDetails_With_Purchased_Stock_Model = customers_DALBase.Account_Details(Customer_ID);
+                CustomerDetails_With_Purchased_Stock_Model customerDetails_With_Purchased_Stock_Model = customers_DALBase.Account_Details(Customer_ID, Customer_Type);
 
-                (DataTable Customer_info, DataTable Statements_Info) = Convert_Model_To_DataTable_For_Customers_Account_Details_Statement(customerDetails_With_Purchased_Stock_Model);
+                (DataTable Customer_info, DataTable Statements_Info, DataTable Sale_Info) = Convert_Model_To_DataTable_For_Customers_Account_Details_Statement(customerDetails_With_Purchased_Stock_Model);
 
 
                 // Set your custom page size (width x height) in points
@@ -830,59 +882,111 @@ namespace Stock_Manage_System_API.DAL
 
 
 
-
-
-
-
-
-                    foreach (DataColumn column in Statements_Info.Columns)
+                    if(Customer_Type == "BUYER")
                     {
-                        PdfPCell headerCell = new PdfPCell(new Phrase(column.ColumnName, new iTextSharp.text.Font(boldfont, 15)));
-                        headerCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                        headerCell.Padding = 10;
-                        pdfTable.AddCell(headerCell);
 
-                        /*  if (column.ColumnName == "GRAIN_NAME")
-                          {
-                              PdfPCell productCell = new PdfPCell(new Phrase("GRAIN_NAME", new iTextSharp.text.Font(gujaratifont, 12)));
-                              productCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                              productCell.Padding = 10;
-                              pdfTable.AddCell(productCell);
-                          }*/
-                    }
-
-                    foreach (DataRow row in Statements_Info.Rows)
-                    {
                         foreach (DataColumn column in Statements_Info.Columns)
                         {
-                            var item = row[column];
+                            PdfPCell headerCell = new PdfPCell(new Phrase(column.ColumnName, new iTextSharp.text.Font(boldfont, 15)));
+                            headerCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                            headerCell.Padding = 10;
+                            pdfTable.AddCell(headerCell);
 
-                            if (item is DateTime dateTimeValue)
+                            /*  if (column.ColumnName == "GRAIN_NAME")
+                              {
+                                  PdfPCell productCell = new PdfPCell(new Phrase("GRAIN_NAME", new iTextSharp.text.Font(gujaratifont, 12)));
+                                  productCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                                  productCell.Padding = 10;
+                                  pdfTable.AddCell(productCell);
+                              }*/
+                        }
+
+                        foreach (DataRow row in Statements_Info.Rows)
+                        {
+                            foreach (DataColumn column in Statements_Info.Columns)
                             {
-                                PdfPCell dataCell = new PdfPCell(new Phrase(dateTimeValue.ToShortDateString(), new iTextSharp.text.Font(boldfont, 15)));
-                                dataCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                                dataCell.Padding = 10;
-                                pdfTable.AddCell(dataCell);
-                                // If the column is a DateTime, format it to display only the date
-                            }
-                            else if (column.ColumnName == "Product" && item is string productName)
-                            {
-                                PdfPCell productTypeCell = new PdfPCell(new Phrase(productName, new iTextSharp.text.Font(gujaratifont, 15)));
-                                productTypeCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                                productTypeCell.Padding = 10;
-                                pdfTable.AddCell(productTypeCell);
-                            }
-                            else
-                            {
-                                PdfPCell dataCell = new PdfPCell(new Phrase(item?.ToString(), new iTextSharp.text.Font(boldfont, 15)));
-                                dataCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                                dataCell.Padding = 10;
-                                pdfTable.AddCell(dataCell);
+                                var item = row[column];
+
+                                if (item is DateTime dateTimeValue)
+                                {
+                                    PdfPCell dataCell = new PdfPCell(new Phrase(dateTimeValue.ToShortDateString(), new iTextSharp.text.Font(boldfont, 15)));
+                                    dataCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                                    dataCell.Padding = 10;
+                                    pdfTable.AddCell(dataCell);
+                                    // If the column is a DateTime, format it to display only the date
+                                }
+                                else if (column.ColumnName == "Product" && item is string productName)
+                                {
+                                    PdfPCell productTypeCell = new PdfPCell(new Phrase(productName, new iTextSharp.text.Font(gujaratifont, 15)));
+                                    productTypeCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                                    productTypeCell.Padding = 10;
+                                    pdfTable.AddCell(productTypeCell);
+                                }
+                                else
+                                {
+                                    PdfPCell dataCell = new PdfPCell(new Phrase(item?.ToString(), new iTextSharp.text.Font(boldfont, 15)));
+                                    dataCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                                    dataCell.Padding = 10;
+                                    pdfTable.AddCell(dataCell);
+                                }
                             }
                         }
                     }
 
-                    // Add data rows
+                    else if(Customer_Type == "SELLER")
+                    {
+                        foreach (DataColumn column in Statements_Info.Columns)
+                        {
+                            PdfPCell headerCell = new PdfPCell(new Phrase(column.ColumnName, new iTextSharp.text.Font(boldfont, 15)));
+                            headerCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                            headerCell.Padding = 10;
+                            pdfTable.AddCell(headerCell);
+
+                            /*  if (column.ColumnName == "GRAIN_NAME")
+                              {
+                                  PdfPCell productCell = new PdfPCell(new Phrase("GRAIN_NAME", new iTextSharp.text.Font(gujaratifont, 12)));
+                                  productCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                                  productCell.Padding = 10;
+                                  pdfTable.AddCell(productCell);
+                              }*/
+                        }
+
+                        foreach (DataRow row in Sale_Info.Rows)
+                        {
+                            foreach (DataColumn column in Sale_Info.Columns)
+                            {
+                                var item = row[column];
+
+                                if (item is DateTime dateTimeValue)
+                                {
+                                    PdfPCell dataCell = new PdfPCell(new Phrase(dateTimeValue.ToShortDateString(), new iTextSharp.text.Font(boldfont, 15)));
+                                    dataCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                                    dataCell.Padding = 10;
+                                    pdfTable.AddCell(dataCell);
+                                    // If the column is a DateTime, format it to display only the date
+                                }
+                                else if (column.ColumnName == "Product" && item is string productName)
+                                {
+                                    PdfPCell productTypeCell = new PdfPCell(new Phrase(productName, new iTextSharp.text.Font(gujaratifont, 15)));
+                                    productTypeCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                                    productTypeCell.Padding = 10;
+                                    pdfTable.AddCell(productTypeCell);
+                                }
+                                else
+                                {
+                                    PdfPCell dataCell = new PdfPCell(new Phrase(item?.ToString(), new iTextSharp.text.Font(boldfont, 15)));
+                                    dataCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                                    dataCell.Padding = 10;
+                                    pdfTable.AddCell(dataCell);
+                                }
+                            }
+                        }
+                    }
+
+
+
+
+                   
 
 
                     document.Add(pdfTable);
@@ -940,11 +1044,11 @@ namespace Stock_Manage_System_API.DAL
             }
         }
 
-        public byte[] Customer_Account_Statement_EXCEL(int Customer_ID)
+        public byte[] Customer_Account_Statement_EXCEL(int Customer_ID, string Customer_Type)
         {
-            CustomerDetails_With_Purchased_Stock_Model customerDetails_With_Purchased_Stock_Model = customers_DALBase.Account_Details(Customer_ID);
+            CustomerDetails_With_Purchased_Stock_Model customerDetails_With_Purchased_Stock_Model = customers_DALBase.Account_Details(Customer_ID, Customer_Type);
 
-            (DataTable Customer_info, DataTable Statements_Info) = Convert_Model_To_DataTable_For_Customers_Account_Details_Statement(customerDetails_With_Purchased_Stock_Model);
+            (DataTable Customer_info, DataTable Statements_Info, DataTable Sale_Info) = Convert_Model_To_DataTable_For_Customers_Account_Details_Statement(customerDetails_With_Purchased_Stock_Model);
             using (XLWorkbook wb = new XLWorkbook())
             {
                
@@ -1178,7 +1282,7 @@ namespace Stock_Manage_System_API.DAL
 
                         BaseFont gujaratifont = BaseFont.CreateFont("D:\\Font\\NotoSansGujarati-Bold.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED, true);
                         iTextSharp.text.Font font = new iTextSharp.text.Font(gujaratifont, 18);
-                        font.Color = new BaseColor(Color.Red);
+                        font.Color = new BaseColor(System.Drawing.Color.Red);
 
 
 

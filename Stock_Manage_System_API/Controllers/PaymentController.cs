@@ -144,6 +144,72 @@ namespace Stock_Manage_System_API.Controllers
         }
 
 
+
+        [HttpGet]
+        public IActionResult Remain_Customers_Payments()
+        {
+            List<Remain_Payment_Model> remain_Payment_Models = payment_BALBase.Remain_Customers_Payments();
+
+            Dictionary<string, dynamic> res = new Dictionary<string, dynamic>();
+
+            if (remain_Payment_Models != null && remain_Payment_Models.Count > 0)
+            {
+                res.Add("status", true);
+
+                res.Add("message", "Data Found !.");
+
+                res.Add("data", remain_Payment_Models);
+
+
+                return Ok(res);
+            }
+            else
+            {
+                res.Add("status", false);
+
+                res.Add("message", "Data Not Found !.");
+
+                res.Add("data", null);
+
+
+                return NotFound(res);
+            }
+        }
+
+
+        [HttpGet]
+        public IActionResult Paid_Customers_Payments()
+        {
+            List<Show_Payment_Info> show_Payment_Infos = payment_BALBase.Paid_Customers_Payments();
+
+            Dictionary<string, dynamic> res = new Dictionary<string, dynamic>();
+
+            if (show_Payment_Infos != null && show_Payment_Infos.Count > 0)
+            {
+                res.Add("status", true);
+
+                res.Add("message", "Data Found !.");
+
+                res.Add("data", show_Payment_Infos);
+
+
+                return Ok(res);
+            }
+            else
+            {
+                res.Add("status", false);
+
+                res.Add("message", "Data Not Found !.");
+
+                res.Add("data", null);
+
+
+                return NotFound(res);
+            }
+        }
+
+
+
         [HttpPost]
 
         public IActionResult Create_Payment(Payment_Model payment_Model)

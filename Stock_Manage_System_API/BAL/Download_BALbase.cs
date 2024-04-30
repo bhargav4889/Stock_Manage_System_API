@@ -71,16 +71,16 @@ namespace Stock_Manage_System_API.BAL
 
         #region Method : Download PDF & Excel Customer Account Statements
 
-        public byte[] Customer_Account_Statement_PDF(int Customer_ID)
+        public byte[] Customer_Account_Statement_PDF(int Customer_ID, string Customer_Type)
         {
-            byte[] Customer_Account_Statement_PDF = download_DALBase.Customer_Account_Statement_PDF(Customer_ID);
+            byte[] Customer_Account_Statement_PDF = download_DALBase.Customer_Account_Statement_PDF(Customer_ID, Customer_Type);
 
             return Customer_Account_Statement_PDF;
         }
 
-        public byte[] Customer_Account_Statement_EXCEL(int Customer_ID)
+        public byte[] Customer_Account_Statement_EXCEL(int Customer_ID,string Customer_Type)
         {
-            byte[] Customer_Account_Statement_EXCEL = download_DALBase.Customer_Account_Statement_EXCEL(Customer_ID);
+            byte[] Customer_Account_Statement_EXCEL = download_DALBase.Customer_Account_Statement_EXCEL(Customer_ID, Customer_Type);
 
             return Customer_Account_Statement_EXCEL;
         }

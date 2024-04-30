@@ -58,17 +58,17 @@ namespace Stock_Manage_System_API.Controllers
         #region ACCOUNT_DETAILS BY CUSTOMER ID 
 
 
-        [HttpGet("{Customer_ID}")]
+        [HttpGet("{Customer_ID}&{Customer_Type}")]
 
-        public IActionResult Account_Details(int Customer_ID)
+        public IActionResult Account_Details(int Customer_ID, string Customer_Type)
         {
 
 
-            CustomerDetails_With_Purchased_Stock_Model customerDetails_With_Purchased_Stock = customers_BALBase.Account_Details(Customer_ID);
+            CustomerDetails_With_Purchased_Stock_Model customerDetails_With_Purchased_Stock = customers_BALBase.Account_Details(Customer_ID, Customer_Type);
 
             Dictionary<string, dynamic> res = new Dictionary<string, dynamic>();
 
-            if (customerDetails_With_Purchased_Stock.Purchased_Stocks.Count > 0 || customerDetails_With_Purchased_Stock.Customers.CustomerId != 0)
+            if (customerDetails_With_Purchased_Stock!= null)
             {
                 res.Add("status", true);
 
@@ -199,9 +199,9 @@ namespace Stock_Manage_System_API.Controllers
 
         [HttpGet("{Customer_ID}")]
 
-        public IActionResult Get_Customer(int Customer_ID)
+        public IActionResult Get_Customer(int Customer_ID,string Customer_Type)
         {
-            Customer_Model customers = customers_BALBase.Customer_Info_By_PK(Customer_ID);
+            Customer_Model customers = customers_BALBase.Customer_Info_By_PK(Customer_ID, Customer_Type);
 
             Dictionary<string, dynamic> res = new Dictionary<string, dynamic>();
 
@@ -237,10 +237,45 @@ namespace Stock_Manage_System_API.Controllers
 
         [HttpGet("{Customer_Name}")]
 
-        public IActionResult CUSTOMER_EXIST_IN_SYSTEM(string Customer_Name)
+        public IActionResult BUYER_CUSTOMER_EXIST_IN_SYSTEM(string Customer_Name)
         {
 
-            List<Customer_Model> List_Of_Exist_Customers = customers_BALBase.CUSTOMER_EXIST_IN_SYSTEM(Customer_Name);
+            List<Customer_Model> List_Of_Exist_Customers = customers_BALBase.BUYER_CUSTOMER_EXIST_IN_SYSTEM(Customer_Name);
+
+
+
+            Dictionary<string, dynamic> res = new Dictionary<string, dynamic>();
+
+            if (List_Of_Exist_Customers.Count > 0 && List_Of_Exist_Customers != null)
+            {
+                res.Add("status", true);
+
+                res.Add("message", "Already Customers Exists.");
+
+                res.Add("data", List_Of_Exist_Customers);
+
+                return Ok(res);
+            }
+            else
+            {
+                res.Add("status", false);
+
+                res.Add("message", "Data Not Found !.");
+
+                res.Add("data", null);
+
+
+                return NotFound(res);
+            }
+        }
+
+
+        [HttpGet("{Customer_Name}")]
+
+        public IActionResult SELLER_CUSTOMER_EXIST_IN_SYSTEM(string Customer_Name)
+        {
+
+            List<Customer_Model> List_Of_Exist_Customers = customers_BALBase.SELLER_CUSTOMER_EXIST_IN_SYSTEM(Customer_Name);
 
 
 
