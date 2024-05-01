@@ -242,7 +242,147 @@ namespace Stock_Manage_System_API.Controllers
 
         #endregion
 
-      
+
+
+        #region Section : Download Payments Statements 
+
+        #region Method : Download Pending Payments  PDF & Excel
+
+
+        [HttpGet]
+        public IActionResult Pending_Payments_PDF()
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                // Custom page size and PDF generation code remains the same...
+
+                // After generating the PDF into memoryStream
+
+                // Prepare the memoryStream for reading
+                byte[] content = download_BALbase.Pending_Payments_PDF();
+
+                // Set the filename for the PDF
+                string fileName = "Pending-Payments-List.pdf";
+
+                // Return the file
+                return File(content, "application/pdf", fileName);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult Pending_Payments_EXCEL()
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                // Custom page size and PDF generation code remains the same...
+
+                // After generating the PDF into memoryStream
+
+                // Prepare the memoryStream for reading
+                byte[] content = download_BALbase.Pending_Payments_EXCEL();
+
+                // Set the filename for the PDF
+                string fileName = "Pending-Payments-List.xlsx";
+
+                // Return the file
+                return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+            }
+        }
+
+        #endregion
+
+
+        #region Method : Download Remain Payments  PDF & Excel
+
+
+        [HttpGet]
+        public IActionResult Remain_Payments_PDF()
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                // Custom page size and PDF generation code remains the same...
+
+                // After generating the PDF into memoryStream
+
+                // Prepare the memoryStream for reading
+                byte[] content = download_BALbase.Remain_Payments_PDF();
+
+                // Set the filename for the PDF
+                string fileName = "Remain-Payments-List.pdf";
+
+                // Return the file
+                return File(content, "application/pdf", fileName);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult Remain_Payments_EXCEL()
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                // Custom page size and PDF generation code remains the same...
+
+                // After generating the PDF into memoryStream
+
+                // Prepare the memoryStream for reading
+                byte[] content = download_BALbase.Remain_Payments_EXCEL();
+
+                // Set the filename for the PDF
+                string fileName = "Remain-Payments-List.xlsx";
+
+                // Return the file
+                return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+            }
+        }
+
+        #endregion
+
+        #region Method : Download Paid Payments  PDF & Excel
+
+
+        [HttpGet]
+        public IActionResult Paid_Payments_PDF()
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                // Custom page size and PDF generation code remains the same...
+
+                // After generating the PDF into memoryStream
+
+                // Prepare the memoryStream for reading
+                byte[] content = download_BALbase.Paid_Payments_PDF();
+
+                // Set the filename for the PDF
+                string fileName = "Paid-Payments-List.pdf";
+
+                // Return the file
+                return File(content, "application/pdf", fileName);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult Paid_Payments_EXCEL()
+        {
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                // Custom page size and PDF generation code remains the same...
+
+                // After generating the PDF into memoryStream
+
+                // Prepare the memoryStream for reading
+                byte[] content = download_BALbase.Paid_Payments_EXCEL();
+
+                // Set the filename for the PDF
+                string fileName = "Paid-Payments-List.xlsx";
+
+                // Return the file
+                return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+            }
+        }
+
+        #endregion
+
+        #endregion
 
 
 

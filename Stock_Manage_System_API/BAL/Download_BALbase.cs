@@ -108,8 +108,62 @@ namespace Stock_Manage_System_API.BAL
         #endregion
 
 
+        #region Section : Download Pending Payments PDF & Excel
 
-       
+        public byte[] Pending_Payments_PDF()
+        {
+            byte[] Pending_Payments = download_DALBase.Pending_Payments_PDF();
+
+            return Pending_Payments;
+        }
+
+        public byte[] Pending_Payments_EXCEL()
+        {
+            byte[] Pending_Payments = download_DALBase.Pending_Payments_EXCEL();
+
+            return Pending_Payments;
+        }
+
+        #endregion
+
+        #region Section : Download Remain Payments PDF & Excel
+
+        public byte[] Remain_Payments_PDF()
+        {
+            byte[] Remain_Payments = download_DALBase.Remain_Payments_PDF();
+
+            return Remain_Payments;
+        }
+
+        public byte[] Remain_Payments_EXCEL()
+        {
+            byte[] Remain_Payments = download_DALBase.Remain_Payments_EXCEL();
+
+            return Remain_Payments;
+        }
+
+        #endregion
+
+        #region Section : Download Paid Payments PDF & Excel
+
+        public byte[] Paid_Payments_PDF()
+        {
+            byte[] Paid_Payments = download_DALBase.Paid_Payments_PDF();
+
+            return Paid_Payments;
+        }
+
+        public byte[] Paid_Payments_EXCEL()
+        {
+            byte[] Paid_Payments = download_DALBase.Paid_Payments_EXCEL();
+
+            return Paid_Payments;
+        }
+
+        #endregion
+
+
+
 
 
 

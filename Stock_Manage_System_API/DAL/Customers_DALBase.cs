@@ -106,121 +106,128 @@ namespace Stock_Manage_System_API.DAL
 
 
             }
-
-            using (DbCommand dbCommand1 = Command_Name("API_PURCHASED_STOCK_BY_CUSTOMER_ID"))
+            if (Customer_Type == "BUYER")
             {
-                database.AddInParameter(dbCommand1, "@CUSTOMER_ID", SqlDbType.Int, Customer_ID);
-
-                List<Purchased_Stock_Model> List_Of_Purchased_Stock = new List<Purchased_Stock_Model>();
-
-                using (IDataReader reader = database.ExecuteReader(dbCommand1))
+                using (DbCommand dbCommand1 = Command_Name("API_PURCHASED_STOCK_BY_CUSTOMER_ID"))
                 {
-                    while (reader.Read())
+                    database.AddInParameter(dbCommand1, "@CUSTOMER_ID", SqlDbType.Int, Customer_ID);
+
+                    List<Purchased_Stock_Model> List_Of_Purchased_Stock = new List<Purchased_Stock_Model>();
+
+                    using (IDataReader reader = database.ExecuteReader(dbCommand1))
                     {
-                        Purchased_Stock_Model purchased_Stock = new Purchased_Stock_Model();
+                        while (reader.Read())
+                        {
+                            Purchased_Stock_Model purchased_Stock = new Purchased_Stock_Model();
 
-                        purchased_Stock.StockId = Convert.ToInt32(reader[0]);
+                            purchased_Stock.StockId = Convert.ToInt32(reader[0]);
 
-                        purchased_Stock.StockDate = Convert.ToDateTime(reader[1]);
+                            purchased_Stock.StockDate = Convert.ToDateTime(reader[1]);
 
-                        purchased_Stock.ProductId = Convert.ToInt32(reader[2].ToString());
+                            purchased_Stock.ProductId = Convert.ToInt32(reader[2].ToString());
 
-                        purchased_Stock.ProductName = reader[3].ToString();
+                            purchased_Stock.ProductName = reader[3].ToString();
 
-                        purchased_Stock.ProductGradeId = Convert.ToInt32(reader[4].ToString());
+                            purchased_Stock.ProductGradeId = Convert.ToInt32(reader[4].ToString());
 
-                        purchased_Stock.ProductGrade = reader[5].ToString();
+                            purchased_Stock.ProductGrade = reader[5].ToString();
 
-                        purchased_Stock.PurchaseStockLocation = reader[6].ToString();
+                            purchased_Stock.PurchaseStockLocation = reader[6].ToString();
 
-                        purchased_Stock.Bags = Convert.ToDecimal(reader[7].ToString());
+                            purchased_Stock.Bags = Convert.ToDecimal(reader[7].ToString());
 
-                        purchased_Stock.BagPerKg = Convert.ToDecimal(reader[8].ToString());
+                            purchased_Stock.BagPerKg = Convert.ToDecimal(reader[8].ToString());
 
-                        purchased_Stock.TotalWeight = Convert.ToDecimal(reader[9].ToString());
+                            purchased_Stock.TotalWeight = Convert.ToDecimal(reader[9].ToString());
 
-                        purchased_Stock.ProductPrice = Convert.ToDecimal(reader[10].ToString());
+                            purchased_Stock.ProductPrice = Convert.ToDecimal(reader[10].ToString());
 
-                        purchased_Stock.TotalPrice = Convert.ToDecimal(reader[11].ToString());
+                            purchased_Stock.TotalPrice = Convert.ToDecimal(reader[11].ToString());
 
-                        purchased_Stock.VehicleId = Convert.ToInt32(reader[12].ToString());
+                            purchased_Stock.VehicleId = Convert.ToInt32(reader[12].ToString());
 
-                        purchased_Stock.VehicleName = reader[13].ToString();
+                            purchased_Stock.VehicleName = reader[13].ToString();
 
-                        purchased_Stock.VehicleNo = reader[14].ToString();
+                            purchased_Stock.VehicleNo = reader[14].ToString();
 
-                        purchased_Stock.DriverName = reader[15].ToString();
+                            purchased_Stock.DriverName = reader[15].ToString();
 
-                        purchased_Stock.TolatName = reader[16].ToString();
+                            purchased_Stock.TolatName = reader[16].ToString();
 
-                        purchased_Stock.PaymentStatus = reader[17].ToString();
+                            purchased_Stock.PaymentStatus = reader[17].ToString();
 
-                        List_Of_Purchased_Stock.Add(purchased_Stock);
+                            List_Of_Purchased_Stock.Add(purchased_Stock);
 
+                        }
+
+                        customerDetails_With_Purchased_Stock.Purchased_Stocks = List_Of_Purchased_Stock;
                     }
 
-                    customerDetails_With_Purchased_Stock.Purchased_Stocks = List_Of_Purchased_Stock;
+
+
+
                 }
-
-
-
-
             }
-
-            using (DbCommand dbCommand2 = Command_Name("API_SALE_BY_CUSTOMER_ID"))
+            else if (Customer_Type == "SELLER")
             {
-                database.AddInParameter(dbCommand2, "@CUSTOMER_ID", SqlDbType.Int, Customer_ID);
-
-                List<Show_Sale> List_Sale_Info = new List<Show_Sale>();
-
-                using (IDataReader reader = sqlDatabase.ExecuteReader(dbCommand2))
+                using (DbCommand dbCommand2 = Command_Name("API_SALE_BY_CUSTOMER_ID"))
                 {
-                    int saleStockIdOrdinal = reader.GetOrdinal("SALE_STOCK_ID");
-                    int saleStockDateOrdinal = reader.GetOrdinal("SALE_STOCK_DATE");
-                    int customerIdOrdinal = reader.GetOrdinal("CUSTOMER_ID");
-                    // Add other necessary columns in the same way...
+                    database.AddInParameter(dbCommand2, "@CUSTOMER_ID", SqlDbType.Int, Customer_ID);
 
-                    while (reader.Read())
+                    List<Show_Sale> List_Sale_Info = new List<Show_Sale>();
+
+                    using (IDataReader reader = sqlDatabase.ExecuteReader(dbCommand2))
                     {
-                        Show_Sale Sale_Info = new Show_Sale();
+                        int saleStockIdOrdinal = reader.GetOrdinal("SALE_STOCK_ID");
+                        int saleStockDateOrdinal = reader.GetOrdinal("SALE_STOCK_DATE");
+                        int customerIdOrdinal = reader.GetOrdinal("CUSTOMER_ID");
+                        // Add other necessary columns in the same way...
 
-                        Sale_Info.saleId = Convert.ToInt32(reader[saleStockIdOrdinal]);
+                        while (reader.Read())
+                        {
+                            Show_Sale Sale_Info = new Show_Sale();
 
-                        Sale_Info.Create_Sales = Convert.ToDateTime(reader[saleStockDateOrdinal]);
-                        Sale_Info.Receive_Payment_Date = Convert.ToDateTime(reader["RECEIVE_PAYMENT_DATE"].ToString());
-                        Sale_Info.CustomerId = Convert.ToInt32(reader[customerIdOrdinal]);
-                        Sale_Info.CustomerName = reader["CUSTOMER_NAME"].ToString();
-                        Sale_Info.CustomerType = reader["CUSTOMER_TYPE"].ToString();
-                        Sale_Info.Product_Id = Convert.ToInt32(reader["PRODUCT_ID"]);
-                        Sale_Info.Product_Name = reader["PRODUCT_NAME_IN_ENGLISH"].ToString();
-                        Sale_Info.Brand_Name = reader["PRODUCT_BRAND_NAME"].ToString();
-                        Sale_Info.Bags = reader["BAGS"] is DBNull ? null : Convert.ToDecimal(reader["BAGS"]);
-                        Sale_Info.BagPerKg = reader["BAG_PER_KG"] is DBNull ? null : Convert.ToDecimal(reader["BAG_PER_KG"]);
-                        Sale_Info.Rate = Convert.ToDecimal(reader["RATE"]);
-                        Sale_Info.Total_Weight = Convert.ToDecimal(reader["TOTAL_WEIGHT"]);
-                        Sale_Info.Total_Price = Convert.ToDecimal(reader["TOTAL_AMOUNT"]);
-                        Sale_Info.Receive_Amount = Convert.ToDecimal(reader["RECEIVE_AMOUNT"]);
-                        Sale_Info.Discount = reader["DISCOUNT"] is DBNull ? null : Convert.ToDecimal(reader["DISCOUNT"]);
-                        bool isFullPaymentReceive = !reader.IsDBNull(reader.GetOrdinal("IS_FULL_AMOUNT_RECEIVE")) && reader.GetBoolean(reader.GetOrdinal("IS_FULL_AMOUNT_RECEIVE"));
-                        Sale_Info.IsFullPaymentReceive = isFullPaymentReceive;  // Corrected boolean logic
+                            Sale_Info.saleId = Convert.ToInt32(reader[saleStockIdOrdinal]);
 
-                        Sale_Info.Payment_Method = reader["RECEIVE_PAYMENT_METHOD"].ToString();
-                        Sale_Info.Deducted_Amount = reader["DEDUCT_AMOUNT"] is DBNull ? null : Convert.ToDecimal(reader["DEDUCT_AMOUNT"].ToString());
+                            Sale_Info.Create_Sales = Convert.ToDateTime(reader[saleStockDateOrdinal]);
+                            Sale_Info.Receive_Payment_Date = Convert.ToDateTime(reader["RECEIVE_PAYMENT_DATE"].ToString());
+                            Sale_Info.CustomerId = Convert.ToInt32(reader[customerIdOrdinal]);
+                            Sale_Info.CustomerName = reader["CUSTOMER_NAME"].ToString();
+                            Sale_Info.CustomerType = reader["CUSTOMER_TYPE"].ToString();
+                            Sale_Info.Product_Id = Convert.ToInt32(reader["PRODUCT_ID"]);
+                            Sale_Info.Product_Name = reader["PRODUCT_NAME_IN_ENGLISH"].ToString();
+                            Sale_Info.Brand_Name = reader["PRODUCT_BRAND_NAME"].ToString();
+                            Sale_Info.Bags = reader["BAGS"] is DBNull ? null : Convert.ToDecimal(reader["BAGS"]);
+                            Sale_Info.BagPerKg = reader["BAG_PER_KG"] is DBNull ? null : Convert.ToDecimal(reader["BAG_PER_KG"]);
+                            Sale_Info.Rate = Convert.ToDecimal(reader["RATE"]);
+                            Sale_Info.Total_Weight = Convert.ToDecimal(reader["TOTAL_WEIGHT"]);
+                            Sale_Info.Total_Price = Convert.ToDecimal(reader["TOTAL_AMOUNT"]);
+                            Sale_Info.Receive_Amount = Convert.ToDecimal(reader["RECEIVE_AMOUNT"]);
+                            Sale_Info.Discount = reader["DISCOUNT"] is DBNull ? null : Convert.ToDecimal(reader["DISCOUNT"]);
+                            bool isFullPaymentReceive = !reader.IsDBNull(reader.GetOrdinal("IS_FULL_AMOUNT_RECEIVE")) && reader.GetBoolean(reader.GetOrdinal("IS_FULL_AMOUNT_RECEIVE"));
+                            Sale_Info.IsFullPaymentReceive = isFullPaymentReceive;  // Corrected boolean logic
 
-                        Sale_Info.Receive_Information_ID = Convert.ToInt32(reader["INFORMATION_ID"].ToString());
-                        Sale_Info.Remain_Receive_Information_ID = Convert.ToInt32(reader["REMAIN_INFORMATION_ID"].ToString());
+                            Sale_Info.Payment_Method = reader["RECEIVE_PAYMENT_METHOD"].ToString();
+                            Sale_Info.Deducted_Amount = reader["DEDUCT_AMOUNT"] is DBNull ? null : Convert.ToDecimal(reader["DEDUCT_AMOUNT"].ToString());
 
-                        Sale_Info.Receive_Account_No = reader["BANK_ACCOUNT_NO"].ToString();
-                        Sale_Info.Bank_Icon = reader["BANK_ICON_ACTUAL"].ToString();
-                        Sale_Info.Account_Holder_Name = reader["BANK_ACCOUNT_HOLDER_NAME"].ToString();
+                            Sale_Info.Receive_Information_ID = Convert.ToInt32(reader["INFORMATION_ID"].ToString());
+                            Sale_Info.Remain_Receive_Information_ID = Convert.ToInt32(reader["REMAIN_INFORMATION_ID"].ToString());
 
-                        // Continue handling other fields as already defined...
+                            Sale_Info.Receive_Account_No = reader["BANK_ACCOUNT_NO"].ToString();
+                            Sale_Info.Bank_Icon = reader["BANK_ICON_ACTUAL"].ToString();
+                            Sale_Info.Account_Holder_Name = reader["BANK_ACCOUNT_HOLDER_NAME"].ToString();
 
-                        List_Sale_Info.Add(Sale_Info);
+                            // Continue handling other fields as already defined...
+
+                            List_Sale_Info.Add(Sale_Info);
+                        }
+                        customerDetails_With_Purchased_Stock.Show_Sales = List_Sale_Info;
                     }
-                    customerDetails_With_Purchased_Stock.Show_Sales = List_Sale_Info;
                 }
             }
+
+
+
 
 
 

@@ -201,7 +201,6 @@ namespace Stock_Manage_System_API.DAL
             }
         }
 
-
         public List<Show_Payment_Info> Paid_Customers_Payments()
         {
             List<Show_Payment_Info> paymentInfoList = new List<Show_Payment_Info>();
@@ -262,6 +261,8 @@ namespace Stock_Manage_System_API.DAL
 
 
         #endregion
+
+
 
         #region Method : Create Payment
 

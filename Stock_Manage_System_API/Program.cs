@@ -36,6 +36,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+builder.Services.AddScoped<DailyEmailService>(); 
+builder.Services.AddHostedService<DailyEmailBackgroundService>();
 
 
 
