@@ -1,46 +1,37 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
+﻿using Microsoft.AspNetCore.Mvc;
+using Stock_Manage_System_API.BAL;
+using Stock_Manage_System_API.Login_Service;
+using Stock_Manage_System_API.Models;
 
 namespace Stock_Manage_System_API.Controllers
 {
-    [Route("api/[controller]/[action]")]
     [ApiController]
+    [Route("[controller]")]
     public class AuthController : ControllerBase
     {
-        private IConfiguration Configuration;
-        public AuthController(IConfiguration configuration)
+        private readonly IAuthBAL _authBAL;
+        private readonly JWT_Service _jwtService;
+
+        public AuthController(IAuthBAL authBAL, JWT_Service jwtService)
         {
-
-            Configuration = configuration;
-
+            _authBAL = authBAL;
+            _jwtService = jwtService;
         }
 
-        [HttpGet]
-        public string Login(string Username)
+        [HttpPost("Login")]
+        public IActionResult Login(Auth_Model authInfo)
         {
-            if(Username == "BHARGAV") 
+            var user = _authBAL.Auth_Login_Details(authInfo);
+            if (user != null && user.Userid > 0)
             {
-               
-                return "Ok";
+                 user.Token = _jwtService.GenerateJWTToken(user);
+                return Ok(new { success = true, user = user });
             }
-            else
-            {
-                return "Error";
-            }
+            return Unauthorized(new { success = false, message = "Invalid credentials" });
         }
 
-        private string Generate_Token()
-        {
-            var securitykey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]));
-            var credentials = new SigningCredentials(securitykey, SecurityAlgorithms.HmacSha256);
 
-            var token = new JwtSecurityToken(Configuration["Jwt:Issuer"], Configuration["Jwt:Audience"], null,
-                expires: DateTime.Now.AddMinutes(30),
-                signingCredentials: credentials);
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
+
+
     }
 }

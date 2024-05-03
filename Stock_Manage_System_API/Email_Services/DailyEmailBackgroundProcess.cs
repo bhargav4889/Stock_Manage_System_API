@@ -19,11 +19,11 @@ public class DailyEmailBackgroundService : BackgroundService
         // Wait until the system time is exactly 2 minutes from now
         while (!stoppingToken.IsCancellationRequested)
         {
-            var nextRunTime = DateTime.Now.AddMinutes(1); // Calculate next run time to be 2 minutes from now
+            var nextRunTime = DateTime.Now.AddDays(1).AddHours(8); 
             var delay = nextRunTime - DateTime.Now;
             if (delay.TotalMilliseconds > 0)
             {
-                await Task.Delay(delay, stoppingToken); // Wait for 2 minutes
+                await Task.Delay(delay, stoppingToken); 
             }
 
             using (var scope = _serviceProvider.CreateScope())
