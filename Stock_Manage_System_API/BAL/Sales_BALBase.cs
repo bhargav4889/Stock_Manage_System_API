@@ -28,6 +28,36 @@ namespace Stock_Manage_System_API.BAL
             }
         }
 
+
+
+        public bool Update_Sale(Sale_Customer_Combied_Model sale_Customer_Combied_Model)
+        {
+            try
+            {
+
+                if (sales_DALBase.Update_Sale(sale_Customer_Combied_Model))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
+        public Sale_Customer_Combied_Model Fetch_Sale_And_Customer_Details(int Sale_ID , int Customer_ID)
+        {
+            Sale_Customer_Combied_Model sale_Customer_Combied_Model = sales_DALBase.Fetch_Sale_And_Customer_Details(Sale_ID, Customer_ID);
+
+            return sale_Customer_Combied_Model;
+        }
+
         public List<Show_Sale> Show_All_Sales()
         {
             List<Show_Sale> List_of_Sales_Info = sales_DALBase.Show_All_Sales();

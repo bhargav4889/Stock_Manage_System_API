@@ -66,12 +66,12 @@ namespace Stock_Manage_System_API.BAL
 
 
         #region DELETE
-        public bool PURCHASE_STOCK_DELETE(int STOCK_ID)
+        public bool PURCHASE_STOCK_DELETE(int TN_ID)
         {
             try
             {
 
-                if (_stockDalBase.PURCHASE_STOCK_DELETE(STOCK_ID))
+                if (_stockDalBase.PURCHASE_STOCK_DELETE(TN_ID))
                 {
                     return true;
                 }

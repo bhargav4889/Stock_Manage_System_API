@@ -138,10 +138,10 @@ namespace Stock_Manage_System_API.Controllers
         #region DELETE
 
         [HttpDelete]
-        public IActionResult Delete_Customer(int Customer_ID)
+        public IActionResult Delete_Customer(int Customer_ID,string Customer_Type)
         {
             // Delete operation
-            bool is_Success = customers_BALBase.Delete_Customer(Customer_ID);
+            bool is_Success = customers_BALBase.Delete_Customer(Customer_ID, Customer_Type);
 
             // Response container
             Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();
@@ -198,7 +198,7 @@ namespace Stock_Manage_System_API.Controllers
 
 
 
-        [HttpGet("{Customer_ID}")]
+        [HttpGet("{Customer_ID}&{Customer_Type}")]
 
         public IActionResult Get_Customer(int Customer_ID,string Customer_Type)
         {

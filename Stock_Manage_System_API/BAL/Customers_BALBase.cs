@@ -72,11 +72,11 @@ namespace Stock_Manage_System_API.BAL
         }
 
 
-        public bool Delete_Customer(int Customer_ID)
+        public bool Delete_Customer(int Customer_ID, string Customer_Type)
         {
             try
             {
-                if(Customers_DAL.Delete_Customer(Customer_ID))
+                if(Customers_DAL.Delete_Customer(Customer_ID,Customer_Type))
                
                 {
                     return true;

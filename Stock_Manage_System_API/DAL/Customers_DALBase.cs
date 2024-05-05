@@ -119,45 +119,21 @@ namespace Stock_Manage_System_API.DAL
                         while (reader.Read())
                         {
                             Purchased_Stock_Model purchased_Stock = new Purchased_Stock_Model();
-
-                            purchased_Stock.StockId = Convert.ToInt32(reader[0]);
-
-                            purchased_Stock.StockDate = Convert.ToDateTime(reader[1]);
-
-                            purchased_Stock.ProductId = Convert.ToInt32(reader[2].ToString());
-
-                            purchased_Stock.ProductName = reader[3].ToString();
-
-                            purchased_Stock.ProductGradeId = Convert.ToInt32(reader[4].ToString());
-
-                            purchased_Stock.ProductGrade = reader[5].ToString();
-
-                            purchased_Stock.PurchaseStockLocation = reader[6].ToString();
-
-                            purchased_Stock.Bags = Convert.ToDecimal(reader[7].ToString());
-
-                            purchased_Stock.BagPerKg = Convert.ToDecimal(reader[8].ToString());
-
-                            purchased_Stock.TotalWeight = Convert.ToDecimal(reader[9].ToString());
-
-                            purchased_Stock.ProductPrice = Convert.ToDecimal(reader[10].ToString());
-
-                            purchased_Stock.TotalPrice = Convert.ToDecimal(reader[11].ToString());
-
-                            purchased_Stock.VehicleId = Convert.ToInt32(reader[12].ToString());
-
-                            purchased_Stock.VehicleName = reader[13].ToString();
-
-                            purchased_Stock.VehicleNo = reader[14].ToString();
-
-                            purchased_Stock.DriverName = reader[15].ToString();
-
-                            purchased_Stock.TolatName = reader[16].ToString();
-
-                            purchased_Stock.PaymentStatus = reader[17].ToString();
+                            purchased_Stock.StockDate = Convert.ToDateTime(reader["PUR_STOCK_DATE"]);
+                            purchased_Stock.ProductName = reader["PRODUCT_NAME"].ToString();
+                            purchased_Stock.PurchaseStockLocation = reader["LOCATION"].ToString();
+                            purchased_Stock.Bags = Convert.ToDecimal(reader["BAGS"]);
+                            purchased_Stock.BagPerKg = Convert.ToDecimal(reader["BAG_PER_KG"]);
+                            purchased_Stock.TotalWeight = Convert.ToDecimal(reader["TOTAL_WEIGHT"]);
+                            purchased_Stock.ProductPrice = Convert.ToDecimal(reader["PRODUCT_PRICE"]);
+                            purchased_Stock.TotalPrice = Convert.ToDecimal(reader["TOTAL_PRICE"]);
+                            purchased_Stock.VehicleName = reader["VEHICLE_NAME"].ToString();
+                            purchased_Stock.VehicleNo = reader["VEHICLE_NO"].ToString();
+                            purchased_Stock.DriverName = reader["DRIVER_NAME"].ToString();
+                            purchased_Stock.TolatName = reader["TOLAT_NAME"].ToString();
+                            purchased_Stock.PaymentStatus = reader["PAYMENT- STATUS"].ToString();
 
                             List_Of_Purchased_Stock.Add(purchased_Stock);
-
                         }
 
                         customerDetails_With_Purchased_Stock.Purchased_Stocks = List_Of_Purchased_Stock;
@@ -277,13 +253,14 @@ namespace Stock_Manage_System_API.DAL
         #region DELETE 
 
 
-        public bool Delete_Customer(int Customer_ID)
+        public bool Delete_Customer(int Customer_ID, string Customer_Type)
         {
             try
             {
 
                 DbCommand dbCommand = Command_Name("API_CUSTOMER_DELETE");
                 sqlDatabase.AddInParameter(dbCommand, "@CUSTOMER_ID", SqlDbType.Int, Customer_ID);
+                sqlDatabase.AddInParameter(dbCommand, "@CUSTOMER_TYPE", SqlDbType.VarChar, Customer_Type);
                 if (Convert.ToBoolean(sqlDatabase.ExecuteNonQuery(dbCommand)))
                 {
                     return true;

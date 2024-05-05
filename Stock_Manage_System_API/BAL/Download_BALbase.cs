@@ -108,6 +108,25 @@ namespace Stock_Manage_System_API.BAL
         #endregion
 
 
+        #region Section : Download Sales Statement PDF & Excel
+
+        public byte[] Sales_Statement_PDF()
+        {
+            byte[] Sales_Statement = download_DALBase.Sales_Statement_PDF();
+
+            return Sales_Statement;
+        }
+
+        public byte[] Sales_Statement_EXCEL()
+        {
+            byte[] Sales_Statement = download_DALBase.Sales_Statement_EXCEL();
+
+            return Sales_Statement; 
+        }
+
+        #endregion
+
+
         #region Section : Download Pending Payments PDF & Excel
 
         public byte[] Pending_Payments_PDF()

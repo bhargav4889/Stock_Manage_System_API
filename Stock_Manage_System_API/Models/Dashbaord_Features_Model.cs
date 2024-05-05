@@ -14,6 +14,8 @@
            
             public string? CustomerName { get; set; }
 
+            public string? CustomerType { get; set; }
+
             public int ProductId { get; set; }
 
             public string? ProductName { get; set; }

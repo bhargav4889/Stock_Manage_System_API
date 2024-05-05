@@ -37,7 +37,7 @@ namespace Stock_Manage_System_API.Controllers
                 res.Add("data", null);
 
 
-                return NotFound(res);
+                return Ok(res);
             }
 
 

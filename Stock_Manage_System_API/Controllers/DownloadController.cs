@@ -240,8 +240,77 @@ namespace Stock_Manage_System_API.Controllers
         }
 
 
+        [HttpGet]
+        public IActionResult Purchase_Stocks_Statement_EXCEL()
+        {
+
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                // Custom page size and PDF generation code remains the same...
+
+                // After generating the PDF into memoryStream
+
+                // Prepare the memoryStream for reading
+                byte[] content = download_BALbase.Purchase_Stocks_Statement_EXCEL();
+
+                // Set the filename for the PDF
+                string fileName = "Purchase-Stocks-Statement.xlsx";
+
+                // Return the file
+                return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+            }
+        }
+
+
         #endregion
 
+
+        #region Section : Download Sales Statement PDF & Excel 
+
+        [HttpGet]
+        public IActionResult Sales_Statement_PDF()
+        {
+
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                // Custom page size and PDF generation code remains the same...
+
+                // After generating the PDF into memoryStream
+
+                // Prepare the memoryStream for reading
+                byte[] content = download_BALbase.Sales_Statement_PDF();
+
+                // Set the filename for the PDF
+                string fileName = "Sales-Statement.pdf";
+
+                // Return the file
+                return File(content, "application/pdf", fileName);
+            }
+        }
+
+
+        [HttpGet]
+        public IActionResult Sales_Statement_EXCEL()
+        {
+
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                // Custom page size and PDF generation code remains the same...
+
+                // After generating the PDF into memoryStream
+
+                // Prepare the memoryStream for reading
+                byte[] content = download_BALbase.Sales_Statement_EXCEL();
+
+                // Set the filename for the PDF
+                string fileName = "Sales-Statement.xlsx";
+
+                // Return the file
+                return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+            }
+        }
+
+        #endregion
 
 
         #region Section : Download Payments Statements 

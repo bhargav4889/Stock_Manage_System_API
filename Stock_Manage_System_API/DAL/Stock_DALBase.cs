@@ -190,13 +190,13 @@ namespace Stock_Manage_System_API.DAL
         #region Method : Purchase Stock Delete  
 
 
-        public bool PURCHASE_STOCK_DELETE(int STOCK_ID)
+        public bool PURCHASE_STOCK_DELETE(int TN_ID)
         {
             try
             {
                 
                 DbCommand dbCommand = Command_Name("API_PURCHASE_STOCK_DELETE");
-                sqlDatabase.AddInParameter(dbCommand, "STOCK_ID", SqlDbType.Int, STOCK_ID);
+                sqlDatabase.AddInParameter(dbCommand, "@STOCK_ID", SqlDbType.Int, TN_ID);
                 if (Convert.ToBoolean(sqlDatabase.ExecuteNonQuery(dbCommand)))
                     return true;
                 else
@@ -214,90 +214,90 @@ namespace Stock_Manage_System_API.DAL
 
         #region Method : Purchase Stock By Stock ID
 
-        public Show_Purchase_Stock? PURCHASE_STOCKS_BY_PK(int Stock_ID)
-        {
-            try
+            public Show_Purchase_Stock? PURCHASE_STOCKS_BY_PK(int Stock_ID)
             {
+                try
+                {
                
 
-                DbCommand dbCommand = Command_Name("API_PURCHASE_STOCK_BY_PK");
+                    DbCommand dbCommand = Command_Name("API_PURCHASE_STOCK_BY_PK");
 
-                sqlDatabase.AddInParameter(dbCommand, "@STOCK_ID", SqlDbType.Int, Stock_ID);
-
-
+                    sqlDatabase.AddInParameter(dbCommand, "@STOCK_ID", SqlDbType.Int, Stock_ID);
 
 
-                Show_Purchase_Stock Stock_Information = new Show_Purchase_Stock();
 
 
-                using (IDataReader dataReader = sqlDatabase.ExecuteReader(dbCommand))
-                {
-                    if (dataReader.Read())
+                    Show_Purchase_Stock Stock_Information = new Show_Purchase_Stock();
+
+
+                    using (IDataReader dataReader = sqlDatabase.ExecuteReader(dbCommand))
                     {
+                        if (dataReader.Read())
+                        {
 
                         
 
-                        Stock_Information.PurchaseStockId = Convert.ToInt32(dataReader[0].ToString());
+                            Stock_Information.PurchaseStockId = Convert.ToInt32(dataReader[0].ToString());
 
-                        Stock_Information.PurchaseStockDate = Convert.ToDateTime(dataReader[1].ToString());
+                            Stock_Information.PurchaseStockDate = Convert.ToDateTime(dataReader[1].ToString());
 
-                        Stock_Information.CustomerId = Convert.ToInt32(dataReader[2].ToString());
+                            Stock_Information.CustomerId = Convert.ToInt32(dataReader[2].ToString());
 
-                        Stock_Information.CustomerName = dataReader[3].ToString();
+                            Stock_Information.CustomerName = dataReader[3].ToString();
 
-                        Stock_Information.CustomerType = dataReader[4].ToString();
+                            Stock_Information.CustomerType = dataReader[4].ToString();
 
-                        Stock_Information.ProductId = Convert.ToInt32(dataReader[5].ToString());
+                            Stock_Information.ProductId = Convert.ToInt32(dataReader[5].ToString());
 
-                        Stock_Information.ProductName = dataReader[6].ToString();
+                            Stock_Information.ProductName = dataReader[6].ToString();
 
-                        Stock_Information.ProductGradeId = Convert.ToInt32(dataReader[7].ToString());
+                            Stock_Information.ProductGradeId = Convert.ToInt32(dataReader[7].ToString());
 
-                        Stock_Information.ProductGrade = dataReader[8].ToString();
+                            Stock_Information.ProductGrade = dataReader[8].ToString();
 
-                        Stock_Information.PurchaseStockLocation = dataReader[9].ToString();
+                            Stock_Information.PurchaseStockLocation = dataReader[9].ToString();
 
-                        Stock_Information.Bags = Convert.ToDecimal(dataReader[10].ToString());
+                            Stock_Information.Bags = Convert.ToDecimal(dataReader[10].ToString());
 
-                        Stock_Information.BagPerKg = Convert.ToDecimal(dataReader[11].ToString());
+                            Stock_Information.BagPerKg = Convert.ToDecimal(dataReader[11].ToString());
 
-                        Stock_Information.TotalWeight = Convert.ToDecimal(dataReader[12]);
+                            Stock_Information.TotalWeight = Convert.ToDecimal(dataReader[12]);
 
-                        Stock_Information.ProductPrice = Convert.ToDecimal(dataReader[13]);
+                            Stock_Information.ProductPrice = Convert.ToDecimal(dataReader[13]);
 
-                        Stock_Information.TotalPrice = Convert.ToDecimal(dataReader[14]);
+                            Stock_Information.TotalPrice = Convert.ToDecimal(dataReader[14]);
 
-                        Stock_Information.VehicleId = Convert.ToInt32(dataReader[15].ToString());
+                            Stock_Information.VehicleId = Convert.ToInt32(dataReader[15].ToString());
 
-                        Stock_Information.VehicleName = dataReader[16].ToString();
+                            Stock_Information.VehicleName = dataReader[16].ToString();
 
-                        Stock_Information.VehicleNo = dataReader[17].ToString();
+                            Stock_Information.VehicleNo = dataReader[17].ToString();
 
-                        Stock_Information.DriverName = dataReader[18].ToString();
+                            Stock_Information.DriverName = dataReader[18].ToString();
 
-                        Stock_Information.TolatName = dataReader[19].ToString();
+                            Stock_Information.TolatName = dataReader[19].ToString();
 
 
                         
 
-                    }
+                        }
 
-                    return Stock_Information;
-                };
-
-
+                        return Stock_Information;
+                    };
 
 
 
 
+
+
+
+                }
+                catch
+                {
+                    return null;
+                }
 
             }
-            catch
-            {
-                return null;
-            }
-
-        }
 
 
         #endregion

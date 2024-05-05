@@ -41,6 +41,35 @@ namespace Stock_Manage_System_API.Controllers
 
         #endregion
 
+        #region UPDATE
+
+
+        [HttpPut]
+        public IActionResult Update_Sale(Sale_Customer_Combied_Model model)
+        {
+            // Insert operation
+            bool is_Success = sales_BALBase.Update_Sale(model);
+
+            // Response container
+            Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();
+
+            // Check insert success
+            if (is_Success)
+            {
+                response.Add("status", true);
+                response.Add("message", "Data Update Successfully!");
+                return Ok(response);
+            }
+            else
+            {
+                response.Add("status", false);
+                response.Add("message", "Error Occurred!");
+                return Ok(response);
+            }
+        }
+
+        #endregion
+
 
         [HttpGet]
 
@@ -89,6 +118,29 @@ namespace Stock_Manage_System_API.Controllers
             }
         }
 
+
+        [HttpGet("{Sale_ID}&{Customer_ID}")]
+
+        public IActionResult Fetch_Sale_And_Customer_Details(int Sale_ID ,int Customer_ID)
+        {
+            Sale_Customer_Combied_Model sale = sales_BALBase.Fetch_Sale_And_Customer_Details(Sale_ID,Customer_ID);
+
+            Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();
+
+            if (sale != null && sale.sale.SaleId != 0)
+            {
+                response.Add("status", true);
+                response.Add("message", "data found !");
+                response.Add("data", sale);
+                return Ok(response);
+            }
+            else
+            {
+                response.Add("status", false);
+                response.Add("message", "data not found");
+                return Ok(response);
+            }
+        }
 
     }
 }

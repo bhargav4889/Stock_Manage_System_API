@@ -32,7 +32,7 @@ namespace Stock_Manage_System_API.DAL
                 while (reader.Read())
                 {
                     string itemName = reader["ItemName"].ToString();
-                    int count = Convert.ToInt32(reader["ActualCount"]);
+                    int count = reader["ActualCount"] != DBNull.Value ? Convert.ToInt32(reader["ActualCount"]) : 0;
                     decimal totalPrice = reader["TotalPrice"] != DBNull.Value ? Convert.ToDecimal(reader["TotalPrice"]) : 0;
 
                     switch (itemName)

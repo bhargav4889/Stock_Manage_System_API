@@ -62,12 +62,11 @@ namespace Stock_Manage_System_API.DAL
 
             DbCommand dbCommand = Command_Name("API_DISPLAY_ALL_SAVE_INFORMATION");
 
-            Information_Model information_Model = new Information_Model();
-
             using (IDataReader reader = sqlDatabase.ExecuteReader(dbCommand))
             {
                 while (reader.Read())
                 {
+                    Information_Model information_Model = new Information_Model();  // Move instantiation inside the loop
                     information_Model.InformationID = Convert.ToInt32(reader[0]);
                     information_Model.AccountHolderName = reader[1].ToString();
                     information_Model.BankName = reader[2].ToString();
@@ -79,6 +78,7 @@ namespace Stock_Manage_System_API.DAL
 
             return List_Of_Save_Informations;
         }
+
 
         #endregion
 

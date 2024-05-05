@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.EMMA;
 using DocumentFormat.OpenXml.Office2013.Excel;
 using DocumentFormat.OpenXml.Spreadsheet;
 using iTextSharp.text;
@@ -30,6 +31,8 @@ namespace Stock_Manage_System_API.DAL
         private readonly Stock_DALBase stock_DALBase = new Stock_DALBase();
 
         private readonly Payment_DALBase payment_DALBase = new Payment_DALBase();
+
+        private readonly Sales_DALBase sales_DALBase = new Sales_DALBase();
 
 
         #region Method : All List Models Convert Datatable 
@@ -71,8 +74,8 @@ namespace Stock_Manage_System_API.DAL
                 row["Product-Grade"] = invoice.ProductGrade;
                 row["Bags"] = invoice.Bags.HasValue ? invoice.Bags.ToString() : "--";
                 row["Bag-Per-Kg"] = invoice.BagPerKg.HasValue ? invoice.BagPerKg.ToString() : "--";
-                row["Weight"] = invoice.TotalWeight;
-                row["Total-Price"] = invoice.TotalPrice;
+                row["Weight"] = invoice.TotalWeight.ToString("C");
+                row["Total-Price"] = invoice.TotalPrice.ToString("C");
                 row["Vehicle-Name"] = invoice.VehicleName;
                 row["Vehicle-No"] = invoice.VehicleNo;
                 row["Tolat"] = invoice.TolatName;
@@ -142,7 +145,7 @@ namespace Stock_Manage_System_API.DAL
                 row["Weight"] = invoice.TotalWeight;
                 row["SGST"] = invoice.SGST.HasValue ? invoice.SGST.ToString() : "--";
                 row["CGST"] = invoice.CGST.HasValue ? invoice.CGST.ToString() : "--";
-                row["Total-Price"] = invoice.TotalPrice;
+                row["Total-Price"] = invoice.TotalPrice.ToString("C");
                 row["Vehicle-Name"] = invoice.VehicleName;
                 row["Vehicle-No"] = invoice.VehicleNo;
                 row["Driver-Name"] = invoice.DriverName;
@@ -362,13 +365,13 @@ namespace Stock_Manage_System_API.DAL
                 row["Product"] = stock.ProductName;
                 row["Product-Grade"] = stock.ProductGrade;
                 row["Location"] = stock.PurchaseStockLocation;
-                row["Bags"] = stock.Bags.HasValue ? stock.Bags.ToString() : "--";
-                row["Bag-Per-Kg"] = stock.BagPerKg.HasValue ? stock.BagPerKg.ToString() : "--";
+                row["Bags"] = stock.Bags.HasValue && stock.Bags != 0 ? stock.Bags.ToString() : "--";
+                row["Bag-Per-Kg"] = stock.BagPerKg.HasValue && stock.BagPerKg != 0 ? stock.BagPerKg.ToString() : "--";
                 row["Weight"] = stock.TotalWeight;
                 row["Total-Price"] = stock.TotalPrice;
                 row["Vehicle-Name"] = stock.VehicleName;
                 row["Vehicle-No"] = stock.VehicleNo;
-                row["Tolat"] = stock.TolatName;
+                row["Tolat"] = string.IsNullOrEmpty(stock.TolatName) ? "--" : stock.TolatName;
                 row["Driver-Name"] = stock.DriverName;
                 row["Payment-Status"] = string.IsNullOrEmpty(stock.PaymentStatus) ? "PENDING" : stock.PaymentStatus;
 
@@ -383,6 +386,69 @@ namespace Stock_Manage_System_API.DAL
         }
 
         #endregion
+
+        #region Method : Sale Satement DataTable
+
+        public DataTable Convert_List_To_DataTable_For_Sales_Statement(List<Show_Sale> sales)
+        {
+            DataTable dataTable = new DataTable();
+
+            dataTable.Columns.Add("Sale-Date", typeof(string));
+            dataTable.Columns.Add("Customer-Name", typeof(string));
+            dataTable.Columns.Add("Product", typeof(string));
+            dataTable.Columns.Add("Brand-Name", typeof(string));
+            dataTable.Columns.Add("Bags", typeof(string));
+            dataTable.Columns.Add("Bag-Per-Kg", typeof(string));
+            dataTable.Columns.Add("Weight", typeof(string));
+            dataTable.Columns.Add("Rate", typeof(string));
+            dataTable.Columns.Add("Total-Amount", typeof(string));
+            dataTable.Columns.Add("Receive-Amount", typeof(string));
+            dataTable.Columns.Add("Receive-Payment-Method", typeof(string));
+            dataTable.Columns.Add("Discount", typeof(string));
+            dataTable.Columns.Add("Is-FullPayment-Receive", typeof(string));
+            dataTable.Columns.Add("Remain-Payment-Date",typeof(string));    
+            dataTable.Columns.Add("Remain-Amount", typeof(string));
+            dataTable.Columns.Add("Remain-Payment-Method", typeof(string));
+            dataTable.Columns.Add("Deducted-Amount", typeof(string));
+
+
+            foreach (var sale in sales)
+            {
+                DataRow row = dataTable.NewRow();
+
+                row["Sale-Date"] = sale.Create_Sales.ToString("dd/MM/yyyy");
+                row["Customer-Name"] = sale.CustomerName;
+                row["Product"] = sale.Product_Name;
+                row["Brand-Name"] = string.IsNullOrEmpty(sale.Brand_Name) ? "--" : sale.Brand_Name;
+                row["Bags"] = sale.Bags.HasValue ? sale.Bags.ToString() : "--";
+                row["Bag-Per-Kg"] = sale.BagPerKg.HasValue ? sale.BagPerKg.ToString() : "--";
+                row["Rate"] = sale.Rate;
+                row["Weight"] = sale.Total_Weight.Value.ToString();
+                row["Total-Amount"] = sale.Total_Price.ToString("C");
+                row["Receive-Amount"] = sale.Total_Price.ToString("C");
+                row["Receive-Payment-Method"] = sale.Payment_Method;
+                row["Discount"] = sale.Discount.HasValue ? sale.Discount.ToString() : "--";
+                row["Is-FullPayment-Receive"] = sale.IsFullPaymentReceive ? "Yes" : "No";
+                row["Remain-Payment-Date"] = sale.Remain_Payment_Date.HasValue ? sale.Remain_Payment_Date.Value.ToString("dd/MM/yyyy"): "--";
+                row["Remain-Amount"] = sale.Receive_Remain_Amount.HasValue ? sale.Receive_Remain_Amount.Value.ToString("C") : "--";
+                row["Remain-Payment-Method"] = string.IsNullOrEmpty(sale.Remain_Payment_Method) ? "--" : sale.Remain_Payment_Method;
+                row["Deducted-Amount"] = sale.Deducted_Amount.HasValue ? sale.Deducted_Amount.Value.ToString("C") : "--";
+
+                dataTable.Rows.Add(row);
+            }
+
+
+
+
+
+            return dataTable;
+        }
+
+
+        #endregion
+
+
+
 
         #region Method : Pending Payments List DataTable
 
@@ -451,7 +517,6 @@ namespace Stock_Manage_System_API.DAL
 
         #endregion
 
-
         #region Method : Paid Payments List DataTable
 
         public DataTable Convert_List_To_DataTable_For_Paid_Payments(List<Show_Payment_Info> paid_payments)
@@ -479,7 +544,7 @@ namespace Stock_Manage_System_API.DAL
                 row["Product"] = payments.ProductName;
                 row["Total-Amount"] = payments.TotalPrice.ToString("C");
                 row["Paid-Amount"] = payments.AmountPaid.ToString("C");
-               
+
                 row["First-Payment-Method"] = payments.PaymentMethod;
 
                 // Assuming payments is the object containing the data
@@ -509,7 +574,7 @@ namespace Stock_Manage_System_API.DAL
         #endregion
 
 
-    
+
 
 
         #endregion
@@ -632,7 +697,7 @@ namespace Stock_Manage_System_API.DAL
                     document.Add(new Chunk("\n"));
 
                     // Image
-                    iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("C:\\Users\\bharg\\OneDrive\\Desktop\\Icons\\Backimg.png");
+                    iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("C:\\Users\\bharg\\Desktop\\Icons\\Backimg.png");
                     backimage.ScaleToFit(500, 500);
                     backimage.SetAbsolutePosition(900, 400);
                     document.Add(backimage);
@@ -1295,7 +1360,7 @@ namespace Stock_Manage_System_API.DAL
                     document.Add(new Chunk("\n"));
 
                     // Image
-                    iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("C:\\Users\\bharg\\OneDrive\\Desktop\\Icons\\Backimg.png");
+                    iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("C:\\Users\\bharg\\Desktop\\Icons\\Backimg.png");
                     backimage.ScaleToFit(500, 500);
                     backimage.SetAbsolutePosition(900, 400);
                     document.Add(backimage);
@@ -1397,6 +1462,143 @@ namespace Stock_Manage_System_API.DAL
                 }
             }
 
+        }
+
+        #endregion
+
+
+        #region Method : Download PDF for Sale Statements
+
+        public byte[] Sales_Statement_PDF()
+        {
+            List<Show_Sale> show_Sales = sales_DALBase.Show_All_Sales();
+
+            DataTable dataTable = Convert_List_To_DataTable_For_Sales_Statement(show_Sales);
+
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                // Set your custom page size (width x height) in points
+                iTextSharp.text.Rectangle customPageSize = new iTextSharp.text.Rectangle(2300, 1200);
+
+                using (Document document = new Document(customPageSize))
+                {
+                    PdfWriter pdfWriter = PdfWriter.GetInstance(document, memoryStream);
+                    document.Open();
+
+                    // Define fonts
+                    BaseFont boldBaseFont = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.WINANSI, BaseFont.EMBEDDED);
+                    BaseFont gujaratiBaseFont = BaseFont.CreateFont("D:\\Font\\NotoSansGujarati-Bold.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, true);
+                    Font boldFont = new Font(boldBaseFont, 12);
+                    Font gujaratiFont = new Font(gujaratiBaseFont, 12);
+
+                    // Title
+                    Paragraph title = new Paragraph("Sales Statement", new Font(boldBaseFont, 35));
+                    title.Alignment = Element.ALIGN_CENTER;
+                    document.Add(title);
+                    document.Add(new Chunk("\n"));
+
+                    // Image
+                    iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("C:\\Users\\bharg\\Desktop\\Icons\\Backimg.png");
+                    backimage.ScaleToFit(500, 500);
+                    backimage.SetAbsolutePosition(900, 400);
+                    document.Add(backimage);
+
+                    // Table setup
+                    PdfPTable pdfTable = new PdfPTable(dataTable.Columns.Count)
+                    {
+                        WidthPercentage = 100,
+                        DefaultCell = { Padding = 10 }
+                    };
+
+                    // Headers
+                    foreach (DataColumn column in dataTable.Columns)
+                    {
+                        Font headerFont = column.ColumnName.Equals("Product", StringComparison.InvariantCultureIgnoreCase) ? gujaratiFont : boldFont;
+                        PdfPCell headerCell = new PdfPCell(new Phrase(column.ColumnName, headerFont))
+                        {
+                            HorizontalAlignment = Element.ALIGN_CENTER,
+                            Padding = 10
+                        };
+                        pdfTable.AddCell(headerCell);
+                    }
+
+                    // Data rows
+                    foreach (DataRow row in dataTable.Rows)
+                    {
+                        foreach (DataColumn column in dataTable.Columns)
+                        {
+                            var item = row[column];
+                            Font itemFont = column.ColumnName.Equals("Product", StringComparison.InvariantCultureIgnoreCase) ? gujaratiFont : boldFont;
+
+                            PdfPCell dataCell = new PdfPCell(new Phrase(item?.ToString(), itemFont))
+                            {
+                                HorizontalAlignment = Element.ALIGN_CENTER,
+                                Padding = 10
+                            };
+                            pdfTable.AddCell(dataCell);
+                        }
+                    }
+
+                    document.Add(pdfTable);
+                    document.Close();
+                }
+
+                // Get the current date for the file name
+
+
+
+
+
+
+                return memoryStream.ToArray();
+            }
+
+        }
+
+        #endregion
+
+        #region Method : Download Excel for Sale Statements
+
+        public byte[] Sales_Statement_EXCEL()
+        {
+            List<Show_Sale> show_Sales = sales_DALBase.Show_All_Sales();
+
+            DataTable dataTable = Convert_List_To_DataTable_For_Sales_Statement(show_Sales);
+
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+                IXLWorksheet ws = wb.Worksheets.Add("Sales Statement");
+
+                // Adding the DataTable data to the worksheet starting from cell A1
+                var tableRange = ws.Cell(1, 1).InsertTable(dataTable, true).AsRange();
+
+                // Adjust column widths to fit contents
+                ws.Columns().AdjustToContents();
+
+                // Apply styling to header row
+                var headerRow = tableRange.FirstRow();
+                headerRow.Style.Font.Bold = true;
+                headerRow.Style.Fill.BackgroundColor = XLColor.LightGray;
+                headerRow.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                // Set the row height and cell alignment for data rows
+                foreach (var row in tableRange.RowsUsed().Skip(1))
+                {
+                    ws.Row(row.RowNumber()).Height = 20; // Set the height for the row
+                    foreach (var cell in row.CellsUsed())
+                    {
+                        cell.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
+                    }
+                }
+
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    wb.SaveAs(stream);
+
+
+                    return stream.ToArray();
+                }
+            }
         }
 
         #endregion

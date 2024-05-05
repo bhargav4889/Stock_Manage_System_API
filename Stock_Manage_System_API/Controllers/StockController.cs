@@ -50,10 +50,10 @@ namespace Stock_Manage_System_API.Controllers
         // Delete a purchased stock
 
         [HttpDelete]
-        public IActionResult Delete_Purchase_Stock(int stock_Id)
-        {
+        public IActionResult Delete_Purchase_Stock(int TN_ID)       
+                {
             // Delete operation
-            bool is_Success = _stock_BAL.PURCHASE_STOCK_DELETE(stock_Id);
+            bool is_Success = _stock_BAL.PURCHASE_STOCK_DELETE(TN_ID);
 
             // Response container
             Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();

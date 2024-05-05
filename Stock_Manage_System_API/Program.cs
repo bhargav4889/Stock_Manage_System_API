@@ -16,7 +16,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Email Service
+// Register EmailSender
 builder.Services.AddTransient<IEmailSender>(i => new EmailSender(
     builder.Configuration["EmailSettings:Host"],
     int.Parse(builder.Configuration["EmailSettings:Port"]),
@@ -24,6 +24,12 @@ builder.Services.AddTransient<IEmailSender>(i => new EmailSender(
     builder.Configuration["EmailSettings:UserName"],
     builder.Configuration["EmailSettings:Password"]
 ));
+
+// Register DailyEmailService if it is not already registered
+builder.Services.AddScoped<DailyEmailService>();
+
+// Register the Background Service
+builder.Services.AddHostedService<DailyEmailBackgroundService>();
 
 // JWT Service
 builder.Services.AddSingleton<JWT_Service>();
@@ -47,6 +53,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+//Daily Email Service 
+builder.Services.AddHostedService<DailyEmailBackgroundService>();
 
 
 var app = builder.Build();

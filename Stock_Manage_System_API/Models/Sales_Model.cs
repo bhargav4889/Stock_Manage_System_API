@@ -3,6 +3,7 @@
     public class SaleModel
     {
         public int SaleId { get; set; }
+
         public DateTime Create_Sales { get; set; }
         public int Product_Id { get; set; }
 
@@ -16,7 +17,9 @@
 
         public int Receive_Bank_Id { get; set; }
 
-      
+        public int Receive_Information_Id { get; set; }
+
+
         public decimal? Bags { get; set; }
 
         public decimal? BagPerKg { get; set; }
@@ -36,7 +39,7 @@
 
         public bool IsFullPaymentReceive { get; set; }
 
-        
+
 
         public DateTime? Remain_Payment_Date { get; set; }
 
@@ -47,12 +50,12 @@
 
         public int? Remain_Amount_Receive_Bank_Id { get; set; }
 
-       
+        public int? Remain_Infromation_ID { get; set; }
+
 
 
 
     }
-
     public class Sale_Customer_Combied_Model
     {
         public Customer_Model customer { get; set; }
