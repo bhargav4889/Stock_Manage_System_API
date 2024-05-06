@@ -3,8 +3,8 @@
 namespace Stock_Manage_System_API.Models
 {
 
-
-    public class Show_Purchase_Stock
+    
+    public class Purchase_Stock
     {
         public int PurchaseStockId { get; set; }
         public DateTime PurchaseStockDate { get; set; }
@@ -26,7 +26,7 @@ namespace Stock_Manage_System_API.Models
         public string? VehicleNo { get; set; }
         public string? DriverName { get; set; }
         public string? TolatName { get; set; }
-        public string? PaymentStatus {  get; set; }
+        public string? PaymentStatus { get; set; }
     }
 
     public class Insert_And_Update_Purchase_Stock

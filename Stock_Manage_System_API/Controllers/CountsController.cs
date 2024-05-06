@@ -7,26 +7,33 @@ namespace Stock_Manage_System_API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class All_CountsController : Controller
+    public class CountsController : Controller
     {
-        private readonly All_Counts_BALBase all_Counts_BALBase = new All_Counts_BALBase();
+        #region BAL Class Instance
+
+        private readonly Counts_BALBase allCountsBALBase = new Counts_BALBase();
+
+        #endregion
+
+
+        #region Method : Get All Counts
 
         [HttpGet]
-
-        public IActionResult Get_All_Counts()
+        
+        public IActionResult Get_Counts()
         {
 
-            All_Counts_Model all_Counts_Model = all_Counts_BALBase.ALL_COUNTS();
+            AllCountsModel allCountsModel = allCountsBALBase.ALL_COUNTS();
 
             Dictionary<string, dynamic> res = new Dictionary<string, dynamic>();
 
-            if (all_Counts_Model != null)
+            if (allCountsModel != null)
             {
                 res.Add("status", true);
 
                 res.Add("message", "Data Found !.");
 
-                res.Add("data", all_Counts_Model);
+                res.Add("data", allCountsModel);
 
                 return Ok(res);
             }
@@ -36,13 +43,14 @@ namespace Stock_Manage_System_API.Controllers
 
                 res.Add("message", "Data Not Found !.");
 
-                res.Add("data", null);
-
                 return NotFound(res);
             }
 
 
         }
+
+
+        #endregion
 
     }
 }

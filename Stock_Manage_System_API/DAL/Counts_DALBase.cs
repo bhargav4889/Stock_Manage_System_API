@@ -6,25 +6,35 @@ using System.Diagnostics.Metrics;
 
 namespace Stock_Manage_System_API.DAL
 {
-    public class All_Counts_DALBase : DAL_Helpers
+    public class Counts_DALBase : DAL_Helpers
     {
-        
+
+        #region Method : Configurations 
 
         private SqlDatabase sqlDatabase;
 
-        public All_Counts_DALBase()
+        public Counts_DALBase()
         {
+            // Ensure Database_Connection is initialized or throw an informative exception.
+            if (Database_Connection == null)
+                throw new InvalidOperationException("Database connection Error.");
+
             sqlDatabase = new SqlDatabase(Database_Connection);
         }
 
         private DbCommand Command_Name(string storedProcedureName)
         {
+            // Retrieve a stored procedure command object configured with the provided name.
             return sqlDatabase.GetStoredProcCommand(storedProcedureName);
         }
 
-        public All_Counts_Model ALL_COUNTS()
+        #endregion
+
+        #region Method : All Counts 
+
+        public AllCountsModel ALL_COUNTS()
         {
-            All_Counts_Model allCountsModel = new All_Counts_Model();
+            AllCountsModel allCountsModel = new AllCountsModel();
             DbCommand dbCommand = Command_Name("API_DASHBOARD_ALL_COUNTS");
 
             using (IDataReader reader = sqlDatabase.ExecuteReader(dbCommand))
@@ -81,8 +91,8 @@ namespace Stock_Manage_System_API.DAL
         }
 
 
+        #endregion
 
 
-
-}
+    }
 }

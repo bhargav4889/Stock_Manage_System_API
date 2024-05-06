@@ -1,25 +1,52 @@
-﻿    namespace Stock_Manage_System_API.Models
+﻿using Newtonsoft.Json;
+
+namespace Stock_Manage_System_API.Models
+{
+    public class AllCountsModel
     {
-        public class All_Counts_Model
-        {
-            public int TotalCustomers { get; set; }
-            public int TotalBags { get; set; }
-            public decimal TotalWeight { get; set; }
-            public decimal AmountOfPurchasedStock { get; set; }
-            public int TotalPurchaseInvoice { get; set; }
-            public decimal AmountOfPurchaseInvoice { get; set; }
-            public int TotalSalesInvoice { get; set; }
-            public decimal AmountOfSalesInvoice { get; set; }
+        [JsonProperty("totalCustomers")]
+        public int TotalCustomers { get; set; }
 
-            public int TotalPayments { get; set; }
+        [JsonProperty("totalBags")]
+        public int TotalBags { get; set; }
 
-            public int PaidPayments { get; set; }
+        [JsonProperty("totalWeight")]
+        public decimal TotalWeight { get; set; }
 
-            public int RemainPayments { get; set; }
-            public int PendingPayments { get; set; }
-            public decimal AmountOfPaidPayments { get; set; }
+        [JsonProperty("amountOfPurchasedStock")]
+        public decimal AmountOfPurchasedStock { get; set; }
 
-            public decimal AmountOfRemainingPayments { get; set; }
-            public decimal AmountOfPendingPayments { get; set; }
-        }
+        [JsonProperty("totalPurchaseInvoices")]
+        public int TotalPurchaseInvoice { get; set; }
+
+        [JsonProperty("amountOfPurchaseInvoices")]
+        public decimal AmountOfPurchaseInvoice { get; set; }
+
+        [JsonProperty("totalSalesInvoices")]
+        public int TotalSalesInvoice { get; set; }
+
+        [JsonProperty("amountOfSalesInvoices")]
+        public decimal AmountOfSalesInvoice { get; set; }
+
+        [JsonProperty("totalPayments")]
+        public int TotalPayments { get; set; }
+
+        [JsonProperty("paidPayments")]
+        public int PaidPayments { get; set; }
+
+        [JsonProperty("remainPayments")]
+        public int RemainPayments { get; set; }
+
+        [JsonProperty("pendingPayments")]
+        public int PendingPayments { get; set; }
+
+        [JsonProperty("amountOfPaidPayments")]
+        public decimal AmountOfPaidPayments { get; set; }
+
+        [JsonProperty("amountOfRemainingPayments")]
+        public decimal AmountOfRemainingPayments { get; set; }
+
+        [JsonProperty("amountOfPendingPayments")]
+        public decimal AmountOfPendingPayments { get; set; }
     }
+}

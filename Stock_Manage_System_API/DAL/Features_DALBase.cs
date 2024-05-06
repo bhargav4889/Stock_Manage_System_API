@@ -5,11 +5,11 @@ using System.Data.Common;
 
 namespace Stock_Manage_System_API.DAL
 {
-    public class Dashbaord_Features_DALBase : DAL_Helpers
+    public class Features_DALBase : DAL_Helpers
     {
         private SqlDatabase sqlDatabase;
 
-        public Dashbaord_Features_DALBase()
+        public Features_DALBase()
         {
             sqlDatabase = new SqlDatabase(Database_Connection);
         }

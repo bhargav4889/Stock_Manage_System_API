@@ -21,7 +21,7 @@ namespace Stock_Manage_System_API.Controllers
         public IActionResult Purchase_Stocks()
         {
             // Retrieve stocks
-            List<Show_Purchase_Stock>? stocks_List = _stock_BAL.DISPLAY_ALL_PURCHASE_STOCK();
+            List<Purchase_Stock>? stocks_List = _stock_BAL.DISPLAY_ALL_PURCHASE_STOCK();
 
             // Response container
             Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();
@@ -50,8 +50,8 @@ namespace Stock_Manage_System_API.Controllers
         // Delete a purchased stock
 
         [HttpDelete]
-        public IActionResult Delete_Purchase_Stock(int TN_ID)       
-                {
+        public IActionResult Delete_Purchase_Stock(int TN_ID)
+        {
             // Delete operation
             bool is_Success = _stock_BAL.PURCHASE_STOCK_DELETE(TN_ID);
 
@@ -111,7 +111,7 @@ namespace Stock_Manage_System_API.Controllers
         // Update purchased stock
         [HttpPut]
         public IActionResult Update_Purchase_Stock(Purchase_Stock_With_Customer_Model stock)
-            {
+        {
             // Update operation
             bool is_Success = _stock_BAL.PURCHASE_STOCK_UPDATE(stock);
 
@@ -143,7 +143,7 @@ namespace Stock_Manage_System_API.Controllers
         public IActionResult Get_Purchase_Stock_By_Id(int Stock_ID)
         {
             // Retrieve stock
-            Show_Purchase_Stock? show_Purchase_Stock  = _stock_BAL.PURCHASE_STOCKS_BY_PK(Stock_ID);
+            Purchase_Stock? show_Purchase_Stock = _stock_BAL.PURCHASE_STOCKS_BY_PK(Stock_ID);
 
             // Response container
             Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();

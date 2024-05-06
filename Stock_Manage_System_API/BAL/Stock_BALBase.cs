@@ -91,12 +91,12 @@ namespace Stock_Manage_System_API.BAL
 
 
         #region DISPLAY ALL
-        public List<Show_Purchase_Stock>? DISPLAY_ALL_PURCHASE_STOCK()
+        public List<Purchase_Stock>? DISPLAY_ALL_PURCHASE_STOCK()
         {
             try
             {
                 
-                List<Show_Purchase_Stock>? List_Of_Stocks = _stockDalBase.DISPLAY_ALL_PURCHASE_STOCK();
+                List<Purchase_Stock>? List_Of_Stocks = _stockDalBase.DISPLAY_ALL_PURCHASE_STOCK();
                 return List_Of_Stocks;
             }
             catch
@@ -110,12 +110,12 @@ namespace Stock_Manage_System_API.BAL
 
 
         #region DISPLAY BY ID
-        public Show_Purchase_Stock? PURCHASE_STOCKS_BY_PK(int Stock_ID)
+        public Purchase_Stock? PURCHASE_STOCKS_BY_PK(int Stock_ID)
         {
             try
             {
 
-                Show_Purchase_Stock? show_Purchase_Stock = _stockDalBase.PURCHASE_STOCKS_BY_PK(Stock_ID);
+                Purchase_Stock? show_Purchase_Stock = _stockDalBase.PURCHASE_STOCKS_BY_PK(Stock_ID);
 
 
                 return show_Purchase_Stock;

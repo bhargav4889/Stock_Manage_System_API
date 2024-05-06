@@ -28,9 +28,9 @@ namespace Stock_Manage_System_API.DAL
         #region Method : Get All Stock  
 
 
-        public List <Show_Purchase_Stock>? DISPLAY_ALL_PURCHASE_STOCK()
+        public List <Purchase_Stock>? DISPLAY_ALL_PURCHASE_STOCK()
         {
-            List<Show_Purchase_Stock> List_of_Stock_Model = new List<Show_Purchase_Stock>();
+            List<Purchase_Stock> List_of_Stock_Model = new List<Purchase_Stock>();
 
             DbCommand dbCommand = Command_Name("API_DISPLAY_ALL_PURCHASE_STOCK");
 
@@ -41,7 +41,7 @@ namespace Stock_Manage_System_API.DAL
                     while (dataReader.Read())
                     {
 
-                        Show_Purchase_Stock Stock_Information = new Show_Purchase_Stock();
+                        Purchase_Stock Stock_Information = new Purchase_Stock();
 
                         Stock_Information.PurchaseStockId = Convert.ToInt32(dataReader[0].ToString());
 
@@ -214,7 +214,7 @@ namespace Stock_Manage_System_API.DAL
 
         #region Method : Purchase Stock By Stock ID
 
-            public Show_Purchase_Stock? PURCHASE_STOCKS_BY_PK(int Stock_ID)
+            public Purchase_Stock? PURCHASE_STOCKS_BY_PK(int Stock_ID)
             {
                 try
                 {
@@ -227,7 +227,7 @@ namespace Stock_Manage_System_API.DAL
 
 
 
-                    Show_Purchase_Stock Stock_Information = new Show_Purchase_Stock();
+                    Purchase_Stock Stock_Information = new Purchase_Stock();
 
 
                     using (IDataReader dataReader = sqlDatabase.ExecuteReader(dbCommand))

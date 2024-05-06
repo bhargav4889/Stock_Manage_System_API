@@ -3,9 +3,13 @@ using Stock_Manage_System_API.Models;
 
 namespace Stock_Manage_System_API.BAL
 {
-    public class Dashboard_Features_BALBase
+    public class Features_BALBase
     {
-        Dashbaord_Features_DALBase Dashbaord_Features_DALBase = new Dashbaord_Features_DALBase();
+        #region
+
+        Features_DALBase Dashbaord_Features_DALBase = new Features_DALBase();
+
+        #endregion
 
 
         public List<Dashbaord_Features_Model.Pending_Customers_Payment_Sort_List> pending_Customers_Payment_Sort_List()

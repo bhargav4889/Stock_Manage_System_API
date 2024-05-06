@@ -10,6 +10,8 @@ namespace Stock_Manage_System_API.Controllers
     public class Recent_ActionsController : Controller
     {
         [HttpGet]
+
+       
         public IActionResult Recent_Actions_List()
         {
             Recent_Actions_BALBase recent_Actions_BALBase = new Recent_Actions_BALBase();
