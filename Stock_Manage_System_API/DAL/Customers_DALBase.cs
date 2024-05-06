@@ -119,6 +119,8 @@ namespace Stock_Manage_System_API.DAL
                         while (reader.Read())
                         {
                             Purchased_Stock_Model purchased_Stock = new Purchased_Stock_Model();
+                            purchased_Stock.StockId = Convert.ToInt32(reader["STOCK_ID"]);
+                            purchased_Stock.ProductId = Convert.ToInt32(reader["PRODUCT_ID"]);
                             purchased_Stock.StockDate = Convert.ToDateTime(reader["PUR_STOCK_DATE"]);
                             purchased_Stock.ProductName = reader["PRODUCT_NAME"].ToString();
                             purchased_Stock.PurchaseStockLocation = reader["LOCATION"].ToString();
