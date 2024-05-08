@@ -600,7 +600,7 @@ namespace Stock_Manage_System_API.DAL
 
                     // Define fonts
                     BaseFont boldBaseFont = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.WINANSI, BaseFont.EMBEDDED);
-                    BaseFont gujaratiBaseFont = BaseFont.CreateFont("D:\\Font\\NotoSansGujarati-Bold.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, true);
+                    BaseFont gujaratiBaseFont = BaseFont.CreateFont("https://localhost:7024/Fonts/NotoSansGujarati.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, true);
                     Font boldFont = new Font(boldBaseFont, 12);
                     Font gujaratiFont = new Font(gujaratiBaseFont, 12);
 
@@ -611,7 +611,7 @@ namespace Stock_Manage_System_API.DAL
                     document.Add(new Chunk("\n"));
 
                     // Image
-                    iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("C:\\Users\\bharg\\Desktop\\Icons\\Backimg.png");
+                    iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("https://localhost:7024/Images/Backimg.png");
                     backimage.ScaleToFit(500, 500);
                     backimage.SetAbsolutePosition(900, 400);
                     document.Add(backimage);
@@ -686,7 +686,7 @@ namespace Stock_Manage_System_API.DAL
 
                     // Define fonts
                     BaseFont boldBaseFont = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.WINANSI, BaseFont.EMBEDDED);
-                    BaseFont gujaratiBaseFont = BaseFont.CreateFont("D:\\Font\\NotoSansGujarati-Bold.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, true);
+                    BaseFont gujaratiBaseFont = BaseFont.CreateFont("https://localhost:7024/Fonts/NotoSansGujarati.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, true);
                     Font boldFont = new Font(boldBaseFont, 12);
                     Font gujaratiFont = new Font(gujaratiBaseFont, 12);
 
@@ -697,7 +697,7 @@ namespace Stock_Manage_System_API.DAL
                     document.Add(new Chunk("\n"));
 
                     // Image
-                    iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("C:\\Users\\bharg\\Desktop\\Icons\\Backimg.png");
+                    iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("https://localhost:7024/Images/Backimg.png");
                     backimage.ScaleToFit(500, 500);
                     backimage.SetAbsolutePosition(900, 400);
                     document.Add(backimage);
@@ -872,7 +872,7 @@ namespace Stock_Manage_System_API.DAL
 
                     BaseFont boldfont = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.WINANSI, BaseFont.EMBEDDED);
 
-                    BaseFont gujaratifont = BaseFont.CreateFont("D:\\Font\\NotoSansGujarati-Bold.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, true);
+                    BaseFont gujaratifont = BaseFont.CreateFont("https://localhost:7024/Fonts/NotoSansGujarati.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, true);
 
 
 
@@ -903,7 +903,7 @@ namespace Stock_Manage_System_API.DAL
 
 
 
-                    iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("C:\\Users\\bharg\\Desktop\\Icons\\Backimg.png");
+                    iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("https://localhost:7024/Images/Backimg.png");
 
 
 
@@ -1005,7 +1005,7 @@ namespace Stock_Manage_System_API.DAL
 
                     BaseFont boldfont = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.WINANSI, BaseFont.EMBEDDED);
 
-                    BaseFont gujaratifont = BaseFont.CreateFont("D:\\Font\\NotoSansGujarati-Bold.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, true);
+                    BaseFont gujaratifont = BaseFont.CreateFont("https://localhost:7024/Fonts/NotoSansGujarati.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, true);
 
 
 
@@ -1047,7 +1047,7 @@ namespace Stock_Manage_System_API.DAL
 
                     // Set Back Image
 
-                    iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("C:\\Users\\bharg\\Desktop\\Icons\\Backimg.png");
+                    iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("https://localhost:7024/Images/Backimg.png");
 
 
 
@@ -1349,7 +1349,7 @@ namespace Stock_Manage_System_API.DAL
 
                     // Define fonts
                     BaseFont boldBaseFont = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.WINANSI, BaseFont.EMBEDDED);
-                    BaseFont gujaratiBaseFont = BaseFont.CreateFont("D:\\Font\\NotoSansGujarati-Bold.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, true);
+                    BaseFont gujaratiBaseFont = BaseFont.CreateFont("https://localhost:7024/Fonts/NotoSansGujarati.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, true);
                     Font boldFont = new Font(boldBaseFont, 12);
                     Font gujaratiFont = new Font(gujaratiBaseFont, 12);
 
@@ -1360,7 +1360,7 @@ namespace Stock_Manage_System_API.DAL
                     document.Add(new Chunk("\n"));
 
                     // Image
-                    iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("C:\\Users\\bharg\\Desktop\\Icons\\Backimg.png");
+                    iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("https://localhost:7024/Images/Backimg.png");
                     backimage.ScaleToFit(500, 500);
                     backimage.SetAbsolutePosition(900, 400);
                     document.Add(backimage);
@@ -1487,7 +1487,7 @@ namespace Stock_Manage_System_API.DAL
 
                     // Define fonts
                     BaseFont boldBaseFont = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.WINANSI, BaseFont.EMBEDDED);
-                    BaseFont gujaratiBaseFont = BaseFont.CreateFont("D:\\Font\\NotoSansGujarati-Bold.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, true);
+                    BaseFont gujaratiBaseFont = BaseFont.CreateFont("https://localhost:7024/Fonts/NotoSansGujarati.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, true);
                     Font boldFont = new Font(boldBaseFont, 12);
                     Font gujaratiFont = new Font(gujaratiBaseFont, 12);
 
@@ -1498,7 +1498,7 @@ namespace Stock_Manage_System_API.DAL
                     document.Add(new Chunk("\n"));
 
                     // Image
-                    iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("C:\\Users\\bharg\\Desktop\\Icons\\Backimg.png");
+                    iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("https://localhost:7024/Images/Backimg.png");
                     backimage.ScaleToFit(500, 500);
                     backimage.SetAbsolutePosition(900, 400);
                     document.Add(backimage);
@@ -1543,7 +1543,7 @@ namespace Stock_Manage_System_API.DAL
                     document.Close();
                 }
 
-                // Get the current date for the file name
+              
 
 
 
@@ -1632,11 +1632,11 @@ namespace Stock_Manage_System_API.DAL
                         iTextSharp.text.Font bfont = new iTextSharp.text.Font(boldfont, 18);
 
 
-                        BaseFont inrfont = BaseFont.CreateFont("D:\\Font\\ITF Rupee.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED, true);
+                        BaseFont inrfont = BaseFont.CreateFont("https://localhost:7024/Fonts/Rupee.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED, true);
                         iTextSharp.text.Font ifont = new iTextSharp.text.Font(inrfont, 18);
 
 
-                        BaseFont gujaratifont = BaseFont.CreateFont("D:\\Font\\NotoSansGujarati-Bold.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED, true);
+                        BaseFont gujaratifont = BaseFont.CreateFont("https://localhost:7024/Fonts/NotoSansGujarati.ttf", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED, true);
                         iTextSharp.text.Font font = new iTextSharp.text.Font(gujaratifont, 18);
                         font.Color = new BaseColor(System.Drawing.Color.Red);
 
@@ -1657,9 +1657,9 @@ namespace Stock_Manage_System_API.DAL
                         contentByte.SetTextMatrix(460, 790); // X, Y position
                         contentByte.ShowText("Mo: +91 94277 23092");
 
-                        iTextSharp.text.Image image = iTextSharp.text.Image.GetInstance("C:\\Users\\bharg\\Desktop\\Icons\\Logo-Size_M.png");
+                        iTextSharp.text.Image image = iTextSharp.text.Image.GetInstance("https://localhost:7024/Images/Logo.png");
 
-                        iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("C:\\Users\\bharg\\Desktop\\Icons\\Backimg.png");
+                        iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("https://localhost:7024/Images/Backimg.png");
 
 
                         image.ScaleToFit(60, 60); // Adjust width and height
@@ -2052,7 +2052,7 @@ namespace Stock_Manage_System_API.DAL
 
                     BaseFont boldfont = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.WINANSI, BaseFont.EMBEDDED);
 
-                    BaseFont gujaratifont = BaseFont.CreateFont("D:\\Font\\NotoSansGujarati-Bold.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, true);
+                    BaseFont gujaratifont = BaseFont.CreateFont("https://localhost:7024/Fonts/NotoSansGujarati.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, true);
 
 
 
@@ -2083,8 +2083,7 @@ namespace Stock_Manage_System_API.DAL
 
 
 
-                    iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("C:\\Users\\bharg\\Desktop\\Icons\\Backimg.png");
-
+                    iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("https://localhost:7024/Images/Backimg.png");
 
 
                     backimage.ScaleToFit(500, 500); // Adjust width and height 
@@ -2234,7 +2233,7 @@ namespace Stock_Manage_System_API.DAL
 
                     BaseFont boldfont = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.WINANSI, BaseFont.EMBEDDED);
 
-                    BaseFont gujaratifont = BaseFont.CreateFont("D:\\Font\\NotoSansGujarati-Bold.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, true);
+                    BaseFont gujaratifont = BaseFont.CreateFont("https://localhost:7024/Fonts/NotoSansGujarati.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, true);
 
 
 
@@ -2265,7 +2264,7 @@ namespace Stock_Manage_System_API.DAL
 
 
 
-                    iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("C:\\Users\\bharg\\Desktop\\Icons\\Backimg.png");
+                    iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("https://localhost:7024/Images/Backimg.png");
 
 
 
@@ -2416,7 +2415,7 @@ namespace Stock_Manage_System_API.DAL
 
                     BaseFont boldfont = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.WINANSI, BaseFont.EMBEDDED);
 
-                    BaseFont gujaratifont = BaseFont.CreateFont("D:\\Font\\NotoSansGujarati-Bold.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, true);
+                    BaseFont gujaratifont = BaseFont.CreateFont("https://localhost:7024/Fonts/NotoSansGujarati.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, true);
 
 
 
@@ -2447,7 +2446,7 @@ namespace Stock_Manage_System_API.DAL
 
 
 
-                    iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("C:\\Users\\bharg\\Desktop\\Icons\\Backimg.png");
+                    iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("https://localhost:7024/Images/Backimg.png");
 
 
 

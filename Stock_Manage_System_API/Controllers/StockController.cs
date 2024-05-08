@@ -1,43 +1,50 @@
 ﻿using Azure;
 using Microsoft.AspNetCore.Mvc;
-using Stock_Manage_System_API.BAL; // Business Logic Layer
-using Stock_Manage_System_API.Models; // Data Models
+using Stock_Manage_System_API.BAL;
+using Stock_Manage_System_API.Models;
 
 namespace Stock_Manage_System_API.Controllers
 {
-
+    /// <summary>
+    /// Controller for managing stock-related operations.
+    /// </summary>
     [ApiController]
     [Route("api/[controller]/[action]")]
     public class StockController : Controller
     {
-        // Stock business logic handler
-        private readonly Stock_BALBase _stock_BAL = new Stock_BALBase();
+        private readonly Stock_BALBase _stock_BAL;
 
+        /// <summary>
+        /// Initializes a new instance of the StockController.
+        /// </summary>
+        public StockController()
+        {
+            _stock_BAL = new Stock_BALBase();
+        }
 
-        #region Display All
+        #region Section: Display All Purchase Stocks
 
-        // Fetch all purchased stocks
+        /// <summary>
+        /// Retrieves all purchase stock entries.
+        /// </summary>
+        /// <returns>An IActionResult containing either the list of stocks or a not found error.</returns>
         [HttpGet]
         public IActionResult Purchase_Stocks()
         {
-            // Retrieve stocks
-            List<Purchase_Stock>? stocks_List = _stock_BAL.DISPLAY_ALL_PURCHASE_STOCK();
-
-            // Response container
+            List<Purchase_Stock>? stocks_List = _stock_BAL.DisplayAllPurchaseStock();
             Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();
 
-            // Check stock existence
             if (stocks_List?.Count > 0)
             {
                 response.Add("status", true);
-                response.Add("message", "Data Found!.");
+                response.Add("message", "Data Found!");
                 response.Add("data", stocks_List);
                 return Ok(response);
             }
             else
             {
                 response.Add("status", false);
-                response.Add("message", "Data Not Found!.");
+                response.Add("message", "Data Not Found!");
                 response.Add("data", "Not Found Data !");
                 return NotFound(response);
             }
@@ -45,20 +52,19 @@ namespace Stock_Manage_System_API.Controllers
 
         #endregion
 
-        #region DELETE 
+        #region Section: Delete Purchase Stock
 
-        // Delete a purchased stock
-
+        /// <summary>
+        /// Deletes a purchase stock entry based on the transaction ID.
+        /// </summary>
+        /// <param name="TN_ID">Transaction ID of the purchase stock to delete.</param>
+        /// <returns>An IActionResult indicating whether the deletion was successful.</returns>
         [HttpDelete]
         public IActionResult Delete_Purchase_Stock(int TN_ID)
         {
-            // Delete operation
-            bool is_Success = _stock_BAL.PURCHASE_STOCK_DELETE(TN_ID);
-
-            // Response container
+            bool is_Success = _stock_BAL.DeletePurchaseStock(TN_ID);
             Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();
 
-            // Check delete success
             if (is_Success)
             {
                 response.Add("status", true);
@@ -73,23 +79,21 @@ namespace Stock_Manage_System_API.Controllers
             }
         }
 
-
         #endregion
 
+        #region Section: Insert Purchase Stock With Customer Details
 
-        #region INSERT
-
-        // Add new purchased stock
+        /// <summary>
+        /// Inserts a new purchase stock entry.
+        /// </summary>
+        /// <param name="model">The purchase stock model to insert.</param>
+        /// <returns>An IActionResult indicating whether the insertion was successful.</returns>
         [HttpPost]
         public IActionResult Insert_Purchase_Stock(Purchase_Stock_With_Customer_Model model)
         {
-            // Insert operation
-            bool is_Success = _stock_BAL.PURCHASE_STOCK_INSERT(model);
-
-            // Response container
+            bool is_Success = _stock_BAL.InsertPurchaseStock(model);
             Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();
 
-            // Check insert success
             if (is_Success)
             {
                 response.Add("status", true);
@@ -106,19 +110,19 @@ namespace Stock_Manage_System_API.Controllers
 
         #endregion
 
-        #region UPDATE
+        #region Section: Update Purchase Stock Details
 
-        // Update purchased stock
+        /// <summary>
+        /// Updates an existing purchase stock entry.
+        /// </summary>
+        /// <param name="stock">The purchase stock model to update.</param>
+        /// <returns>An IActionResult indicating whether the update was successful.</returns>
         [HttpPut]
         public IActionResult Update_Purchase_Stock(Purchase_Stock_With_Customer_Model stock)
         {
-            // Update operation
-            bool is_Success = _stock_BAL.PURCHASE_STOCK_UPDATE(stock);
-
-            // Response container
+            bool is_Success = _stock_BAL.UpdatePurchaseStock(stock);
             Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();
 
-            // Check update success
             if (is_Success)
             {
                 response.Add("status", true);
@@ -135,67 +139,67 @@ namespace Stock_Manage_System_API.Controllers
 
         #endregion
 
+        #region Section: Purchase Stock By Stock ID
 
-        #region DISPLAY BY ID
-
-        // Fetch purchased stock by ID
+        /// <summary>
+        /// Retrieves a purchase stock entry by its ID.
+        /// </summary>
+        /// <param name="Stock_ID">The ID of the stock to retrieve.</param>
+        /// <returns>An IActionResult containing the stock data or a not found error.</returns>
         [HttpGet("{Stock_ID}")]
         public IActionResult Get_Purchase_Stock_By_Id(int Stock_ID)
         {
-            // Retrieve stock
-            Purchase_Stock? show_Purchase_Stock = _stock_BAL.PURCHASE_STOCKS_BY_PK(Stock_ID);
-
-            // Response container
+            Purchase_Stock? show_Purchase_Stock = _stock_BAL.PurchaseStockByID(Stock_ID);
             Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();
 
-            // Check stock existence
             if (show_Purchase_Stock != null && show_Purchase_Stock.PurchaseStockId != 0)
             {
                 response.Add("status", true);
-                response.Add("message", "Data Found!.");
+                response.Add("message", "Data Found!");
                 response.Add("data", show_Purchase_Stock);
                 return Ok(response);
             }
             else
             {
                 response.Add("status", false);
-                response.Add("message", "Data Not Found!.");
+                response.Add("message", "Data Not Found!");
                 response.Add("data", "No Data");
                 return NotFound(response);
             }
         }
 
+        #endregion
+
+        #region Section: Fetch Stock And Customer Information By Those IDs
+
+        /// <summary>
+        /// Fetches stock and customer details by their IDs.
+        /// </summary>
+        /// <param name="Stock_ID">The stock ID to search for.</param>
+        /// <param name="Customer_ID">The customer ID to search for.</param>
+        /// <returns>An IActionResult containing the combined details of stock and customer or a not found error.</returns>
 
         [HttpGet("{Stock_ID}&{Customer_ID}")]
-
         public IActionResult Fetch_Stock_And_Customer_Details(int Stock_ID, int Customer_ID)
         {
             Purchase_Stock_With_Customer_Model purchase_Stock_With_Customer_Model = _stock_BAL.Fetch_Stock_And_Customer_Details(Stock_ID, Customer_ID);
-
-            // Response container
             Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();
 
-            // Check stock existence
             if (purchase_Stock_With_Customer_Model != null && purchase_Stock_With_Customer_Model.Purchase_Stock.PurchaseStockId != 0 && purchase_Stock_With_Customer_Model.Customers_Model.CustomerId != 0)
             {
                 response.Add("status", true);
-                response.Add("message", "Data Found!.");
+                response.Add("message", "Data Found!");
                 response.Add("data", purchase_Stock_With_Customer_Model);
                 return Ok(response);
             }
             else
             {
                 response.Add("status", false);
-                response.Add("message", "Data Not Found!.");
+                response.Add("message", "Data Not Found!");
                 response.Add("data", "No Data");
                 return NotFound(response);
             }
-
         }
-
         #endregion
-
-
-
     }
 }

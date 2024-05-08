@@ -142,5 +142,32 @@ namespace Stock_Manage_System_API.Controllers
             }
         }
 
+
+        // Delete a purchased stock
+
+        [HttpDelete]
+        public IActionResult Delete_Sale(int Sale_ID)
+        {
+            // Delete operation
+            bool is_Success = sales_BALBase.Delete_Sale(Sale_ID);
+
+            // Response container
+            Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();
+
+            // Check delete success
+            if (is_Success)
+            {
+                response.Add("status", true);
+                response.Add("message", "Data Deleted Successfully");
+                return Ok(response);
+            }
+            else
+            {
+                response.Add("status", false);
+                response.Add("message", "Error Occurred!");
+                return Ok(response);
+            }
+        }
+
     }
 }

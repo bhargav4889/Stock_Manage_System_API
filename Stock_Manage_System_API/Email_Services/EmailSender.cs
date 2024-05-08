@@ -43,29 +43,6 @@
         }
 
 
-        /*  public Task SendEmailWithAttachmentAsync(string email, string subject, string body, Attachment attachment)
-          {
-              using (var smtpClient = new SmtpClient(_host)
-              {
-                  Port = _port,
-                  Credentials = new NetworkCredential(_userName, _password),
-                  EnableSsl = _enableSSL,
-              })
-              {
-                  var mailMessage = new MailMessage
-                  {
-                      From = new MailAddress(_userName, "Stock Manage System"),
-                      Subject = subject,
-                      Body = body,
-                      IsBodyHtml = true,
-                  };
-                  mailMessage.To.Add(email);
-                  mailMessage.Attachments.Add(attachment);
-
-                  return smtpClient.SendMailAsync(mailMessage);
-              }
-          }*/
-
         public async Task SendEmailWithAttachmentAsync(string email, string subject, string body, Attachment attachment)
         {
             try

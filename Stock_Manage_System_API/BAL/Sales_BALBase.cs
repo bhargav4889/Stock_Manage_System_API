@@ -51,6 +51,27 @@ namespace Stock_Manage_System_API.BAL
         }
 
 
+        public bool Delete_Sale(int Sale_ID)
+        {
+            try
+            {
+
+                if (sales_DALBase.DELETE_SALE(Sale_ID))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+
         public Sale_Customer_Combied_Model Fetch_Sale_And_Customer_Details(int Sale_ID , int Customer_ID)
         {
             Sale_Customer_Combied_Model sale_Customer_Combied_Model = sales_DALBase.Fetch_Sale_And_Customer_Details(Sale_ID, Customer_ID);

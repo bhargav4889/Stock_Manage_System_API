@@ -1,4 +1,5 @@
-﻿using Microsoft.Practices.EnterpriseLibrary.Data.Sql;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Practices.EnterpriseLibrary.Data.Sql;
 using Stock_Manage_System_API.Models;
 using System.Data;
 using System.Data.Common;
@@ -89,6 +90,7 @@ namespace Stock_Manage_System_API.DAL
                 sqlDatabase.AddInParameter(dbCommand, "@SALE_DATE", SqlDbType.Date, sale_Customer_Combined_Model.sale.Create_Sales);
                 sqlDatabase.AddInParameter(dbCommand, "@PRODUCT_ID", SqlDbType.Int, sale_Customer_Combined_Model.sale.Product_Id);
                 sqlDatabase.AddInParameter(dbCommand, "@RECEIVE_PAYMENT_DATE", SqlDbType.Date, sale_Customer_Combined_Model.sale.Receive_Payment_Date);
+                sqlDatabase.AddInParameter(dbCommand, "@RECEIVE_PAYMENT_METHOD", SqlDbType.VarChar, sale_Customer_Combined_Model.sale.Payment_Method);
                 sqlDatabase.AddInParameter(dbCommand, "@CUSTOMER_ID", SqlDbType.Int, sale_Customer_Combined_Model.customer.CustomerId);
                 sqlDatabase.AddInParameter(dbCommand, "@PRODUCT_BRAND_NAME", SqlDbType.VarChar, sale_Customer_Combined_Model.sale.Brand_Name);
                 sqlDatabase.AddInParameter(dbCommand, "@BAGS", SqlDbType.Decimal, sale_Customer_Combined_Model.sale.Bags);
@@ -98,7 +100,7 @@ namespace Stock_Manage_System_API.DAL
                 sqlDatabase.AddInParameter(dbCommand, "@TOTAL_PRICE", SqlDbType.Decimal, sale_Customer_Combined_Model.sale.Total_Price);
                 sqlDatabase.AddInParameter(dbCommand, "@DISCOUNT", SqlDbType.Decimal, sale_Customer_Combined_Model.sale.Discount);
                 sqlDatabase.AddInParameter(dbCommand, "@RECEIVE_AMOUNT", SqlDbType.Decimal, sale_Customer_Combined_Model.sale.Receive_Amount);
-                sqlDatabase.AddInParameter(dbCommand, "@PAYMENT_METHOD", SqlDbType.VarChar, sale_Customer_Combined_Model.sale.Payment_Method);
+               
 
                 if(sale_Customer_Combined_Model.sale.Payment_Method == "CASH")
                 {
@@ -407,6 +409,27 @@ namespace Stock_Manage_System_API.DAL
 
 
         }
+
+
+        // Delete a Sale 
+        public bool DELETE_SALE(int Sale_ID)
+        {
+            try
+            {
+
+                DbCommand dbCommand = Command_Name("API_SALE_DELETE");
+                sqlDatabase.AddInParameter(dbCommand, "@SALE_ID", SqlDbType.Int, Sale_ID);
+                if (Convert.ToBoolean(sqlDatabase.ExecuteNonQuery(dbCommand)))
+                    return true;
+                else
+                    return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
 
 
     }

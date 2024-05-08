@@ -2,7 +2,7 @@
 
 namespace Stock_Manage_System_API.Models
 {
-    public class All_DropDowns_Model
+    public class DropDowns_Model
     {
         public List<Product_DropDown_Model> Products_DropDowns_List { get;  set; }
     

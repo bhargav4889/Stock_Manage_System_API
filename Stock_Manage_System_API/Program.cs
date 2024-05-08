@@ -1,15 +1,17 @@
-using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
-using Stock_Manage_System_API.BAL;
-using Stock_Manage_System_API.DAL;
-using Stock_Manage_System_API.Email_Services;
-using Stock_Manage_System_API.Login_Service;
 using System.Text;
-
+using Stock_Manage_System_API.Email_Services;
+using Stock_Manage_System_API.SMS_Services;
+using Stock_Manage_System_API.Reminder_Service;
+using Microsoft.AspNetCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -25,19 +27,20 @@ builder.Services.AddTransient<IEmailSender>(i => new EmailSender(
     builder.Configuration["EmailSettings:Password"]
 ));
 
-// Register DailyEmailService if it is not already registered
-builder.Services.AddScoped<DailyEmailService>();
+// Register SMS Sender
+builder.Services.AddTransient<ISmsSender>(s => new SmsSender(
+    builder.Configuration["TwilioSettings:AccountSid"],
+    builder.Configuration["TwilioSettings:AuthToken"],
+    builder.Configuration["TwilioSettings:PhoneNumber"]
+));
 
-// Register the Background Service
-builder.Services.AddHostedService<DailyEmailBackgroundService>();
+// Register ReminderService as Scoped
+builder.Services.AddScoped<ReminderService>();
 
-// JWT Service
-builder.Services.AddSingleton<JWT_Service>();
-builder.Services.AddScoped<IAuthBAL, Auth_BALBase>();
-builder.Services.AddScoped<IAuthDAL, Auth_DALBase>();
+// Register Background Services
+builder.Services.AddHostedService<ReminderBackgroundProcess>();
 
-
-// Authentication
+// JWT Configuration
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -53,11 +56,19 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-//Daily Email Service 
-builder.Services.AddHostedService<DailyEmailBackgroundService>();
-
-
 var app = builder.Build();
+
+// Exception Handling Middleware
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler(c => c.Run(async context =>
+    {
+        var exception = context.Features.Get<IExceptionHandlerPathFeature>()?.Error;
+        var response = new { Error = exception?.Message };
+        context.Response.StatusCode = 500;
+        await context.Response.WriteAsJsonAsync(response);
+    }));
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -66,19 +77,31 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-app.UseAuthentication(); // Ensure authentication is used
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
-// Serving a folder outside of wwwroot
+// Static Files Configuration
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(
         Path.Combine(Directory.GetCurrentDirectory(), "Images")),
+        
     RequestPath = "/Images"
 });
 
-app.Run();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "Fonts")),
 
+    RequestPath = "/Fonts"
+});
+
+app.Run();
