@@ -29,7 +29,7 @@ namespace Stock_Manage_System_API.Controllers
         /// </summary>
         /// <returns>An IActionResult containing either the list of stocks or a not found error.</returns>
         [HttpGet]
-        public IActionResult Purchase_Stocks()
+        public IActionResult GetAllPurchaseStocks()
         {
             List<Purchase_Stock>? stocks_List = _stock_BAL.DisplayAllPurchaseStock();
             Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();
@@ -60,7 +60,7 @@ namespace Stock_Manage_System_API.Controllers
         /// <param name="TN_ID">Transaction ID of the purchase stock to delete.</param>
         /// <returns>An IActionResult indicating whether the deletion was successful.</returns>
         [HttpDelete]
-        public IActionResult Delete_Purchase_Stock(int TN_ID)
+        public IActionResult RemovePurchaseStock(int TN_ID)
         {
             bool is_Success = _stock_BAL.DeletePurchaseStock(TN_ID);
             Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();
@@ -89,7 +89,7 @@ namespace Stock_Manage_System_API.Controllers
         /// <param name="model">The purchase stock model to insert.</param>
         /// <returns>An IActionResult indicating whether the insertion was successful.</returns>
         [HttpPost]
-        public IActionResult Insert_Purchase_Stock(Purchase_Stock_With_Customer_Model model)
+        public IActionResult AddPurchaseStockWithCustomerDetails(Purchase_Stock_With_Customer_Model model)
         {
             bool is_Success = _stock_BAL.InsertPurchaseStock(model);
             Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();
@@ -118,7 +118,7 @@ namespace Stock_Manage_System_API.Controllers
         /// <param name="stock">The purchase stock model to update.</param>
         /// <returns>An IActionResult indicating whether the update was successful.</returns>
         [HttpPut]
-        public IActionResult Update_Purchase_Stock(Purchase_Stock_With_Customer_Model stock)
+        public IActionResult UpdatePurchaseStock(Purchase_Stock_With_Customer_Model stock)
         {
             bool is_Success = _stock_BAL.UpdatePurchaseStock(stock);
             Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();
@@ -147,7 +147,7 @@ namespace Stock_Manage_System_API.Controllers
         /// <param name="Stock_ID">The ID of the stock to retrieve.</param>
         /// <returns>An IActionResult containing the stock data or a not found error.</returns>
         [HttpGet("{Stock_ID}")]
-        public IActionResult Get_Purchase_Stock_By_Id(int Stock_ID)
+        public IActionResult GetPurchaseStockById(int Stock_ID)
         {
             Purchase_Stock? show_Purchase_Stock = _stock_BAL.PurchaseStockByID(Stock_ID);
             Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();
@@ -180,7 +180,7 @@ namespace Stock_Manage_System_API.Controllers
         /// <returns>An IActionResult containing the combined details of stock and customer or a not found error.</returns>
 
         [HttpGet("{Stock_ID}&{Customer_ID}")]
-        public IActionResult Fetch_Stock_And_Customer_Details(int Stock_ID, int Customer_ID)
+        public IActionResult GetPurchaseStockAndCustomerDetails(int Stock_ID, int Customer_ID)
         {
             Purchase_Stock_With_Customer_Model purchase_Stock_With_Customer_Model = _stock_BAL.Fetch_Stock_And_Customer_Details(Stock_ID, Customer_ID);
             Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();

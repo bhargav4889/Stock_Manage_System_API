@@ -1333,7 +1333,7 @@ namespace Stock_Manage_System_API.DAL
 
         public byte[] Purchase_Stocks_Statement_PDF()
         {
-            List<Purchase_Stock> purchase_Stocks = stock_DALBase.DISPLAY_ALL_PURCHASE_STOCK();
+            List<Purchase_Stock> purchase_Stocks = stock_DALBase.DisplayAllPurchaseStock();
 
             DataTable dataTable = Convert_List_To_DataTable_For_Stock_Statement(purchase_Stocks);
 
@@ -1423,7 +1423,7 @@ namespace Stock_Manage_System_API.DAL
 
         public byte[] Purchase_Stocks_Statement_EXCEL()
         {
-            List<Purchase_Stock> purchase_Stocks = stock_DALBase.DISPLAY_ALL_PURCHASE_STOCK();
+            List<Purchase_Stock> purchase_Stocks = stock_DALBase.DisplayAllPurchaseStock();
 
             DataTable dataTable = Convert_List_To_DataTable_For_Stock_Statement(purchase_Stocks);
 
