@@ -2,152 +2,136 @@
 using Microsoft.AspNetCore.Mvc;
 using Stock_Manage_System_API.BAL;
 using Stock_Manage_System_API.Models;
-using System.Data;
+using System.Collections.Generic;
 using static Stock_Manage_System_API.Models.InvoicesModel;
 
 namespace Stock_Manage_System_API.Controllers
 {
-
     [ApiController]
     [Route("api/[controller]/[action]")]
-
     public class CustomersController : Controller
     {
-        private readonly Customers_BALBase customers_BALBase = new Customers_BALBase();
+        private readonly Customers_BALBase _customers_BALBase;
 
+        /// <summary>
+        /// Initializes a new instance of the CustomersController.
+        /// </summary>
+        public CustomersController()
+        {
+            _customers_BALBase = new Customers_BALBase();
+        }
 
-        #region DISPLAY ALL
+        #region Section: Display All Customers
 
+        /// <summary>
+        /// Retrieves all customers from the database.
+        /// </summary>
+        /// <returns>A list of all customers or a message indicating no data was found.</returns>
         [HttpGet]
-       
-        public IActionResult Customers_List()
+        public IActionResult GetAllCustomers()
         {
+            var customers = _customers_BALBase.GetAllCustomers();
+            var res = new Dictionary<string,
+              dynamic>();
 
-
-            List<Customer_Model> customers = customers_BALBase.SHOW_ALL_CUSTOMERS();
-
-            Dictionary<string, dynamic> res = new Dictionary<string, dynamic>();
-
-            if (customers.Count > 0 && customers != null)
+            if (customers.Count > 0)
             {
                 res.Add("status", true);
-
-                res.Add("message", "Data Found !.");
-
+                res.Add("message", "Data Found!");
                 res.Add("data", customers);
-
                 return Ok(res);
             }
             else
             {
                 res.Add("status", false);
-
-                res.Add("message", "Data Not Found !.");
-
-                res.Add("data", null);
-
-
-                return NotFound(res);
+                res.Add("message", "Data Not Found!");
+                res.Add("data", "No Data!");
+                return Ok(res);
             }
-
-
         }
 
         #endregion
 
+        #region Section: Account Details by Customer ID and Type
 
-        #region ACCOUNT_DETAILS BY CUSTOMER ID 
-
-
+        /// <summary>
+        /// Retrieves detailed account information for a customer based on their ID and type.
+        /// </summary>
+        /// <param name="Customer_ID">The customer's ID.</param>
+        /// <param name="Customer_Type">The type of the customer.</param>
+        /// <returns>Account details including purchased stock information or a message if no data is found.</returns>
         [HttpGet("{Customer_ID}&{Customer_Type}")]
-
-        public IActionResult Account_Details(int Customer_ID, string Customer_Type)
+        public IActionResult GetAccountDetails(int Customer_ID, string Customer_Type)
         {
+            var customerDetails = _customers_BALBase.RetrieveAccountDetails(Customer_ID, Customer_Type);
+            var res = new Dictionary<string,
+              dynamic>();
 
-
-            CustomerDetails_With_Purchased_Stock_Model customerDetails_With_Purchased_Stock = customers_BALBase.Account_Details(Customer_ID, Customer_Type);
-
-            Dictionary<string, dynamic> res = new Dictionary<string, dynamic>();
-
-            if (customerDetails_With_Purchased_Stock!= null)
+            if (customerDetails != null)
             {
                 res.Add("status", true);
-
-                res.Add("message", "Data Found !.");
-
-                res.Add("data", customerDetails_With_Purchased_Stock);
-
-
-
-
+                res.Add("message", "Data Found!");
+                res.Add("data", customerDetails);
                 return Ok(res);
             }
             else
             {
                 res.Add("status", false);
-
-                res.Add("message", "Data Not Found !.");
-
-                res.Add("data", null);
-
-
-                return NotFound(res);
+                res.Add("message", "Data Not Found!");
+                res.Add("data", "No Data!");
+                return Ok(res);
             }
-
-
-
-
         }
 
         #endregion
 
+        #region Section: Insert Customer
 
-
-        #region INSERT
-
+        /// <summary>
+        /// Adds a new customer to the database.
+        /// </summary>
+        /// <param name="customers">The customer data model to be inserted.</param>
+        /// <returns>Status and message indicating whether the insertion was successful.</returns>
         [HttpPost]
-
-        public IActionResult Insert_Customer(Customer_Model customers)
+        public IActionResult AddCustomer(Customer_Model customers)
         {
-            Customers_BALBase customers_BALBase = new Customers_BALBase();
+            bool isSuccess = _customers_BALBase.InsertCustomer(customers);
+            var res = new Dictionary<string,
+              dynamic>();
 
-                bool IsSuccess = customers_BALBase.CREATE_CUSTOMER(customers);
-
-            Dictionary<string, dynamic> res = new Dictionary<string, dynamic>();
-
-            if (IsSuccess)
+            if (isSuccess)
             {
-
                 res.Add("status", true);
-                res.Add("message", "Data Insert Successfully!");
+                res.Add("message", "Data Inserted Successfully!");
                 res.Add("data", customers);
                 return Ok(res);
             }
             else
             {
-
                 res.Add("status", false);
-                res.Add("message", "Some Error Occured !");
+                res.Add("message", "Some Error Occurred!");
                 return Ok(res);
             }
         }
 
-
         #endregion
 
-        #region DELETE
+        #region Section: Delete Customer
 
+        /// <summary>
+        /// Deletes a customer based on their ID and type.
+        /// </summary>
+        /// <param name="Customer_ID">The ID of the customer to delete.</param>
+        /// <param name="Customer_Type">The type of the customer to delete.</param>
+        /// <returns>Status and message indicating whether the deletion was successful.</returns>
         [HttpDelete]
-        public IActionResult Delete_Customer(int Customer_ID,string Customer_Type)
+        public IActionResult DeleteCustomer(int Customer_ID, string Customer_Type)
         {
-            // Delete operation
-            bool is_Success = customers_BALBase.Delete_Customer(Customer_ID, Customer_Type);
+            bool isSuccess = _customers_BALBase.DeleteCustomer(Customer_ID, Customer_Type);
+            var response = new Dictionary<string,
+              dynamic>();
 
-            // Response container
-            Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();
-
-            // Check delete success
-            if (is_Success)
+            if (isSuccess)
             {
                 response.Add("status", true);
                 response.Add("message", "Data Deleted Successfully");
@@ -161,25 +145,23 @@ namespace Stock_Manage_System_API.Controllers
             }
         }
 
-
-
         #endregion
 
+        #region Section: Update Customer
 
-        #region UPDATE
-
+        /// <summary>
+        /// Updates an existing customer's information.
+        /// </summary>
+        /// <param name="customers">The customer data model to be updated.</param>
+        /// <returns>Status and message indicating whether the update was successful.</returns>
         [HttpPut]
-
-        public IActionResult Update_Customer(Customer_Model customers)
+        public IActionResult UpdateCustomer(Customer_Model customers)
         {
-            // Update operation
-            bool is_Success = customers_BALBase.Update_Customer(customers);
+            bool isSuccess = _customers_BALBase.UpdateCustomer(customers);
+            var response = new Dictionary<string,
+              dynamic>();
 
-            // Response container
-            Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();
-
-            // Check update success
-            if (is_Success)
+            if (isSuccess)
             {
                 response.Add("status", true);
                 response.Add("message", "Data Updated Successfully!");
@@ -193,122 +175,107 @@ namespace Stock_Manage_System_API.Controllers
             }
         }
 
+        #endregion
+
+        #region Section: Customer By ID and Type
+
+        /// <summary>
+        /// Retrieves customer data based on customer ID and type.
+        /// </summary>
+        /// <param name="Customer_ID">The customer's ID.</param>
+        /// <param name="Customer_Type">The type of the customer.</param>
+        /// <returns>Customer information if found or a message if not found.</returns>
+        [HttpGet("{Customer_ID}&{Customer_Type}")]
+        public IActionResult GetCustomerByIDAndType(int Customer_ID, string Customer_Type)
+        {
+            var customers = _customers_BALBase.CustomerByIDAndType(Customer_ID, Customer_Type);
+            var res = new Dictionary<string,
+              dynamic>();
+
+            if (customers != null)
+            {
+                res.Add("status", true);
+                res.Add("message", "Data Found!");
+                res.Add("data", customers);
+                return Ok(res);
+            }
+            else
+            {
+                res.Add("status", false);
+                res.Add("message", "Data Not Found!");
+                res.Add("data", null);
+                return NotFound(res);
+            }
+        }
 
         #endregion
 
+        #region Section: Customer Does Exist
 
+        #region Area: Buyer Customer Exist
 
-        [HttpGet("{Customer_ID}&{Customer_Type}")]
-
-        public IActionResult Get_Customer(int Customer_ID,string Customer_Type)
-        {
-            Customer_Model customers = customers_BALBase.Customer_Info_By_PK(Customer_ID, Customer_Type);
-
-            Dictionary<string, dynamic> res = new Dictionary<string, dynamic>();
-
-            if (Customer_ID != 0 && customers != null)
-            {
-                res.Add("status", true);
-
-                res.Add("message", "Data Found !.");
-
-                res.Add("data", customers);
-
-                return Ok(res);
-
-            }
-            else
-            {
-                res.Add("status", false);
-
-                res.Add("message", "Data Not Found !.");
-
-                res.Add("data", null);
-
-
-                return NotFound(res);
-            }
-
-
-
-        }
-
-
-
-
+        /// <summary>
+        /// Checks if a buyer customer with a specific name exists.
+        /// </summary>
+        /// <param name="Customer_Name">The name of the buyer customer to check.</param>
+        /// <returns>List of customers if found, or a message if no customer is found.</returns>
         [HttpGet("{Customer_Name}")]
-
-        public IActionResult BUYER_CUSTOMER_EXIST_IN_SYSTEM(string Customer_Name)
+        public IActionResult IsBuyerCustomerExist(string Customer_Name)
         {
+            var existingCustomers = _customers_BALBase.DoesBuyerCustomerExist(Customer_Name);
+            var res = new Dictionary<string,
+              dynamic>();
 
-            List<Customer_Model> List_Of_Exist_Customers = customers_BALBase.BUYER_CUSTOMER_EXIST_IN_SYSTEM(Customer_Name);
-
-
-
-            Dictionary<string, dynamic> res = new Dictionary<string, dynamic>();
-
-            if (List_Of_Exist_Customers.Count > 0 && List_Of_Exist_Customers != null)
+            if (existingCustomers.Count > 0)
             {
                 res.Add("status", true);
-
                 res.Add("message", "Already Customers Exists.");
-
-                res.Add("data", List_Of_Exist_Customers);
-
+                res.Add("data", existingCustomers);
                 return Ok(res);
             }
             else
             {
                 res.Add("status", false);
-
-                res.Add("message", "Data Not Found !.");
-
-                res.Add("data", null);
-
-
+                res.Add("message", "Data Not Found!");
+                res.Add("data", "No Data!");
                 return NotFound(res);
             }
         }
 
+        #endregion
 
+        #region Area: Seller Customer Exist
+
+        /// <summary>
+        /// Checks if a seller customer with a specific name exists.
+        /// </summary>
+        /// <param name="Customer_Name">The name of the seller customer to check.</param>
+        /// <returns>List of customers if found, or a message if no customer is found.</returns>
         [HttpGet("{Customer_Name}")]
-
-        public IActionResult SELLER_CUSTOMER_EXIST_IN_SYSTEM(string Customer_Name)
+        public IActionResult IsSellerCustomerExist(string Customer_Name)
         {
+            var existingCustomers = _customers_BALBase.DoesSellerCustomerExist(Customer_Name);
+            var res = new Dictionary<string,
+              dynamic>();
 
-            List<Customer_Model> List_Of_Exist_Customers = customers_BALBase.SELLER_CUSTOMER_EXIST_IN_SYSTEM(Customer_Name);
-
-
-
-            Dictionary<string, dynamic> res = new Dictionary<string, dynamic>();
-
-            if (List_Of_Exist_Customers.Count > 0 && List_Of_Exist_Customers != null)
+            if (existingCustomers.Count > 0)
             {
                 res.Add("status", true);
-
                 res.Add("message", "Already Customers Exists.");
-
-                res.Add("data", List_Of_Exist_Customers);
-
+                res.Add("data", existingCustomers);
                 return Ok(res);
             }
             else
             {
                 res.Add("status", false);
-
-                res.Add("message", "Data Not Found !.");
-
-                res.Add("data", null);
-
-
-                return NotFound(res);
+                res.Add("message", "Data Not Found!");
+                res.Add("data", "No Data!");
+                return Ok(res);
             }
         }
 
+        #endregion
 
-
-
-
-
+        #endregion
     }
 }

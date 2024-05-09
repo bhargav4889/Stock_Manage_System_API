@@ -1,19 +1,29 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/// <summary>
+/// Represents the Features controller for managing features in the API.
+/// </summary>
+using Microsoft.AspNetCore.Mvc;
 using Stock_Manage_System_API.BAL;
 using Stock_Manage_System_API.Models;
 
 namespace Stock_Manage_System_API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]/[action]")]   
+    [Route("api/[controller]/[action]")]
     public class FeaturesController : Controller
     {
+        /// <summary>
+        /// Retrieves a list of pending customers payment sort list.
+        /// </summary>
+        /// <returns>An <see cref="IActionResult"/> object containing a dictionary with the status, message, and data.</returns>
+
+        #region Method : Sort List of Pending Customer Payments Recent 
+
         [HttpGet]
-        public IActionResult Pending_Customers_Payment_Sort_List()
+        public IActionResult PendingCustomersPaymentSortList()
         {
             Features_BALBase dashboard_Features_BALBase = new Features_BALBase();
 
-            List<Dashbaord_Features_Model.Pending_Customers_Payment_Sort_List> pending_Customers_Payment_Sort_Lists = dashboard_Features_BALBase.pending_Customers_Payment_Sort_List();
+            List<Dashbaord_Features_Model.Pending_Customers_Payment_Sort_List> pending_Customers_Payment_Sort_Lists = dashboard_Features_BALBase.PendingCustomersPaymentSortList();
 
             Dictionary<string, dynamic> res = new Dictionary<string, dynamic>();
 
@@ -35,12 +45,9 @@ namespace Stock_Manage_System_API.Controllers
 
                 res.Add("data", null);
 
-
                 return Ok(res);
             }
-
-
-
         }
+        #endregion
     }
 }

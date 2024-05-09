@@ -7,13 +7,18 @@ using System.Text;
 
 namespace Stock_Manage_System_API.Email_Services
 {
+    /// <summary>
+    /// A service for sending a daily email with a report attached as a PDF.
+    /// </summary>
     public class DailyEmailService
     {
         private readonly IEmailSender _emailSender;
         private readonly string _connectionString;
 
-
-        // Step - 1 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DailyEmailService"/> class.
+        /// </summary>
+        /// <param name="emailSender">The email sender to use for sending emails.</param>
         public DailyEmailService(IEmailSender emailSender)
         {
             _emailSender = emailSender;
@@ -24,8 +29,10 @@ namespace Stock_Manage_System_API.Email_Services
               .GetConnectionString("MyConnection");
         }
 
-
-        // Step-2
+        /// <summary>
+        /// Gets the recent actions from the database.
+        /// </summary>
+        /// <returns>A <see cref="DataTable"/> containing the recent actions.</returns>
         private async Task<DataTable> Get_Recent_Actions()
         {
             DataTable dataTable = new DataTable();
@@ -42,15 +49,13 @@ namespace Stock_Manage_System_API.Email_Services
                 }
             }
             return dataTable;
-
-
-
-
         }
 
-        //Step-3
-
-
+        /// <summary>
+        /// Creates a PDF report from the given data table.
+        /// </summary>
+        /// <param name="dataTable">The data table to use for creating the report.</param>
+        /// <returns>A tuple containing the PDF attachment and the byte array of the PDF.</returns>
         public async Task<(Attachment, byte[])> Create_Reporting_PDF(DataTable dataTable)
         {
             using (MemoryStream memoryStream = new MemoryStream())
@@ -63,7 +68,7 @@ namespace Stock_Manage_System_API.Email_Services
                 float columnWidth = 100f;
 
                 BaseFont boldfont = BaseFont.CreateFont(BaseFont.HELVETICA_BOLD, BaseFont.WINANSI, BaseFont.EMBEDDED);
-                BaseFont gujaratifont = BaseFont.CreateFont("D:\\Font\\NotoSansGujarati-Bold.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, true);
+                BaseFont gujaratifont = BaseFont.CreateFont("https://localhost:7024/Fonts/NotoSansGujarati.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED, true);
 
                 // Add title
                 Paragraph title = new Paragraph("Daily Reporting", new iTextSharp.text.Font(boldfont, 35));
@@ -72,19 +77,21 @@ namespace Stock_Manage_System_API.Email_Services
 
                 document.Add(new Chunk("\n")); // Add a line break
 
-                iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("C:\\Users\\bharg\\Desktop\\Icons\\Backimg.png");
-                backimage.ScaleToFit(300,300); // Adjust width and height
+                iTextSharp.text.Image backimage = iTextSharp.text.Image.GetInstance("https://localhost:7024/Images/Backimg.png");
+                backimage.ScaleToFit(300, 300); // Adjust width and height
 
                 // Set position to center of the page (A4 size typically is 595 x 842 points)
                 backimage.SetAbsolutePosition((PageSize.A4.Width - backimage.ScaledWidth) / 2, (PageSize.A4.Height - backimage.ScaledHeight) / 2);
 
-                // Apply opacity to the image
-                PdfContentByte content = pdfWriter.DirectContentUnder;
+                // Apply opacity to the imagePdfContentByte content = pdfWriter.DirectContentUnder;
                 PdfGState gs = new PdfGState
                 {
                     FillOpacity = 0.4f, // 40% opacity
                     StrokeOpacity = 0.4f
                 };
+                PdfContentByte content = pdfWriter.DirectContentUnder;
+
+
                 content.SetGState(gs);
                 content.AddImage(backimage);
 
@@ -137,12 +144,10 @@ namespace Stock_Manage_System_API.Email_Services
             }
         }
 
-
-
-
-
-
-
+        /// <summary>
+        /// Sends the daily email with the report attached as a PDF.
+        /// </summary>
+        /// <param name="recipientEmail">The email address of the recipient.</param>
         public async Task SendDailyActionsEmailAsync(string recipientEmail)
         {
             DataTable actionsData = await Get_Recent_Actions();
@@ -159,11 +164,5 @@ namespace Stock_Manage_System_API.Email_Services
 
             }
         }
-
-
-
-
-
-
     }
 }

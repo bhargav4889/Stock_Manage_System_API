@@ -6,22 +6,25 @@ using System.Data.Common;
 
 namespace Stock_Manage_System_API.BAL
 {
+    /// <summary>
+    /// Provides business logic functions for customer operations, bridging between DAL and API layers.
+    /// </summary>
     public class Customers_BALBase
     {
-        private readonly Customers_DALBase Customers_DAL = new Customers_DALBase();
+        private readonly Customers_DALBase _customers_DAL = new Customers_DALBase();
 
-        public bool CREATE_CUSTOMER(Customer_Model customers)
+        #region Section: Insert Customer
+
+        /// <summary>
+        /// Inserts a new customer into the system.
+        /// </summary>
+        /// <param name="customers">The customer model to insert.</param>
+        /// <returns>True if the operation is successful, False otherwise.</returns>
+        public bool InsertCustomer(Customer_Model customers)
         {
             try
             {
-                if (Customers_DAL.CREATE_CUSTOMER(customers))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return _customers_DAL.InsertCustomer(customers);
             }
             catch
             {
@@ -29,63 +32,73 @@ namespace Stock_Manage_System_API.BAL
             }
         }
 
+        #endregion
+
+        #region Section: Display All Customers
 
 
-        public Customer_Model Customer_Info_By_PK(int Customer_ID,string Customer_Type)
+
+        /// <summary>
+        /// Retrieves all customers.
+        /// </summary>
+        /// <returns>A list of all customers in the system.</returns>
+        public List<Customer_Model> GetAllCustomers()
         {
-            Customer_Model customers = Customers_DAL.Customer_Info_By_PK(Customer_ID, Customer_Type);
-
-            return customers;
-
-        }
-
-        public List<Customer_Model> BUYER_CUSTOMER_EXIST_IN_SYSTEM(string Customer_Name)
-        {
-            List<Customer_Model> customerinfo = Customers_DAL.BUYER_CUSTOMER_EXIST_IN_SYSTEM(Customer_Name);
-
-            return customerinfo;
-        }
-
-        public List<Customer_Model> SELLER_CUSTOMER_EXIST_IN_SYSTEM(string Customer_Name)
-        {
-            List<Customer_Model> customerinfo = Customers_DAL.SELLER_CUSTOMER_EXIST_IN_SYSTEM(Customer_Name);
-
-            return customerinfo;
+            return _customers_DAL.GetAllCustomers();
         }
 
 
 
-        public List<Customer_Model> SHOW_ALL_CUSTOMERS()
+
+
+
+        #endregion
+
+        #region Section: Account Details by Customer ID and Type
+
+        /// <summary>
+        /// Retrieves account details for a specific customer based on their ID and Type.
+        /// </summary>
+        /// <param name="Customer_ID">The customer's ID.</param>
+        /// <param name="Customer_Type">The customer's type.</param>
+        /// <returns>Detailed customer and their purchased stock info.</returns>
+        public CustomerDetails_With_Purchased_Stock_Model RetrieveAccountDetails(int Customer_ID, string Customer_Type)
         {
-            List<Customer_Model> customerslist = Customers_DAL.SHOW_ALL_CUSTOMERS();
-
-            return customerslist;
-
-
+            return _customers_DAL.RetrieveAccountDetails(Customer_ID, Customer_Type);
         }
 
-        public CustomerDetails_With_Purchased_Stock_Model Account_Details(int Customer_ID, string Customer_Type)
-        {
-            CustomerDetails_With_Purchased_Stock_Model customerDetails_With_Purchased_Stock = Customers_DAL.Account_Details(Customer_ID,Customer_Type);
+        #endregion
 
-            return customerDetails_With_Purchased_Stock;
+        #region Section: Customer By ID and Type
+
+        /// <summary>
+        /// Retrieves a customer by ID and Type.
+        /// </summary>
+        /// <param name="Customer_ID">The customer's ID.</param>
+        /// <param name="Customer_Type">The customer's type.</param>
+        /// <returns>The customer model if found; otherwise, null.</returns>
+        public Customer_Model CustomerByIDAndType(int Customer_ID, string Customer_Type)
+        {
+            return _customers_DAL.CustomerByIDAndType(Customer_ID, Customer_Type);
         }
 
 
-        public bool Delete_Customer(int Customer_ID, string Customer_Type)
+
+        #endregion
+
+        #region Section : Delete Customer
+
+        /// <summary>
+        /// Deletes a customer based on ID and Type.
+        /// </summary>
+        /// <param name="Customer_ID">The ID of the customer to delete.</param>
+        /// <param name="Customer_Type">The type of the customer.</param>
+        /// <returns>True if the operation is successful, False otherwise.</returns>
+        public bool DeleteCustomer(int Customer_ID, string Customer_Type)
         {
             try
             {
-                if(Customers_DAL.Delete_Customer(Customer_ID,Customer_Type))
-               
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-
+                return _customers_DAL.DeleteCustomer(Customer_ID, Customer_Type);
             }
             catch
             {
@@ -93,19 +106,20 @@ namespace Stock_Manage_System_API.BAL
             }
         }
 
-        public bool Update_Customer(Customer_Model customers)
+        #endregion
+
+        #region Section : Update Customer
+
+        /// <summary>
+        /// Updates a customer's information.
+        /// </summary>
+        /// <param name="customers">The customer model to update.</param>
+        /// <returns>True if the operation is successful, False otherwise.</returns>
+        public bool UpdateCustomer(Customer_Model customers)
         {
             try
             {
-                if (Customers_DAL.Update_Customer(customers))
-
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return _customers_DAL.UpdateCustomer(customers);
             }
             catch
             {
@@ -113,5 +127,39 @@ namespace Stock_Manage_System_API.BAL
             }
         }
 
+        #endregion
+
+        #region Section : Customer Does Exist
+
+        #region Area: Buyer Customer Exist
+
+        /// <summary>
+        /// Checks if a buyer customer exists by name.
+        /// </summary>
+        /// <param name="Customer_Name">The name of the buyer customer to check.</param>
+        /// <returns>A list of customer models.</returns>
+        public List<Customer_Model> DoesBuyerCustomerExist(string Customer_Name)
+        {
+            return _customers_DAL.DoesBuyerCustomerExist(Customer_Name);
+        }
+
+        #endregion
+
+        #region Area: Seller Customer Exist
+
+        /// <summary>
+        /// Checks if a seller customer exists by name.
+        /// </summary>
+        /// <param name="Customer_Name">The name of the seller customer to check.</param>
+        /// <returns>A list of customer models.</returns>
+        public List<Customer_Model> DoesSellerCustomerExist(string Customer_Name)
+        {
+            return _customers_DAL.DoesSellerCustomerExist(Customer_Name);
+        }
+
+        #endregion
+
+
+        #endregion
     }
 }

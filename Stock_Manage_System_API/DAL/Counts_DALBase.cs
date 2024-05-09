@@ -11,8 +11,13 @@ namespace Stock_Manage_System_API.DAL
 
         #region Method : Configurations 
 
+
         private SqlDatabase sqlDatabase;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Counts_DALBase"/> class.
+        /// Ensures that the Database_Connection is initialized or throws an informative exception.
+        /// </summary>
         public Counts_DALBase()
         {
             // Ensure Database_Connection is initialized or throw an informative exception.
@@ -21,6 +26,12 @@ namespace Stock_Manage_System_API.DAL
 
             sqlDatabase = new SqlDatabase(Database_Connection);
         }
+
+        /// <summary>
+        /// Configures and returns a stored procedure command object with the provided name.
+        /// </summary>
+        /// <param name="storedProcedureName">The name of the stored procedure.</param>
+        /// <returns>A DbCommand object configured with the provided stored procedure name.</returns>
 
         private DbCommand Command_Name(string storedProcedureName)
         {
@@ -32,7 +43,12 @@ namespace Stock_Manage_System_API.DAL
 
         #region Method : All Counts 
 
-        public AllCountsModel ALL_COUNTS()
+        /// <summary>
+        /// Retrieves the total counts for all relevant entities.
+        /// </summary>
+        /// <returns>An AllCountsModel object containing the total counts and amounts for all relevant entities.</returns>
+
+        public AllCountsModel GetTotalCounts()
         {
             AllCountsModel allCountsModel = new AllCountsModel();
             DbCommand dbCommand = Command_Name("API_DASHBOARD_ALL_COUNTS");

@@ -1,4 +1,7 @@
-﻿using Microsoft.Practices.EnterpriseLibrary.Data.Sql;
+﻿/// <summary>
+/// Represents the base class for managing information in the data access layer.
+/// </summary>
+using Microsoft.Practices.EnterpriseLibrary.Data.Sql;
 using Stock_Manage_System_API.Models;
 using System.Data;
 using System.Data.Common;
@@ -9,20 +12,32 @@ namespace Stock_Manage_System_API.DAL
     {
         private SqlDatabase sqlDatabase;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Information_DALBase"/> class.
+        /// </summary>
         public Information_DALBase()
         {
             sqlDatabase = new SqlDatabase(Database_Connection);
         }
 
+        /// <summary>
+        /// Creates a database command for the specified stored procedure name.
+        /// </summary>
+        /// <param name="storedProcedureName">The name of the stored procedure.</param>
+        /// <returns>A <see cref="DbCommand"/> object for the specified stored procedure.</returns>
         private DbCommand Command_Name(string storedProcedureName)
         {
             return sqlDatabase.GetStoredProcCommand(storedProcedureName);
         }
 
-
         #region Method : Bank Information Insert
 
-        public bool Insert_Bank_Infromation(Information_Model information_Model)
+        /// <summary>
+        /// Inserts a new bank information.
+        /// </summary>
+        /// <param name="information_Model">The <see cref="Information_Model"/> object containing the bank information to insert.</param>
+        /// <returns><c>true</c> if the bank information was inserted successfully; otherwise, <c>false</c>.</returns>
+        public bool InsertBankInformation(Information_Model information_Model)
         {
             try
             {
@@ -55,8 +70,11 @@ namespace Stock_Manage_System_API.DAL
 
         #region Method : Show All Informations 
 
-
-        public List<Information_Model> Show_All_Save_Informations()
+        /// <summary>
+        /// Retrieves all saved information.
+        /// </summary>
+        /// <returns>A list of <see cref="Information_Model"/> objects containing all saved information.</returns>
+        public List<Information_Model> GetAllSaveInformation()
         {
             List<Information_Model> List_Of_Save_Informations = new List<Information_Model>();
 
@@ -79,13 +97,17 @@ namespace Stock_Manage_System_API.DAL
             return List_Of_Save_Informations;
         }
 
-
         #endregion
 
 
         #region Method : Information Show By ID 
 
-        public Information_Model Information_Model(int Information_ID)
+        /// <summary>
+        /// Retrieves the saved information with the specified information ID.
+        /// </summary>
+        /// <param name="Information_ID">The ID of the saved information to retrieve.</param>
+        /// <returns>A <see cref="Information_Model"/> object containing the saved information with the specified information ID.</returns>
+        public Information_Model InformationByID(int Information_ID)
         {
             Information_Model information_Model = new Information_Model();
 
@@ -104,9 +126,6 @@ namespace Stock_Manage_System_API.DAL
                     information_Model.BankId = Convert.ToInt32(reader[4].ToString());
                     information_Model.BankName = reader[5].ToString();
                     information_Model.BankIcon = reader[6].ToString();
-                    
-
-
                 }
             }
 
@@ -117,7 +136,14 @@ namespace Stock_Manage_System_API.DAL
         #endregion
 
 
-        public bool Delete_Save_Information(int Information_ID)
+
+        #region Method : Delete Information
+        /// <summary>
+        /// Deletes the saved information with the specified information ID.
+        /// </summary>
+        /// <param name="Information_ID">The ID of the saved information to delete.</param>
+        /// <returns><c>true</c> if the saved information was deleted successfully; otherwise, <c>false</c>.</returns>
+        public bool DeleteInformation(int Information_ID)
         {
             DbCommand dbCommand = Command_Name("API_DISPLAY_SAVE_INFORMATION_BY_ID");
 
@@ -131,8 +157,8 @@ namespace Stock_Manage_System_API.DAL
             {
                 return false;
             }
-
         }
 
+        #endregion
     }
 }

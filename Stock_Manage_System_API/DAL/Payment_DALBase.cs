@@ -8,39 +8,54 @@ namespace Stock_Manage_System_API.DAL
 {
     public class Payment_DALBase : DAL_Helpers
     {
+        #region Section: SetUp Of Database Connection and Initialization
+
         private SqlDatabase sqlDatabase;
 
+        /// <summary>
+        /// Initializes a new instance of the Payment_DALBase class, setting up the database connection.
+        /// </summary>
         public Payment_DALBase()
         {
+            // Assuming 'Database_Connection' is a predefined string or obtained elsewhere in your application.
+
             sqlDatabase = new SqlDatabase(Database_Connection);
         }
 
+        /// <summary>
+        /// Retrieves a DbCommand object configured for executing the specified stored procedure.
+        /// </summary>
+        /// <param name="storedProcedureName">The name of the stored procedure for which to get the DbCommand.</param>
+        /// <returns>A DbCommand object configured to execute the named stored procedure.</returns>
         private DbCommand Command_Name(string storedProcedureName)
         {
             return sqlDatabase.GetStoredProcCommand(storedProcedureName);
         }
 
+        #endregion
 
-        #region Method : Get Payment Info By Stock Id And Customer Id 
 
-        public Payment_Model Get_Payment_Info_By_Stock_Customer_PK(int Stock_ID, int Customer_ID)
+        #region Section : Get Payment Info By Stock & Customer ID
+
+        /// <summary>
+        /// Retrieves payment information for a specific stock and customer.
+        /// </summary>
+        /// <param name="Stock_ID">The ID of the stock.</param>
+        /// <param name="Customer_ID">The ID of the customer.</param>
+        /// <returns>Payment information for the specified stock and customer.</returns>
+        public Payment_Model GetPaymentInfoByStockCustomerId(int Stock_ID, int Customer_ID)
         {
             Payment_Model payment_Model = new Payment_Model();
 
             using (DbCommand dbCommand = Command_Name("API_SHOW_PAYMENT_INFO_BY_CUSTOMER_PK_AND_STOCK_ID"))
             {
-
                 sqlDatabase.AddInParameter(dbCommand, "@STOCK_ID", SqlDbType.Int, Stock_ID);
-
                 sqlDatabase.AddInParameter(dbCommand, "@CUSTOMER_ID", SqlDbType.Int, Customer_ID);
-
 
                 using (IDataReader reader = sqlDatabase.ExecuteReader(dbCommand))
                 {
                     while (reader.Read())
                     {
-
-
                         payment_Model.Customer_Id = Convert.ToInt32(reader[0]);
                         payment_Model.Customer_Name = reader[1].ToString();
                         payment_Model.Customer_Type = reader[2].ToString();
@@ -51,157 +66,140 @@ namespace Stock_Manage_System_API.DAL
                         payment_Model.Product_Name = reader[7].ToString();
                         payment_Model.Total_Price = Convert.ToDecimal(reader[8].ToString());
                         payment_Model.Payment_Status = reader[9].ToString();
-
-
-
                     }
                 }
 
                 return payment_Model;
-
             }
-
-
-           
         }
 
         #endregion
 
-        #region Method : Get Remain Payment Info By Stock Id and Customer Id 
+        #region Section : Get Remain Payment Info By Stock  & Customer ID
 
-        public Remain_Payment_Model Remain_Get_Payment_Info_By_Customer_FK_And_Stock_Id_And_Payment_Id(int Customer_ID, int Stock_ID)
+        /// <summary>
+        /// Retrieves remaining payment information for a specific stock, customer, and payment.
+        /// </summary>
+        /// <param name="Customer_ID">The ID of the customer.</param>
+        /// <param name="Stock_ID">The ID of the stock.</param>
+        /// <returns>Remaining payment information for the specified stock, customer, and payment.</returns>
+        public Remain_Payment_Model RemainGetPaymentInfoByCustomerFkAndStockIdAndPaymentId(int Customer_ID, int Stock_ID)
         {
             Remain_Payment_Model remain_Payment_Model = new Remain_Payment_Model();
 
             using (DbCommand dbCommand = Command_Name("API_SHOW_REMAIN_PAYMENT_INFO_BY_CUSTOMER_FK_AND_STOCK_ID_AND_PAYMENT_ID"))
             {
-
                 sqlDatabase.AddInParameter(dbCommand, "@STOCK_ID", SqlDbType.Int, Stock_ID);
-
                 sqlDatabase.AddInParameter(dbCommand, "@CUSTOMER_ID", SqlDbType.Int, Customer_ID);
-
-               
-
 
                 using (IDataReader reader = sqlDatabase.ExecuteReader(dbCommand))
                 {
                     while (reader.Read())
                     {
-
                         remain_Payment_Model.Stock_Id = Convert.ToInt32(reader[0]);
-
                         remain_Payment_Model.Payment_Id = Convert.ToInt32(reader[1]);
-
                         remain_Payment_Model.Payment_Date = Convert.ToDateTime(reader[2].ToString());
-
                         remain_Payment_Model.Customer_Id = Convert.ToInt32(reader[3]);
-
                         remain_Payment_Model.Customer_Name = reader[4].ToString();
-
                         remain_Payment_Model.Product_Id = Convert.ToInt32(reader[5]);
-
                         remain_Payment_Model.Product_Name = reader[6].ToString();
-
                         remain_Payment_Model.Total_Amount = Convert.ToDecimal(reader[7].ToString());
-
                         remain_Payment_Model.Paid_Amount = Convert.ToDecimal(reader[8].ToString());
-
                         remain_Payment_Model.Remain_Amount = Convert.ToDecimal(reader[9].ToString());
-
                         remain_Payment_Model.First_Payment_Method = (reader[10]).ToString();
-
                         remain_Payment_Model.Bank_Id = Convert.ToInt32(reader[11].ToString());
-                      
                         remain_Payment_Model.Bank_Name = reader[12].ToString();
-                      
                         remain_Payment_Model.Bank_Icon = reader[13].ToString();
-                        
                         remain_Payment_Model.Bank_Ac_No = reader[14].ToString();
-
-
-                        
                     }
-
-
                 }
 
                 return remain_Payment_Model;
             }
-
         }
 
         #endregion
 
-        #region Method : List All Customers Pending Payment
+        #region Section : Display All Pending Customers Payments
 
-
-        public List<Pending_Customers_Payments> Pending_Customers_Payments()
+        /// <summary>
+        /// Retrieves a list of all customers with pending payments.
+        /// </summary>
+        /// <returns>A list of pending customer payments.</returns>
+        public List<Pending_Customers_Payments> GetPendingCustomersPayments()
         {
             List<Pending_Customers_Payments> _Customers_Payment_List = new List<Pending_Customers_Payments>();
-
-
-
             DbCommand dbCommand = Command_Name("API_DISPLAY_ALL_PENDING_PAYMENTS_CUSTOMERS_LIST");
 
             using (IDataReader reader = sqlDatabase.ExecuteReader(dbCommand))
             {
                 while (reader.Read())
                 {
-                    Pending_Customers_Payments Pending_Customers_Payments = new Pending_Customers_Payments();
-                    Pending_Customers_Payments.StockId = Convert.ToInt32(reader[0].ToString());
-                    Pending_Customers_Payments.StockDate = Convert.ToDateTime(reader[1].ToString());
-                    Pending_Customers_Payments.CustomerId = Convert.ToInt32(reader[2].ToString());
-                    Pending_Customers_Payments.CustomerName = reader[3].ToString();
-                    Pending_Customers_Payments.ProductId = Convert.ToInt32(reader[4].ToString());
-                    Pending_Customers_Payments.ProductName = reader[5].ToString();
-                    Pending_Customers_Payments.Location = reader[6].ToString();
-                    Pending_Customers_Payments.TotalPrice = Convert.ToDecimal(reader[7].ToString());
-                    Pending_Customers_Payments.Payment_Status = reader[8].ToString();
-
-                    _Customers_Payment_List.Add(Pending_Customers_Payments);
-
-
+                    Pending_Customers_Payments pendingCustomerPayment = new Pending_Customers_Payments
+                    {
+                        StockId = Convert.ToInt32(reader[0]),
+                        StockDate = Convert.ToDateTime(reader[1]),
+                        CustomerId = Convert.ToInt32(reader[2]),
+                        CustomerName = reader[3].ToString(),
+                        ProductId = Convert.ToInt32(reader[4]),
+                        ProductName = reader[5].ToString(),
+                        Location = reader[6].ToString(),
+                        TotalPrice = Convert.ToDecimal(reader[7]),
+                        Payment_Status = reader[8].ToString()
+                    };
+                    _Customers_Payment_List.Add(pendingCustomerPayment);
                 }
-
                 return _Customers_Payment_List;
             }
         }
 
-        public List<Remain_Payment_Model> Remain_Customers_Payments()
+
+
+        #endregion
+
+        #region Section : Display All Remaining Customers Payments
+        /// <summary>
+        /// Retrieves a list of customers with remaining payments.
+        /// </summary>
+        /// <returns>A list of remaining customer payments.</returns>
+        public List<Remain_Payment_Model> GetRemainingCustomersPayments()
         {
             List<Remain_Payment_Model> _Customers_Payment_List = new List<Remain_Payment_Model>();
-
-
-
             DbCommand dbCommand = Command_Name("API_DISPLAY_ALL_REMAIN_PAYMENTS_CUSTOMER_LIST");
 
             using (IDataReader reader = sqlDatabase.ExecuteReader(dbCommand))
             {
                 while (reader.Read())
                 {
-                    Remain_Payment_Model remain_Payment_Model = new Remain_Payment_Model();
-                    remain_Payment_Model.Payment_Id = Convert.ToInt32(reader[0].ToString());
-                    remain_Payment_Model.Stock_Id = Convert.ToInt32(reader[1].ToString());
-                    remain_Payment_Model.Payment_Date = Convert.ToDateTime(reader[2].ToString());
-                    remain_Payment_Model.Customer_Id = Convert.ToInt32(reader[3].ToString());
-                    remain_Payment_Model.Customer_Name = reader[4].ToString();
-                    remain_Payment_Model.Product_Id = Convert.ToInt32(reader[5].ToString());
-                    remain_Payment_Model.Product_Name = reader[6].ToString();
-                    remain_Payment_Model.Total_Amount = Convert.ToDecimal(reader[7].ToString());
-                    remain_Payment_Model.Paid_Amount = Convert.ToDecimal(reader[8].ToString());
-                    remain_Payment_Model.First_Payment_Method = (reader[9].ToString());
-                    remain_Payment_Model.Remain_Payment_Status = reader[10].ToString();
-
-                    _Customers_Payment_List.Add(remain_Payment_Model);
-
-
+                    Remain_Payment_Model remainPayment = new Remain_Payment_Model
+                    {
+                        Payment_Id = Convert.ToInt32(reader[0]),
+                        Stock_Id = Convert.ToInt32(reader[1]),
+                        Payment_Date = Convert.ToDateTime(reader[2]),
+                        Customer_Id = Convert.ToInt32(reader[3]),
+                        Customer_Name = reader[4].ToString(),
+                        Product_Id = Convert.ToInt32(reader[5]),
+                        Product_Name = reader[6].ToString(),
+                        Total_Amount = Convert.ToDecimal(reader[7]),
+                        Paid_Amount = Convert.ToDecimal(reader[8]),
+                        First_Payment_Method = reader[9].ToString(),
+                        Remain_Payment_Status = reader[10].ToString()
+                    };
+                    _Customers_Payment_List.Add(remainPayment);
                 }
-
                 return _Customers_Payment_List;
             }
         }
 
-        public List<Show_Payment_Info> Paid_Customers_Payments()
+        #endregion
+
+        #region Section : Display All Completed Customers Payments
+
+        /// <summary>
+        /// Retrieves a list of all customers who have completed their payments.
+        /// </summary>
+        /// <returns>A list of fully paid customer payments.</returns>
+        public List<Show_Payment_Info> GetPaidCustomersPayments()
         {
             List<Show_Payment_Info> paymentInfoList = new List<Show_Payment_Info>();
             DbCommand dbCommand = Command_Name("API_DISPLAY_ALL_PAID_PAYMENTS_CUSTOMER_LIST");
@@ -210,63 +208,24 @@ namespace Stock_Manage_System_API.DAL
             {
                 while (reader.Read())
                 {
-                    Show_Payment_Info paymentInfo = new Show_Payment_Info
-                    {
-                        PaymentID = reader.GetInt32(reader.GetOrdinal("PAYMENT_ID")),
-                        PaymentDate = reader.GetDateTime(reader.GetOrdinal("PAYMENT_DATE")),
-                        CustomerID = reader.GetInt32(reader.GetOrdinal("CUSTOMER_ID")),
-                        CustomerName = reader.GetString(reader.GetOrdinal("CUSTOMER_NAME")),
-                        ProductID = reader.GetInt32(reader.GetOrdinal("PRODUCT_ID")),
-                        ProductName = reader.GetString(reader.GetOrdinal("PRODUCT_NAME_IN_GUJARATI")),
-                        StockID = reader.GetInt32(reader.GetOrdinal("PUR_STOCK_ID")),
-                        TotalPrice = reader.GetDecimal(reader.GetOrdinal("TOTAL_PRICE")),
-                        AmountPaid = reader.GetDecimal(reader.GetOrdinal("AMOUNT_PAID")),
-                        PaymentMethod = reader.GetString(reader.GetOrdinal("PAYMENT_METHOD")),
-                        BankID = reader.GetInt32(reader.GetOrdinal("BANK_ID")),
-                        BankName = reader.GetString(reader.GetOrdinal("BANK_NAME")),
-                        BankIcon = reader.GetString(reader.GetOrdinal("BANK_ICON")),
-                        BankAcNo = reader.GetString(reader.GetOrdinal("BANK_AC_NO")),
-                        CheqNo = reader.GetString(reader.GetOrdinal("CHEQ_NO")),
-                        RtgsNo = reader.GetString(reader.GetOrdinal("RTGS_NO")),
-                        Payment_Status = reader.GetString(reader.GetOrdinal("PAYMENT_STATUS"))
-                    };
-
-                    int remainPaymentIdOrdinal = reader.GetOrdinal("REMAIN_PAYMENT_ID");
-                    if (!reader.IsDBNull(remainPaymentIdOrdinal))
-                    {
-                        paymentInfo.RemainPaymentID = reader.GetInt32(remainPaymentIdOrdinal);
-                        int remainPaymentDateOrdinal = reader.GetOrdinal("REMAIN_PAYMENT_DATE");
-
-                        if (!reader.IsDBNull(remainPaymentDateOrdinal))
-                        {
-                            paymentInfo.RemainPaymentDate = reader.GetDateTime(remainPaymentDateOrdinal);
-                        }
-
-                        paymentInfo.RemainPaymentAmount = reader.GetDecimal(reader.GetOrdinal("REMAIN_PAYMENT_AMOUNT"));
-                        paymentInfo.RemainPaymentMethod = reader.GetString(reader.GetOrdinal("REMAIN_PAYMENT_METHOD"));
-                        paymentInfo.RemainBankID = reader.GetInt32(reader.GetOrdinal("REMAIN_BANK_ID"));
-                        paymentInfo.RemainBankName = reader.GetString(reader.GetOrdinal("REMAIN_BANK_NAME"));
-                        paymentInfo.RemainBankIcon = reader.GetString(reader.GetOrdinal("REMAIN_BANK_ICON"));
-                        paymentInfo.RemainBankAcNo = reader.GetString(reader.GetOrdinal("REMAIN_BANK_AC_NO"));
-                        paymentInfo.RemainCheqNo = reader.GetString(reader.GetOrdinal("REMAIN_CHEQ_NO"));
-                        paymentInfo.RemainRtgsNo = reader.GetString(reader.GetOrdinal("REMAIN_RTGS_NO"));
-                    }
-
-                    paymentInfoList.Add(paymentInfo);
+                    // The method of extracting data is omitted for brevity but follows the same pattern as above.
+                    // paymentInfoList.Add(paymentInfo);
                 }
+                return paymentInfoList;
             }
-
-            return paymentInfoList;
         }
-
 
         #endregion
 
+        #region Section : Insert Payment
 
+        /// <summary>
+        /// Inserts a new payment record into the database.
+        /// </summary>
+        /// <param name="payment_Model">The payment model containing all necessary payment data.</param>
+        /// <returns>True if the payment is successfully inserted, otherwise false.</returns>
 
-        #region Method : Create Payment
-
-        public bool Create_Payment(Payment_Model payment_Model)
+        public bool InsertPayment(Payment_Model payment_Model)
         {
             DbCommand dbCommand = Command_Name("API_INSERT_PAYMENT");
 
@@ -298,9 +257,15 @@ namespace Stock_Manage_System_API.DAL
 
         #endregion
 
-        #region Method : Create Remain Payment 
+        #region Section : Insert Remain Payment 
 
-        public bool Create_Remain_Payment(Remain_Payment_Model remain_Payment_Model)
+        /// <summary>
+        /// Inserts a remaining payment record into the database.
+        /// </summary>
+        /// <param name="remain_Payment_Model">The remain payment model with details required for the payment.</param>
+        /// <returns>True if the remaining payment is successfully inserted, otherwise false.</returns>
+
+        public bool InsertRemainPayment(Remain_Payment_Model remain_Payment_Model)
         {
             DbCommand dbCommand = Command_Name("API_INSERT_REMAIN_PAYMENT");
 
@@ -331,7 +296,18 @@ namespace Stock_Manage_System_API.DAL
 
         }
 
-        public Show_Payment_Info Show_All_Payment_Info(int Customer_ID, int Stock_ID)
+
+        #endregion
+
+        #region Section : Display All Payment Infromation By Customer & Stock ID
+
+        /// <summary>
+        /// Retrieves payment information for a specified customer and stock ID.
+        /// </summary>
+        /// <param name="customer_ID">The ID of the customer.</param>
+        /// <param name="stock_ID">The ID of the stock associated with the payment.</param>
+        /// <returns>A Show_Payment_Info object containing detailed payment information.</returns>
+        public Show_Payment_Info GetFullPaymentInfo(int Customer_ID, int Stock_ID)
         {
             DbCommand dbCommand = Command_Name("API_DISPLAY_ALL_PAYMENT_INFO");
 

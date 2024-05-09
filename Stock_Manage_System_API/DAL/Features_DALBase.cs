@@ -1,14 +1,21 @@
 ﻿using Microsoft.Practices.EnterpriseLibrary.Data.Sql;
 using Stock_Manage_System_API.Models;
+
 using System.Data;
 using System.Data.Common;
 
+/// <summary>
+/// Represents the base class for managing features in the data access layer.
+/// </summary>
 namespace Stock_Manage_System_API.DAL
 {
     public class Features_DALBase : DAL_Helpers
     {
         private SqlDatabase sqlDatabase;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Features_DALBase"/> class.
+        /// </summary>
         public Features_DALBase()
         {
             sqlDatabase = new SqlDatabase(Database_Connection);
@@ -19,11 +26,17 @@ namespace Stock_Manage_System_API.DAL
             return sqlDatabase.GetStoredProcCommand(storedProcedureName);
         }
 
-        public List<Dashbaord_Features_Model.Pending_Customers_Payment_Sort_List> pending_Customers_Payment_Sort_List()
+        /// <summary>
+        /// Retrieves a list of pending customers payment sort list.
+        /// </summary>
+        /// <returns>A list of <see cref="Dashbaord_Features_Model.Pending_Customers_Payment_Sort_List"/> objects.</returns>
+
+
+        #region Method : Sort List of Pending Customer Payments Recent 
+
+        public List<Dashbaord_Features_Model.Pending_Customers_Payment_Sort_List> PendingCustomersPaymentSortList()
         {
             List<Dashbaord_Features_Model.Pending_Customers_Payment_Sort_List> _Customers_Payment_Sort_List = new List<Dashbaord_Features_Model.Pending_Customers_Payment_Sort_List>();
-
-
 
             DbCommand dbCommand = Command_Name("API_PENDING_PAYMENTS_CUSTOMERS_LIST_DASHBAORD");
 
@@ -41,18 +54,14 @@ namespace Stock_Manage_System_API.DAL
                     customers_Payment_Sort_List.ProductName = reader["PRODUCT_NAME"].ToString();
                     customers_Payment_Sort_List.TotalPrice = Convert.ToDecimal(reader["TOTAL_PRICE"].ToString());
 
-
-
                     _Customers_Payment_Sort_List.Add(customers_Payment_Sort_List);
-
-
                 }
 
                 return _Customers_Payment_Sort_List;
             }
-
-
-
         }
+
+        #endregion
+
     }
 }

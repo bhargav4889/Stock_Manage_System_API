@@ -1,14 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+
 using Stock_Manage_System_API.Email_Services;
 
+/// <summary>
+/// Represents the Email controller for managing email-related functionality in the API.
+/// </summary>
 namespace Stock_Manage_System_API.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
     public class EmailController : Controller
     {
-
         private IEmailSender _emailSender;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EmailController"/> class with the specified email sender.
+        /// </summary>
+        /// <param name="emailSender">The email sender to use for sending emails.</param>
         public EmailController(IEmailSender emailSender)
         {
             _emailSender = emailSender;
@@ -43,4 +51,4 @@ namespace Stock_Manage_System_API.Controllers
             return Ok("Email Sent Successfully !!");
         }
     }
-}   
+}

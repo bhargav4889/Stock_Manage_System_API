@@ -124,17 +124,7 @@ namespace Stock_Manage_System_API.BAL
 
         public List<Purchase_Stock>? DisplayAllPurchaseStock()
         {
-            try
-            {
-
-                List<Purchase_Stock>? List_Of_Stocks = _stockDalBase.DisplayAllPurchaseStock();
-                return List_Of_Stocks;
-            }
-            catch
-            {
-                return null;
-            }
-
+            return _stockDalBase.DisplayAllPurchaseStock();
         }
 
         #endregion
@@ -149,17 +139,7 @@ namespace Stock_Manage_System_API.BAL
 
         public Purchase_Stock? PurchaseStockByID(int Stock_ID)
         {
-            try
-            {
-
-                Purchase_Stock? show_Purchase_Stock = _stockDalBase.PurchaseStockByID(Stock_ID);
-
-                return show_Purchase_Stock;
-            }
-            catch
-            {
-                return null;
-            }
+            return _stockDalBase.PurchaseStockByID(Stock_ID);
         }
 
         #endregion

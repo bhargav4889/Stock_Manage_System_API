@@ -38,9 +38,9 @@ namespace Stock_Manage_System_API.DAL
         #region Method : All List Models Convert Datatable 
 
 
-        #region Method : Purchase Invoice Statement DataTable 
+        #region Section : Purchase Invoice Statement DataTable 
 
-        public DataTable Convert_List_To_DataTable_For_Purchase_Invoice_Statement(List<Purchase_Invoice_Model> purchase_Invoices)
+        public DataTable ListToDataTableConverterForPurchaseInvoiceStatement(List<Purchase_Invoice_Model> purchase_Invoices)
         {
             DataTable dataTable = new DataTable();
             dataTable.Columns.Add("Invoice-Date", typeof(string));
@@ -96,7 +96,7 @@ namespace Stock_Manage_System_API.DAL
 
         #region Method : Sales Invoice Statement DataTable
 
-        public DataTable Convert_List_To_DataTable_For_Sale_Invoice_Statement(List<Sales_Invoice_Model> salesInvoices)
+        public DataTable ListToDataTableConverterForSaleInvoiceStatement(List<Sales_Invoice_Model> salesInvoices)
         {
             DataTable dataTable = new DataTable();
             dataTable.Columns.Add("Invoice-Date", typeof(string));
@@ -165,7 +165,7 @@ namespace Stock_Manage_System_API.DAL
 
         #region Method : Customers Account List Statements DataTable
 
-        public DataTable Convert_List_To_DataTable_For_Customers_Account(List<Customer_Model> customer_Models)
+        public DataTable ListToDataTableConverterForCustomersAccount(List<Customer_Model> customer_Models)
         {
             DataTable dataTable = new DataTable();
 
@@ -194,7 +194,7 @@ namespace Stock_Manage_System_API.DAL
 
         #region Method : Customer Account Details Statement DataTable 
 
-        public (DataTable Customer_info, DataTable Statements_Info, DataTable Sale_Info) Convert_Model_To_DataTable_For_Customers_Account_Details_Statement(CustomerDetails_With_Purchased_Stock_Model customerDetails_With_Purchased_Stock_)
+        public (DataTable Customer_info, DataTable Statements_Info, DataTable Sale_Info) ListToDataTableConverterForCustomersAccountDetails(CustomerDetails_With_Purchased_Stock_Model customerDetails_With_Purchased_Stock_)
         {
 
 
@@ -330,7 +330,7 @@ namespace Stock_Manage_System_API.DAL
 
         #region Method : Stock Statement DataTable
 
-        public DataTable Convert_List_To_DataTable_For_Stock_Statement(List<Purchase_Stock> purchase_Stocks)
+        public DataTable ListToDataTableConverterForPurchaseStockStatement(List<Purchase_Stock> purchase_Stocks)
         {
             DataTable dataTable = new DataTable();
             dataTable.Columns.Add("Stock-Date", typeof(string));
@@ -389,7 +389,7 @@ namespace Stock_Manage_System_API.DAL
 
         #region Method : Sale Satement DataTable
 
-        public DataTable Convert_List_To_DataTable_For_Sales_Statement(List<Show_Sale> sales)
+        public DataTable ListToDataTableConverterForSalesStatement(List<Show_Sale> sales)
         {
             DataTable dataTable = new DataTable();
 
@@ -447,12 +447,9 @@ namespace Stock_Manage_System_API.DAL
 
         #endregion
 
-
-
-
         #region Method : Pending Payments List DataTable
 
-        public DataTable Convert_List_To_DataTable_For_Pending_Payments(List<Pending_Customers_Payments> pending_payments)
+        public DataTable ListToDataTableConverterForPendingPayments(List<Pending_Customers_Payments> pending_payments)
         {
             DataTable dataTable = new DataTable();
 
@@ -482,7 +479,7 @@ namespace Stock_Manage_System_API.DAL
 
         #region Method : Remain Payments List DataTable
 
-        public DataTable Convert_List_To_DataTable_For_Remain_Payments(List<Remain_Payment_Model> remain_payments)
+        public DataTable ListToDataTableConverterForRemainPayments(List<Remain_Payment_Model> remain_payments)
         {
             DataTable dataTable = new DataTable();
 
@@ -519,7 +516,7 @@ namespace Stock_Manage_System_API.DAL
 
         #region Method : Paid Payments List DataTable
 
-        public DataTable Convert_List_To_DataTable_For_Paid_Payments(List<Show_Payment_Info> paid_payments)
+        public DataTable ListToDataTableConverterForPaidPayments(List<Show_Payment_Info> paid_payments)
         {
             DataTable dataTable = new DataTable();
 
@@ -583,11 +580,11 @@ namespace Stock_Manage_System_API.DAL
 
         #region Method : Download PDf All Invoices Statements
 
-        public byte[] Purchase_Invoice_Statement_PDF()
+        public byte[] PurchaseInvoiceStatementPDF()
         {
-            List<InvoicesModel.Purchase_Invoice_Model> Purchase_Invoices = invoices_DALBase.DISPLAY_ALL_PURCHASE_INVOICE();
+            List<InvoicesModel.Purchase_Invoice_Model> Purchase_Invoices = invoices_DALBase.DisplayAllPurchaseInvoices();
 
-            DataTable dataTable = Convert_List_To_DataTable_For_Purchase_Invoice_Statement(Purchase_Invoices);
+            DataTable dataTable = ListToDataTableConverterForPurchaseInvoiceStatement(Purchase_Invoices);
 
             using (MemoryStream memoryStream = new MemoryStream())
             {
@@ -664,12 +661,12 @@ namespace Stock_Manage_System_API.DAL
 
         }
 
-        public byte[] Sales_Invoice_Statement_PDF()
+        public byte[] SalesInvoiceStatementPDF()
         {
-            List<Sales_Invoice_Model> salesInvoices = invoices_DALBase.SHOW_ALL_SALES_INVOICES();
+            List<Sales_Invoice_Model> salesInvoices = invoices_DALBase.DisplayAllSaleInvoices();
 
             // Convert to DataTable
-            DataTable dataTable = Convert_List_To_DataTable_For_Sale_Invoice_Statement(salesInvoices);
+            DataTable dataTable = ListToDataTableConverterForSaleInvoiceStatement(salesInvoices);
 
 
 
@@ -751,11 +748,11 @@ namespace Stock_Manage_System_API.DAL
 
         #region Method : Download Excel All Invoices Statements 
 
-        public byte[] Purchase_Invoice_Statement_EXCEL()
+        public byte[] PurchaseInvoiceStatementEXCEL()
         {
-            List<InvoicesModel.Purchase_Invoice_Model> Purchase_Invoices = invoices_DALBase.DISPLAY_ALL_PURCHASE_INVOICE();
+            List<InvoicesModel.Purchase_Invoice_Model> Purchase_Invoices = invoices_DALBase.DisplayAllPurchaseInvoices();
 
-            DataTable dataTable = Convert_List_To_DataTable_For_Purchase_Invoice_Statement(Purchase_Invoices);
+            DataTable dataTable = ListToDataTableConverterForPurchaseInvoiceStatement(Purchase_Invoices);
 
             using (XLWorkbook wb = new XLWorkbook())
             {
@@ -792,12 +789,12 @@ namespace Stock_Manage_System_API.DAL
             }
         }
 
-        public byte[] Sales_Invoice_Statement_EXCEL()
+        public byte[] SalesInvoiceStatementEXCEL()
         {
-            List<Sales_Invoice_Model> salesInvoices = invoices_DALBase.SHOW_ALL_SALES_INVOICES();
+            List<Sales_Invoice_Model> salesInvoices = invoices_DALBase.DisplayAllSaleInvoices();
 
             // Convert to DataTable
-            DataTable dataTable = Convert_List_To_DataTable_For_Sale_Invoice_Statement(salesInvoices);
+            DataTable dataTable = ListToDataTableConverterForSaleInvoiceStatement(salesInvoices);
 
             using (XLWorkbook wb = new XLWorkbook())
             {
@@ -851,11 +848,11 @@ namespace Stock_Manage_System_API.DAL
 
         #region Method : Download PDF For Customers Account & Account Details Statements
 
-        public byte[] Customers_Statement_PDF()
+        public byte[] CustomersStatementPDF()
         {
-            List<Customer_Model> customer_Models = customers_DALBase.SHOW_ALL_CUSTOMERS();
+            List<Customer_Model> customer_Models = customers_DALBase.GetAllCustomers();
 
-            DataTable dataTable = Convert_List_To_DataTable_For_Customers_Account(customer_Models);
+            DataTable dataTable = ListToDataTableConverterForCustomersAccount(customer_Models);
 
             using (MemoryStream memoryStream = new MemoryStream())
             {
@@ -983,13 +980,13 @@ namespace Stock_Manage_System_API.DAL
             }
         }
 
-        public byte[] Customer_Account_Statement_PDF(int Customer_ID, string Customer_Type)
+        public byte[] CustomerAccountStatementPDF(int Customer_ID, string Customer_Type)
         {
             using (MemoryStream memoryStream = new MemoryStream())
             {
-                CustomerDetails_With_Purchased_Stock_Model customerDetails_With_Purchased_Stock_Model = customers_DALBase.Account_Details(Customer_ID, Customer_Type);
+                CustomerDetails_With_Purchased_Stock_Model customerDetails_With_Purchased_Stock_Model = customers_DALBase.RetrieveAccountDetails(Customer_ID, Customer_Type);
 
-                (DataTable Customer_info, DataTable Statements_Info, DataTable Sale_Info) = Convert_Model_To_DataTable_For_Customers_Account_Details_Statement(customerDetails_With_Purchased_Stock_Model);
+                (DataTable Customer_info, DataTable Statements_Info, DataTable Sale_Info) = ListToDataTableConverterForCustomersAccountDetails(customerDetails_With_Purchased_Stock_Model);
 
 
                 // Set your custom page size (width x height) in points
@@ -1216,11 +1213,11 @@ namespace Stock_Manage_System_API.DAL
 
         #region Method : Download Excel For Customers Account & Account Details Statements
 
-        public byte[] Customers_Statement_EXCEL()
+        public byte[] CustomersStatementEXCEL()
         {
-            List<Customer_Model> customer_Models = customers_DALBase.SHOW_ALL_CUSTOMERS();
+            List<Customer_Model> customer_Models = customers_DALBase.GetAllCustomers();
 
-            DataTable dataTable = Convert_List_To_DataTable_For_Customers_Account(customer_Models);
+            DataTable dataTable = ListToDataTableConverterForCustomersAccount(customer_Models);
 
             using (XLWorkbook wb = new XLWorkbook())
             {
@@ -1258,10 +1255,10 @@ namespace Stock_Manage_System_API.DAL
             }
         }
 
-        public byte[] Customer_Account_Statement_EXCEL(int Customer_ID, string Customer_Type)
+        public byte[] CustomerAccountStatementEXCEL(int Customer_ID, string Customer_Type)
         {
-            CustomerDetails_With_Purchased_Stock_Model customerDetails_With_Purchased_Stock_Model = customers_DALBase.Account_Details(Customer_ID, Customer_Type);
-            (DataTable Customer_info, DataTable Statements_Info, DataTable Sale_Info) = Convert_Model_To_DataTable_For_Customers_Account_Details_Statement(customerDetails_With_Purchased_Stock_Model);
+            CustomerDetails_With_Purchased_Stock_Model customerDetails_With_Purchased_Stock_Model = customers_DALBase.RetrieveAccountDetails(Customer_ID, Customer_Type);
+            (DataTable Customer_info, DataTable Statements_Info, DataTable Sale_Info) = ListToDataTableConverterForCustomersAccountDetails(customerDetails_With_Purchased_Stock_Model);
 
             using (XLWorkbook wb = new XLWorkbook())
             {
@@ -1331,11 +1328,11 @@ namespace Stock_Manage_System_API.DAL
 
         #region Method : Download PDF For Purchase Stocks Statement
 
-        public byte[] Purchase_Stocks_Statement_PDF()
+        public byte[] PurchaseStocksStatementPDF()
         {
             List<Purchase_Stock> purchase_Stocks = stock_DALBase.DisplayAllPurchaseStock();
 
-            DataTable dataTable = Convert_List_To_DataTable_For_Stock_Statement(purchase_Stocks);
+            DataTable dataTable = ListToDataTableConverterForPurchaseStockStatement(purchase_Stocks);
 
             using (MemoryStream memoryStream = new MemoryStream())
             {
@@ -1421,11 +1418,11 @@ namespace Stock_Manage_System_API.DAL
 
         #region Method : Download Excel Purchase Stocks Statements 
 
-        public byte[] Purchase_Stocks_Statement_EXCEL()
+        public byte[] PurchaseStocksStatementEXCEL()
         {
             List<Purchase_Stock> purchase_Stocks = stock_DALBase.DisplayAllPurchaseStock();
 
-            DataTable dataTable = Convert_List_To_DataTable_For_Stock_Statement(purchase_Stocks);
+            DataTable dataTable = ListToDataTableConverterForPurchaseStockStatement(purchase_Stocks);
 
             using (XLWorkbook wb = new XLWorkbook())
             {
@@ -1469,11 +1466,11 @@ namespace Stock_Manage_System_API.DAL
 
         #region Method : Download PDF for Sale Statements
 
-        public byte[] Sales_Statement_PDF()
+        public byte[] SalesStatementPDF()
         {
-            List<Show_Sale> show_Sales = sales_DALBase.Show_All_Sales();
+            List<Show_Sale> show_Sales = sales_DALBase.GetAllSales();
 
-            DataTable dataTable = Convert_List_To_DataTable_For_Sales_Statement(show_Sales);
+            DataTable dataTable = ListToDataTableConverterForSalesStatement(show_Sales);
 
             using (MemoryStream memoryStream = new MemoryStream())
             {
@@ -1559,11 +1556,11 @@ namespace Stock_Manage_System_API.DAL
 
         #region Method : Download Excel for Sale Statements
 
-        public byte[] Sales_Statement_EXCEL()
+        public byte[] SalesStatementEXCEL()
         {
-            List<Show_Sale> show_Sales = sales_DALBase.Show_All_Sales();
+            List<Show_Sale> show_Sales = sales_DALBase.GetAllSales();
 
-            DataTable dataTable = Convert_List_To_DataTable_For_Sales_Statement(show_Sales);
+            DataTable dataTable = ListToDataTableConverterForSalesStatement(show_Sales);
 
             using (XLWorkbook wb = new XLWorkbook())
             {
@@ -2031,11 +2028,11 @@ namespace Stock_Manage_System_API.DAL
 
         #region Method : Download PDF of Pending Payments
 
-        public byte[] Pending_Payments_PDF()
+        public byte[] PendingPaymentsPDF()
         {
-            List<Pending_Customers_Payments> pending_payments = payment_DALBase.Pending_Customers_Payments();
+            List<Pending_Customers_Payments> pending_payments = payment_DALBase.GetPendingCustomersPayments();
 
-            DataTable dataTable = Convert_List_To_DataTable_For_Pending_Payments(pending_payments);
+            DataTable dataTable = ListToDataTableConverterForPendingPayments(pending_payments);
 
             using (MemoryStream memoryStream = new MemoryStream())
             {
@@ -2166,11 +2163,11 @@ namespace Stock_Manage_System_API.DAL
 
         #region Method : Download Excel of Pending Payments
 
-        public byte[] Pending_Payments_EXCEL()
+        public byte[] PendingPaymentsEXCEL()
         {
-            List<Pending_Customers_Payments> pending_payments = payment_DALBase.Pending_Customers_Payments();
+            List<Pending_Customers_Payments> pending_payments = payment_DALBase.GetPendingCustomersPayments();
 
-            DataTable dataTable = Convert_List_To_DataTable_For_Pending_Payments(pending_payments);
+            DataTable dataTable = ListToDataTableConverterForPendingPayments(pending_payments);
 
             using (XLWorkbook wb = new XLWorkbook())
             {
@@ -2212,11 +2209,11 @@ namespace Stock_Manage_System_API.DAL
 
         #region Method : Download PDF of Remain Payments
 
-        public byte[] Remain_Payments_PDF()
+        public byte[] RemainPaymentsPDF()
         {
-            List<Remain_Payment_Model> remain_payments = payment_DALBase.Remain_Customers_Payments();
+            List<Remain_Payment_Model> remain_payments = payment_DALBase.GetRemainingCustomersPayments();
 
-            DataTable dataTable = Convert_List_To_DataTable_For_Remain_Payments(remain_payments);
+            DataTable dataTable = ListToDataTableConverterForRemainPayments(remain_payments);
 
             using (MemoryStream memoryStream = new MemoryStream())
             {
@@ -2348,11 +2345,11 @@ namespace Stock_Manage_System_API.DAL
 
         #region Method : Download Excel of Remain Payments
 
-        public byte[] Remain_Payments_EXCEL()
+        public byte[] RemainPaymentsEXCEL()
         {
-            List<Remain_Payment_Model> remain_payments = payment_DALBase.Remain_Customers_Payments();
+            List<Remain_Payment_Model> remain_payments = payment_DALBase.GetRemainingCustomersPayments();
 
-            DataTable dataTable = Convert_List_To_DataTable_For_Remain_Payments(remain_payments);
+            DataTable dataTable = ListToDataTableConverterForRemainPayments(remain_payments);
 
             using (XLWorkbook wb = new XLWorkbook())
             {
@@ -2394,11 +2391,11 @@ namespace Stock_Manage_System_API.DAL
 
         #region Method : Download PDF of Paid Payments
 
-        public byte[] Paid_Payments_PDF()
+        public byte[] PaidPaymentsPDF()
         {
-            List<Show_Payment_Info> paid_payments = payment_DALBase.Paid_Customers_Payments();
+            List<Show_Payment_Info> paid_payments = payment_DALBase.GetPaidCustomersPayments();
 
-            DataTable dataTable = Convert_List_To_DataTable_For_Paid_Payments(paid_payments);
+            DataTable dataTable = ListToDataTableConverterForPaidPayments(paid_payments);
 
             using (MemoryStream memoryStream = new MemoryStream())
             {
@@ -2530,11 +2527,11 @@ namespace Stock_Manage_System_API.DAL
 
         #region Method : Download Excel of Paid Payments
 
-        public byte[] Paid_Payments_EXCEL()
+        public byte[] PaidPaymentsEXCEL()
         {
-            List<Show_Payment_Info> paid_payments = payment_DALBase.Paid_Customers_Payments();
+            List<Show_Payment_Info> paid_payments = payment_DALBase.GetPaidCustomersPayments();
 
-            DataTable dataTable = Convert_List_To_DataTable_For_Paid_Payments(paid_payments);
+            DataTable dataTable = ListToDataTableConverterForPaidPayments(paid_payments);
 
             using (XLWorkbook wb = new XLWorkbook())
             {

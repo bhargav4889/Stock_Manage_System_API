@@ -21,7 +21,7 @@ namespace Stock_Manage_System_API.Controllers
         #region Download PDF & Excel For Purchase Invoice
 
         [HttpGet]
-        public IActionResult Purchase_Invoice_Statement_PDF()
+        public IActionResult PurchaseInvoiceStatementPDF()
         {
 
             using (MemoryStream memoryStream = new MemoryStream())
@@ -31,7 +31,7 @@ namespace Stock_Manage_System_API.Controllers
                 // After generating the PDF into memoryStream
 
                 // Prepare the memoryStream for reading
-                byte[] content = download_BALbase.Purchase_Invoice_Statement_PDF();
+                byte[] content = download_BALbase.PurchaseInvoiceStatementPDF();
 
                 // Set the filename for the PDF
                 string fileName = "Purchase-Invoice-Statement.pdf";
@@ -43,7 +43,7 @@ namespace Stock_Manage_System_API.Controllers
 
 
         [HttpGet]
-        public IActionResult Purchase_Invoice_Statement_EXCEL()
+        public IActionResult PurchaseInvoiceStatementEXCEL()
         {
             using (MemoryStream memoryStream = new MemoryStream())
             {
@@ -52,7 +52,7 @@ namespace Stock_Manage_System_API.Controllers
                 // After generating the PDF into memoryStream
 
                 // Prepare the memoryStream for reading
-                byte[] content = download_BALbase.Purchase_Invoice_Statement_EXCEL();
+                byte[] content = download_BALbase.PurchaseInvoiceStatementEXCEL();
 
                 // Set the filename for the PDF
                 string fileName = "Purchase-Invoice-List.xlsx";
@@ -67,7 +67,7 @@ namespace Stock_Manage_System_API.Controllers
         #region Download PDF & Excel For Sales Invoice
 
         [HttpGet]
-        public IActionResult Sales_Invoice_Statement_PDF()
+        public IActionResult SalesInvoiceStatementPDF()
         {
 
             using (MemoryStream memoryStream = new MemoryStream())
@@ -77,7 +77,7 @@ namespace Stock_Manage_System_API.Controllers
                 // After generating the PDF into memoryStream
 
                 // Prepare the memoryStream for reading
-                byte[] content = download_BALbase.Sales_Invoice_Statement_PDF();
+                byte[] content = download_BALbase.SalesInvoiceStatementPDF();
 
                 // Set the filename for the PDF
                 string fileName = "Sales-Invoice-Statement.pdf";
@@ -88,7 +88,7 @@ namespace Stock_Manage_System_API.Controllers
         }
 
         [HttpGet]
-        public IActionResult Sales_Invoice_Statement_EXCEL()
+        public IActionResult SalesInvoiceStatementEXCEL()
         {
             using (MemoryStream memoryStream = new MemoryStream())
             {
@@ -97,7 +97,7 @@ namespace Stock_Manage_System_API.Controllers
                 // After generating the PDF into memoryStream
 
                 // Prepare the memoryStream for reading
-                byte[] content = download_BALbase.Sales_Invoice_Statement_EXCEL();
+                byte[] content = download_BALbase.SalesInvoiceStatementEXCEL();
 
                 // Set the filename for the PDF
                 string fileName = "Sales-Invoice-List.xlsx";
@@ -119,7 +119,7 @@ namespace Stock_Manage_System_API.Controllers
         #region Method : Download PDF & Excel Customers Statements
 
         [HttpGet]
-        public IActionResult Customers_Statement_PDF()
+        public IActionResult CustomersStatementPDF()
         {
 
             using (MemoryStream memoryStream = new MemoryStream())
@@ -129,7 +129,7 @@ namespace Stock_Manage_System_API.Controllers
                 // After generating the PDF into memoryStream
 
                 // Prepare the memoryStream for reading
-                byte[] content = download_BALbase.Customers_Statement_PDF();
+                byte[] content = download_BALbase.CustomersStatementPDF();
 
                 // Set the filename for the PDF
                 string fileName = "Customers-Account-Statement.pdf";
@@ -140,7 +140,7 @@ namespace Stock_Manage_System_API.Controllers
         }
 
         [HttpGet]
-        public IActionResult Customers_Statement_EXCEL()
+        public IActionResult CustomersStatementEXCEL()
         {
             using (MemoryStream memoryStream = new MemoryStream())
             {
@@ -149,7 +149,7 @@ namespace Stock_Manage_System_API.Controllers
                 // After generating the PDF into memoryStream
 
                 // Prepare the memoryStream for reading
-                byte[] content = download_BALbase.Customers_Statement_EXCEL();
+                byte[] content = download_BALbase.CustomersStatementEXCEL();
 
                 // Set the filename for the PDF
                 string fileName = "Customers-Statements-List.xlsx";
@@ -164,9 +164,9 @@ namespace Stock_Manage_System_API.Controllers
         #region Method : Download PDF & Excel Customer Account Statements
 
         [HttpGet("{Customer_ID}&{Customer_Type}")]
-        public IActionResult Customer_Account_Statement_PDF(int Customer_ID, string Customer_Type)
+        public IActionResult CustomerAccountStatementPDF(int Customer_ID, string Customer_Type)
         {
-            var customerDetails = customers_DALBase.Customer_Info_By_PK(Customer_ID, Customer_Type);
+            var customerDetails = customers_DALBase.CustomerByIDAndType(Customer_ID, Customer_Type);
 
             using (MemoryStream memoryStream = new MemoryStream())
             {
@@ -175,7 +175,7 @@ namespace Stock_Manage_System_API.Controllers
                 // After generating the PDF into memoryStream
 
                 // Prepare the memoryStream for reading
-                byte[] content = download_BALbase.Customer_Account_Statement_PDF(Customer_ID, Customer_Type);
+                byte[] content = download_BALbase.CustomerAccountStatementPDF(Customer_ID, Customer_Type);
 
                 // Set the filename for the PDF
                 string fileName = $"{customerDetails.CustomerName}-{Customer_Type}-Account-Statement.pdf";
@@ -186,18 +186,18 @@ namespace Stock_Manage_System_API.Controllers
         }
 
         [HttpGet("{Customer_ID}&{Customer_Type}")]
-        public IActionResult Customer_Account_Statement_EXCEL(int Customer_ID, string Customer_Type)
+        public IActionResult CustomerAccountStatementEXCEL(int Customer_ID, string Customer_Type)
         {
             using (MemoryStream memoryStream = new MemoryStream())
             {
                 // Custom page size and PDF generation code remains the same...
 
-                var customerDetails = customers_DALBase.Customer_Info_By_PK(Customer_ID, Customer_Type);
+                var customerDetails = customers_DALBase.CustomerByIDAndType(Customer_ID, Customer_Type);
 
                 // After generating the PDF into memoryStream
 
                 // Prepare the memoryStream for reading
-                byte[] content = download_BALbase.Customer_Account_Statement_EXCEL(Customer_ID,Customer_Type);
+                byte[] content = download_BALbase.CustomerAccountStatementEXCEL(Customer_ID,Customer_Type);
 
                 // Set the filename for the PDF
                 string fileName = $"{customerDetails.CustomerName}-{Customer_Type}-Account-Statement.xlsx";
@@ -219,7 +219,7 @@ namespace Stock_Manage_System_API.Controllers
         #region Section : Download Purchase Stock Statement PDF & Excel
 
         [HttpGet]
-        public IActionResult Purchase_Stocks_Statement_PDF()
+        public IActionResult PurchaseStocksStatementPDF()
         {
 
             using (MemoryStream memoryStream = new MemoryStream())
@@ -229,7 +229,7 @@ namespace Stock_Manage_System_API.Controllers
                 // After generating the PDF into memoryStream
 
                 // Prepare the memoryStream for reading
-                byte[] content = download_BALbase.Purchase_Stocks_Statement_PDF();
+                byte[] content = download_BALbase.PurchaseStocksStatementPDF();
 
                 // Set the filename for the PDF
                 string fileName = "Purchase-Stocks-Statement.pdf";
@@ -241,7 +241,7 @@ namespace Stock_Manage_System_API.Controllers
 
 
         [HttpGet]
-        public IActionResult Purchase_Stocks_Statement_EXCEL()
+        public IActionResult PurchaseStocksStatementEXCEL()
         {
 
             using (MemoryStream memoryStream = new MemoryStream())
@@ -251,7 +251,7 @@ namespace Stock_Manage_System_API.Controllers
                 // After generating the PDF into memoryStream
 
                 // Prepare the memoryStream for reading
-                byte[] content = download_BALbase.Purchase_Stocks_Statement_EXCEL();
+                byte[] content = download_BALbase.PurchaseStocksStatementEXCEL();
 
                 // Set the filename for the PDF
                 string fileName = "Purchase-Stocks-Statement.xlsx";
@@ -268,7 +268,7 @@ namespace Stock_Manage_System_API.Controllers
         #region Section : Download Sales Statement PDF & Excel 
 
         [HttpGet]
-        public IActionResult Sales_Statement_PDF()
+        public IActionResult SalesStatementPDF()
         {
 
             using (MemoryStream memoryStream = new MemoryStream())
@@ -278,7 +278,7 @@ namespace Stock_Manage_System_API.Controllers
                 // After generating the PDF into memoryStream
 
                 // Prepare the memoryStream for reading
-                byte[] content = download_BALbase.Sales_Statement_PDF();
+                byte[] content = download_BALbase.SalesStatementPDF();
 
                 // Set the filename for the PDF
                 string fileName = "Sales-Statement.pdf";
@@ -290,7 +290,7 @@ namespace Stock_Manage_System_API.Controllers
 
 
         [HttpGet]
-        public IActionResult Sales_Statement_EXCEL()
+        public IActionResult SalesStatementEXCEL()
         {
 
             using (MemoryStream memoryStream = new MemoryStream())
@@ -300,7 +300,7 @@ namespace Stock_Manage_System_API.Controllers
                 // After generating the PDF into memoryStream
 
                 // Prepare the memoryStream for reading
-                byte[] content = download_BALbase.Sales_Statement_EXCEL();
+                byte[] content = download_BALbase.SalesStatementEXCEL();
 
                 // Set the filename for the PDF
                 string fileName = "Sales-Statement.xlsx";
@@ -319,7 +319,7 @@ namespace Stock_Manage_System_API.Controllers
 
 
         [HttpGet]
-        public IActionResult Pending_Payments_PDF()
+        public IActionResult PendingPaymentsPDF()
         {
             using (MemoryStream memoryStream = new MemoryStream())
             {
@@ -328,7 +328,7 @@ namespace Stock_Manage_System_API.Controllers
                 // After generating the PDF into memoryStream
 
                 // Prepare the memoryStream for reading
-                byte[] content = download_BALbase.Pending_Payments_PDF();
+                byte[] content = download_BALbase.PendingPaymentsPDF();
 
                 // Set the filename for the PDF
                 string fileName = "Pending-Payments-List.pdf";
@@ -339,7 +339,7 @@ namespace Stock_Manage_System_API.Controllers
         }
 
         [HttpGet]
-        public IActionResult Pending_Payments_EXCEL()
+        public IActionResult PendingPaymentsEXCEL()
         {
             using (MemoryStream memoryStream = new MemoryStream())
             {
@@ -348,7 +348,7 @@ namespace Stock_Manage_System_API.Controllers
                 // After generating the PDF into memoryStream
 
                 // Prepare the memoryStream for reading
-                byte[] content = download_BALbase.Pending_Payments_EXCEL();
+                byte[] content = download_BALbase.PendingPaymentsEXCEL();
 
                 // Set the filename for the PDF
                 string fileName = "Pending-Payments-List.xlsx";
@@ -365,7 +365,7 @@ namespace Stock_Manage_System_API.Controllers
 
 
         [HttpGet]
-        public IActionResult Remain_Payments_PDF()
+        public IActionResult RemainPaymentsPDF()
         {
             using (MemoryStream memoryStream = new MemoryStream())
             {
@@ -374,7 +374,7 @@ namespace Stock_Manage_System_API.Controllers
                 // After generating the PDF into memoryStream
 
                 // Prepare the memoryStream for reading
-                byte[] content = download_BALbase.Remain_Payments_PDF();
+                byte[] content = download_BALbase.RemainPaymentsPDF();
 
                 // Set the filename for the PDF
                 string fileName = "Remain-Payments-List.pdf";
@@ -385,7 +385,7 @@ namespace Stock_Manage_System_API.Controllers
         }
 
         [HttpGet]
-        public IActionResult Remain_Payments_EXCEL()
+        public IActionResult RemainPaymentsEXCEL()
         {
             using (MemoryStream memoryStream = new MemoryStream())
             {
@@ -394,7 +394,7 @@ namespace Stock_Manage_System_API.Controllers
                 // After generating the PDF into memoryStream
 
                 // Prepare the memoryStream for reading
-                byte[] content = download_BALbase.Remain_Payments_EXCEL();
+                byte[] content = download_BALbase.RemainPaymentsEXCEL();
 
                 // Set the filename for the PDF
                 string fileName = "Remain-Payments-List.xlsx";
@@ -410,7 +410,7 @@ namespace Stock_Manage_System_API.Controllers
 
 
         [HttpGet]
-        public IActionResult Paid_Payments_PDF()
+        public IActionResult PaidPaymentsPDF()
         {
             using (MemoryStream memoryStream = new MemoryStream())
             {
@@ -419,7 +419,7 @@ namespace Stock_Manage_System_API.Controllers
                 // After generating the PDF into memoryStream
 
                 // Prepare the memoryStream for reading
-                byte[] content = download_BALbase.Paid_Payments_PDF();
+                byte[] content = download_BALbase.PaidPaymentsPDF();
 
                 // Set the filename for the PDF
                 string fileName = "Paid-Payments-List.pdf";
@@ -430,7 +430,7 @@ namespace Stock_Manage_System_API.Controllers
         }
 
         [HttpGet]
-        public IActionResult Paid_Payments_EXCEL()
+        public IActionResult PaidPaymentsEXCEL()
         {
             using (MemoryStream memoryStream = new MemoryStream())
             {
@@ -439,7 +439,7 @@ namespace Stock_Manage_System_API.Controllers
                 // After generating the PDF into memoryStream
 
                 // Prepare the memoryStream for reading
-                byte[] content = download_BALbase.Paid_Payments_EXCEL();
+                byte[] content = download_BALbase.PaidPaymentsEXCEL();
 
                 // Set the filename for the PDF
                 string fileName = "Paid-Payments-List.xlsx";

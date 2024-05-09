@@ -1,26 +1,40 @@
-﻿using Stock_Manage_System_API.DAL;
+﻿using Microsoft.Extensions.Logging.Abstractions;
+using Stock_Manage_System_API.DAL;
 using Stock_Manage_System_API.Models;
-using System.Data;
-using static Stock_Manage_System_API.Models.InvoicesModel;
 
 namespace Stock_Manage_System_API.BAL
 {
     public class Invoices_BALBase
     {
-        private readonly Invoices_DALBase Invoice_dALBase = new Invoices_DALBase();
+        private readonly Invoices_DALBase _invoicesDALBase = new Invoices_DALBase();
 
+        #region Area: Sale Invoice
 
+        #region Section: Display All Sale Invoices
 
-        #region Sell Invoice
+        /// <summary>
+        /// Retrieves all sales invoices from the database.
+        /// </summary>
+        /// <returns>A list of all sales invoices.</returns>
+        public List<InvoicesModel.Sales_Invoice_Model> DisplayAllSaleInvoices()
+        {
+            return _invoicesDALBase.DisplayAllSaleInvoices();
+        }
 
+        #endregion
 
-        #region INSERT 
+        #region Section: Insert Sale Invoice Details
 
-        public bool CREATE_SALES_INVOICE(InvoicesModel.Sales_Invoice_Model sales_Invoice)
+        /// <summary>
+        /// Inserts a new sales invoice in the database.
+        /// </summary>
+        /// <param name="sales_Invoice">The sales invoice model to insert.</param>
+        /// <returns>True if the insertion is successful; otherwise, false.</returns>
+        public bool InsertSaleInvoice(InvoicesModel.Sales_Invoice_Model sales_Invoice)
         {
             try
             {
-                if (Invoice_dALBase.CREATE_SALES_INVOICE(sales_Invoice))
+                if (_invoicesDALBase.InsertSaleInvoice(sales_Invoice))
                 {
                     return true;
                 }
@@ -37,15 +51,18 @@ namespace Stock_Manage_System_API.BAL
 
         #endregion
 
+        #region Section: Delete Sale Invoice
 
-        #region DELETE
-
-        public bool DELETE_SALES_INVOICE(int Sales_Invoice_ID)
+        /// <summary>
+        /// Deletes a sales invoice from the database using its ID.
+        /// </summary>
+        /// <param name="Sales_Invoice_ID">The ID of the sales invoice to delete.</param>
+        /// <returns>True if the deletion is successful; otherwise, false.</returns>
+        public bool DeleteSaleInvoice(int Sale_Invoice_ID)
         {
             try
             {
-
-                if (Invoice_dALBase.DELETE_SALES_INVOICE(Sales_Invoice_ID))
+                if (_invoicesDALBase.DeleteSaleInvoice(Sale_Invoice_ID))
                 {
                     return true;
                 }
@@ -62,97 +79,32 @@ namespace Stock_Manage_System_API.BAL
 
         #endregion
 
-        #region DISPLAY ALL
+        #region Section: Sale Invoice By Invoice ID
 
-        public List<InvoicesModel.Sales_Invoice_Model> SHOW_ALL_SALES_INVOICES()
+        /// <summary>
+        /// Retrieves details of a specific sales invoice by its ID.
+        /// </summary>
+        /// <param name="Sales_Invoice_ID">The ID of the sales invoice to retrieve.</param>
+        /// <returns>The sales invoice model if found; otherwise, null.</returns>
+        public InvoicesModel.Sales_Invoice_Model SaleInvoiceByID(int Sale_Invoice_ID)
         {
-            List<InvoicesModel.Sales_Invoice_Model> List_Of_Sales_Invoice = Invoice_dALBase.SHOW_ALL_SALES_INVOICES();
-
-            return List_Of_Sales_Invoice;
-
+            return _invoicesDALBase.SaleInvoiceByID(Sale_Invoice_ID);
         }
 
         #endregion
 
-        #region DISPLAY BY ID
+        #region Section: Update Sale Invoice Details
 
-        public InvoicesModel.Sales_Invoice_Model SALES_INVOICE_DETAILS_BY_ID(int Sales_Invoice_ID)
-        {
-
-            try
-            {
-
-                InvoicesModel.Sales_Invoice_Model sales_Invoice = Invoice_dALBase.SALES_INVOICE_DETAILS_BY_ID(Sales_Invoice_ID);
-
-                return sales_Invoice;
-            }
-            catch
-            {
-                return null;
-            }
-
-
-
-        }
-
-        #endregion
-
-        #region UPDATE 
-
-        public bool SALES_INVOICE_UPDATE(InvoicesModel.Sales_Invoice_Model sales_Invoice)
+        /// <summary>
+        /// Updates an existing sales invoice in the database.
+        /// </summary>
+        /// <param name="sales_Invoice">The sales invoice model to update.</param>
+        /// <returns>True if the update is successful; otherwise, false.</returns>
+        public bool UpdateSaleInvoice(InvoicesModel.Sales_Invoice_Model sales_Invoice)
         {
             try
             {
-                if (Invoice_dALBase.SALES_INVOICE_UPDATE(sales_Invoice))
-                {
-                    return true;
-                }
-
-                else
-                {
-                    return false;
-                }
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        #endregion
-
-
-
-        #endregion
-
-
-        #region Purchase Invoice
-
-
-
-        #region DISPLAY ALL
-
-
-        public List<InvoicesModel.Purchase_Invoice_Model> SHOW_ALL_PURCHASE_INVOICES()
-        {
-            List<InvoicesModel.Purchase_Invoice_Model> List_Of_Purchase_Invoice = Invoice_dALBase.DISPLAY_ALL_PURCHASE_INVOICE();
-
-            return List_Of_Purchase_Invoice;
-
-        }
-
-
-        #endregion
-
-
-        #region DELETE
-
-        public bool DELETE_PURCHASE_INVOICE(int Purchase_Invoice_ID)
-        {
-            try
-            {
-
-                if (Invoice_dALBase.DELETE_PURCHASE_INVOICE(Purchase_Invoice_ID))
+                if (_invoicesDALBase.UpdateSaleInvoice(sales_Invoice))
                 {
                     return true;
                 }
@@ -169,30 +121,35 @@ namespace Stock_Manage_System_API.BAL
 
         #endregion
 
+        #endregion
 
+        #region Area: Purchase Invoice
 
-        #region DISPLAY BY ID 
+        #region Section: Display All Purchase Invoices
 
-        public InvoicesModel.Purchase_Invoice_Model? PURCHASE_INVOICE_DETAILS_BY_ID(int Purchase_Invoice_ID)
+        /// <summary>
+        /// Retrieves all purchase invoices from the database.
+        /// </summary>
+        /// <returns>A list of all purchase invoices.</returns>
+        public List<InvoicesModel.Purchase_Invoice_Model> DisplayAllPurchaseInvoices()
         {
-            InvoicesModel.Purchase_Invoice_Model? purchase_Invoice = Invoice_dALBase.PURCHASE_INVOICE_DETAILS_BY_ID(Purchase_Invoice_ID);
-
-
-            return purchase_Invoice;
+            return _invoicesDALBase.DisplayAllPurchaseInvoices();
         }
-
 
         #endregion
 
+        #region Section: Insert Purchase Invoice Details
 
-
-        #region INSERT 
-
-        public bool CREATE_PURCHASE_INVOICE(InvoicesModel.Purchase_Invoice_Model purchase_Invoice)
+        /// <summary>
+        /// Creates a new purchase invoice in the database.
+        /// </summary>
+        /// <param name="purchase_Invoice">The purchase invoice model to insert.</param>
+        /// <returns>True if the insertion is successful; otherwise, false.</returns>
+        public bool InsertPurchaseInvoice(InvoicesModel.Purchase_Invoice_Model purchase_Invoice)
         {
             try
             {
-                if (Invoice_dALBase.CREATE_PURCHASE_INVOICE(purchase_Invoice))
+                if (_invoicesDALBase.InsertPurchaseInvoice(purchase_Invoice))
                 {
                     return true;
                 }
@@ -209,19 +166,21 @@ namespace Stock_Manage_System_API.BAL
 
         #endregion
 
+        #region Section: Delete Purchase Invoice
 
-
-        #region UPDATE 
-
-        public bool PURCHASE_INVOICE_UPDATE(InvoicesModel.Purchase_Invoice_Model purchase_Invoice)
+        /// <summary>
+        /// Deletes a purchase invoice from the database using its ID.
+        /// </summary>
+        /// <param name="Purchase_Invoice_ID">The ID of the purchase invoice to delete.</param>
+        /// <returns>True if the deletion is successful; otherwise, false.</returns>
+        public bool DeletePurchaseInvoice(int Purchase_Invoice_ID)
         {
             try
             {
-                if (Invoice_dALBase.PURCHASE_INVOICE_UPDATE(purchase_Invoice))
+                if (_invoicesDALBase.DeletePurchaseInvoice(Purchase_Invoice_ID))
                 {
                     return true;
                 }
-
                 else
                 {
                     return false;
@@ -235,12 +194,48 @@ namespace Stock_Manage_System_API.BAL
 
         #endregion
 
+        #region Section: Purchase Invoice By Invoice ID
+
+        /// <summary>
+        /// Retrieves details of a specific purchase invoice by its ID.
+        /// </summary>
+        /// <param name="Purchase_Invoice_ID">The ID of the purchase invoice to retrieve.</param>
+        /// <returns>The purchase invoice model if found; otherwise, null.</returns>
+        public InvoicesModel.Purchase_Invoice_Model? PurchasenInvoiceByID(int Purchase_Invoice_ID)
+        {
+            return _invoicesDALBase.PurchasenInvoiceByID(Purchase_Invoice_ID);
+        }
 
         #endregion
 
+        #region Section: Update Purchase Invoice Details
 
-       
+        /// <summary>
+        /// Updates an existing purchase invoice in the database.
+        /// </summary>
+        /// <param name="purchase_Invoice">The purchase invoice model to update.</param>
+        /// <returns>True if the update is successful; otherwise, false.</returns>
+        public bool UpdatePurchaseInvoice(InvoicesModel.Purchase_Invoice_Model purchase_Invoice)
+        {
+            try
+            {
+                if (_invoicesDALBase.UpdatePurchaseInvoice(purchase_Invoice))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
+        #endregion
+
+        #endregion
     }
-
 }

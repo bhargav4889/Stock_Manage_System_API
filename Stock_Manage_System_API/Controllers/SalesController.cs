@@ -12,14 +12,14 @@ namespace Stock_Manage_System_API.Controllers
 
         public readonly Sales_BALBase sales_BALBase = new Sales_BALBase();
 
-        #region INSERT
+        #region Method : Insert Sale
 
-       
+
         [HttpPost]
-        public IActionResult Insert_Sale(Sale_Customer_Combied_Model model)
+        public IActionResult AddSale(Sale_Customer_Combied_Model model)
         {
             // Insert operation
-            bool is_Success = sales_BALBase.Insert_Sale_With_Customer(model);
+            bool is_Success = sales_BALBase.InsertSale(model);
 
             // Response container
             Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();
@@ -41,14 +41,14 @@ namespace Stock_Manage_System_API.Controllers
 
         #endregion
 
-        #region UPDATE
+        #region Method : Update Sale
 
 
         [HttpPut]
-        public IActionResult Update_Sale(Sale_Customer_Combied_Model model)
+        public IActionResult UpdateSale(Sale_Customer_Combied_Model model)
         {
             // Insert operation
-            bool is_Success = sales_BALBase.Update_Sale(model);
+            bool is_Success = sales_BALBase.UpdateSale(model);
 
             // Response container
             Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();
@@ -70,12 +70,13 @@ namespace Stock_Manage_System_API.Controllers
 
         #endregion
 
+        #region Method : Get All Sales 
 
         [HttpGet]
 
-        public IActionResult Sales()
+        public IActionResult GetAllSales()
         {
-            List<Show_Sale> sales = sales_BALBase.Show_All_Sales();
+            List<Show_Sale> sales = sales_BALBase.GetAllSales();
 
             Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();
 
@@ -95,11 +96,15 @@ namespace Stock_Manage_System_API.Controllers
 
         }
 
+        #endregion
+
+        #region Method : Sale Information By ID
+
         [HttpGet("{Sale_ID}")]
 
         public IActionResult Get_Sale_By_ID(int Sale_ID)
         {
-            Show_Sale sale = sales_BALBase.Show_Sale_By_ID(Sale_ID);
+            Show_Sale sale = sales_BALBase.GetSaleByID(Sale_ID);
 
             Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();
 
@@ -117,13 +122,16 @@ namespace Stock_Manage_System_API.Controllers
                 return Ok(response);
             }
         }
+        #endregion
 
+
+        #region Method :Sale With Customer Information Data
 
         [HttpGet("{Sale_ID}&{Customer_ID}")]
 
         public IActionResult Fetch_Sale_And_Customer_Details(int Sale_ID ,int Customer_ID)
         {
-            Sale_Customer_Combied_Model sale = sales_BALBase.Fetch_Sale_And_Customer_Details(Sale_ID,Customer_ID);
+            Sale_Customer_Combied_Model sale = sales_BALBase.GetSaleByCustomerAndSaleID(Sale_ID,Customer_ID);
 
             Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();
 
@@ -142,14 +150,15 @@ namespace Stock_Manage_System_API.Controllers
             }
         }
 
+        #endregion
 
-        // Delete a purchased stock
+        #region Method : Delete Sale
 
         [HttpDelete]
-        public IActionResult Delete_Sale(int Sale_ID)
+        public IActionResult DeleteSale(int Sale_ID)
         {
             // Delete operation
-            bool is_Success = sales_BALBase.Delete_Sale(Sale_ID);
+            bool is_Success = sales_BALBase.DeleteSale(Sale_ID);
 
             // Response container
             Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();
@@ -168,6 +177,8 @@ namespace Stock_Manage_System_API.Controllers
                 return Ok(response);
             }
         }
+
+        #endregion
 
     }
 }

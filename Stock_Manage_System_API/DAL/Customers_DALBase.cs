@@ -4,6 +4,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Practices.EnterpriseLibrary.Data;
 using Microsoft.Practices.EnterpriseLibrary.Data.Sql;
 using Stock_Manage_System_API.Models;
+using System;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
@@ -14,25 +15,41 @@ namespace Stock_Manage_System_API.DAL
 {
     public class Customers_DALBase : DAL_Helpers
     {
+        #region Section: SetUp Of Database Connection and Initialization
+
         private SqlDatabase sqlDatabase;
 
+        /// <summary>
+        /// Initializes a new instance of the Customers_DALBase class, setting up the database connection.
+        /// </summary>
         public Customers_DALBase()
         {
+            // Assuming 'Database_Connection' is a predefined string or obtained elsewhere in your application.
+
             sqlDatabase = new SqlDatabase(Database_Connection);
         }
 
+        /// <summary>
+        /// Retrieves a DbCommand object configured for executing the specified stored procedure.
+        /// </summary>
+        /// <param name="storedProcedureName">The name of the stored procedure for which to get the DbCommand.</param>
+        /// <returns>A DbCommand object configured to execute the named stored procedure.</returns>
         private DbCommand Command_Name(string storedProcedureName)
         {
             return sqlDatabase.GetStoredProcCommand(storedProcedureName);
         }
 
+        #endregion
 
-        #region DISPLAY ALL
-        public List<Customer_Model> SHOW_ALL_CUSTOMERS()
+        #region Section: Display All Customers
+        /// <summary>
+        /// Retrieves a list of all customers from the database.
+        /// </summary>
+        /// <returns>A list of <see cref="Customer_Model"/> instances representing all customers. Returns null if an error occurs.</returns>
+        public List<Customer_Model> GetAllCustomers()
         {
             try
             {
-
 
                 DbCommand dbCommand = Command_Name("API_DISPLAY_ALL_CUSTOMER_LIST");
 
@@ -57,9 +74,6 @@ namespace Stock_Manage_System_API.DAL
 
                 return List_Of_Customers;
 
-
-
-
             }
             catch
             {
@@ -69,10 +83,16 @@ namespace Stock_Manage_System_API.DAL
 
         #endregion
 
+        #region Section: Account Details by Customer ID and Type
 
-        #region ACCOUNT DETAILS BY CUSTOMER ID
+        /// <summary>
+        /// Retrieves account details and transactions based on customer ID and type.
+        /// </summary>
+        /// <param name="customerID">The ID of the customer.</param>
+        /// <param name="customerType">The type of the customer (e.g., "BUYER" or "SELLER").</param>
+        /// <returns>A model containing customer details and either purchased stock or sales information based on customer type.</returns>
 
-        public CustomerDetails_With_Purchased_Stock_Model Account_Details(int Customer_ID, string Customer_Type)
+        public CustomerDetails_With_Purchased_Stock_Model RetrieveAccountDetails(int Customer_ID, string Customer_Type)
         {
 
             CustomerDetails_With_Purchased_Stock_Model customerDetails_With_Purchased_Stock = new CustomerDetails_With_Purchased_Stock_Model();
@@ -99,11 +119,8 @@ namespace Stock_Manage_System_API.DAL
 
                         customerDetails_With_Purchased_Stock.Customers = customers;
 
-
-
                     }
                 }
-
 
             }
             if (Customer_Type == "BUYER")
@@ -140,9 +157,6 @@ namespace Stock_Manage_System_API.DAL
 
                         customerDetails_With_Purchased_Stock.Purchased_Stocks = List_Of_Purchased_Stock;
                     }
-
-
-
 
                 }
             }
@@ -183,7 +197,7 @@ namespace Stock_Manage_System_API.DAL
                             Sale_Info.Receive_Amount = Convert.ToDecimal(reader["RECEIVE_AMOUNT"]);
                             Sale_Info.Discount = reader["DISCOUNT"] is DBNull ? null : Convert.ToDecimal(reader["DISCOUNT"]);
                             bool isFullPaymentReceive = !reader.IsDBNull(reader.GetOrdinal("IS_FULL_AMOUNT_RECEIVE")) && reader.GetBoolean(reader.GetOrdinal("IS_FULL_AMOUNT_RECEIVE"));
-                            Sale_Info.IsFullPaymentReceive = isFullPaymentReceive;  // Corrected boolean logic
+                            Sale_Info.IsFullPaymentReceive = isFullPaymentReceive; // Corrected boolean logic
 
                             Sale_Info.Payment_Method = reader["RECEIVE_PAYMENT_METHOD"].ToString();
                             Sale_Info.Deducted_Amount = reader["DEDUCT_AMOUNT"] is DBNull ? null : Convert.ToDecimal(reader["DEDUCT_AMOUNT"].ToString());
@@ -204,21 +218,21 @@ namespace Stock_Manage_System_API.DAL
                 }
             }
 
-
-
-
-
-
             return customerDetails_With_Purchased_Stock;
         }
 
-
         #endregion
 
-        #region INSERT
+        #region Section: Insert Customer
+
+        /// <summary>
+        /// Inserts a new customer into the database.
+        /// </summary>
+        /// <param name="customers">The customer model containing the data to insert.</param>
+        /// <returns>True if the customer was successfully inserted, otherwise false.</returns>
 
         [HttpPost]
-        public bool CREATE_CUSTOMER(Customer_Model customers)
+        public bool InsertCustomer(Customer_Model customers)
         {
             int generatedCustomerId = 0;
 
@@ -249,13 +263,18 @@ namespace Stock_Manage_System_API.DAL
             }
         }
 
-
         #endregion
 
-        #region DELETE 
+        #region Section: Delete Customer
 
+        /// <summary>
+        /// Deletes a customer from the database based on the provided customer ID and type.
+        /// </summary>
+        /// <param name="Customer_ID">The ID of the customer to be deleted.</param>
+        /// <param name="Customer_Type">The type of the customer to be deleted.</param>
+        /// <returns>True if the customer was successfully deleted, otherwise false.</returns>
 
-        public bool Delete_Customer(int Customer_ID, string Customer_Type)
+        public bool DeleteCustomer(int Customer_ID, string Customer_Type)
         {
             try
             {
@@ -281,10 +300,15 @@ namespace Stock_Manage_System_API.DAL
 
         #endregion
 
+        #region Section: Update Customer
 
-        #region UPDATE
+        /// <summary>
+        /// Updates the details of an existing customer in the database.
+        /// </summary>
+        /// <param name="customers">The customer model containing updated information about the customer.</param>
+        /// <returns>True if the customer was successfully updated, otherwise false.</returns>
 
-        public bool Update_Customer(Customer_Model customers)
+        public bool UpdateCustomer(Customer_Model customers)
         {
             try
             {
@@ -318,83 +342,16 @@ namespace Stock_Manage_System_API.DAL
 
         #endregion
 
+        #region Section: Customer By ID and Type
 
-        public List<Customer_Model> BUYER_CUSTOMER_EXIST_IN_SYSTEM(string Customer_Name)
-        {
+        /// <summary>
+        /// Retrieves a customer's details based on their ID and type.
+        /// </summary>
+        /// <param name="Customer_ID">The unique identifier for the customer.</param>
+        /// <param name="Customer_Type">The type of the customer, e.g., "BUYER" or "SELLER".</param>
+        /// <returns>A <see cref="Customer_Model"/> object containing the customer's details if found; otherwise, an empty <see cref="Customer_Model"/> object.</returns>
 
-            List<Customer_Model> List_Of_Customers = new List<Customer_Model>();
-
-            DbCommand dbCommand = Command_Name("API_CUSTOMER_EXIST_IN_SYSTEM_FOR_BUYER");
-
-
-            sqlDatabase.AddInParameter(dbCommand, "@CUSTOMER_NAME", SqlDbType.NVarChar, Customer_Name);
-
-            using (IDataReader reader = sqlDatabase.ExecuteReader(dbCommand))
-            {
-                while (reader.Read())
-                {
-                    Customer_Model customers = new Customer_Model();
-
-                    customers.CustomerId = Convert.ToInt32(reader[0]);
-                    customers.CustomerName = reader[1].ToString();
-                    customers.CustomerType = reader[2].ToString();
-                    customers.CustomerContact = reader[3].ToString();
-                    customers.CustomerAddress = reader[4].ToString();
-
-                    List_Of_Customers.Add(customers);
-
-                }
-
-
-
-                return List_Of_Customers;
-
-            }
-
-
-
-        }
-
-
-        public List<Customer_Model> SELLER_CUSTOMER_EXIST_IN_SYSTEM(string Customer_Name)
-        {
-
-            List<Customer_Model> List_Of_Customers = new List<Customer_Model>();
-
-            System.Data.Common.DbCommand dbCommand = Command_Name("API_CUSTOMER_EXIST_IN_SYSTEM_FOR_SELLER");
-
-
-            sqlDatabase.AddInParameter(dbCommand, "@CUSTOMER_NAME", SqlDbType.NVarChar, Customer_Name);
-
-            using (IDataReader reader = sqlDatabase.ExecuteReader(dbCommand))
-            {
-                while (reader.Read())
-                {
-                    Customer_Model customers = new Customer_Model();
-
-                    customers.CustomerId = Convert.ToInt32(reader[0]);
-                    customers.CustomerName = reader[1].ToString();
-                    customers.CustomerType = reader[2].ToString();
-                    customers.CustomerContact = reader[3].ToString();
-                    customers.CustomerAddress = reader[4].ToString();
-
-                    List_Of_Customers.Add(customers);
-
-                }
-
-
-
-                return List_Of_Customers;
-
-            }
-
-
-
-        }
-
-
-
-        public Customer_Model Customer_Info_By_PK(int Customer_ID, string Customer_Type)
+        public Customer_Model CustomerByIDAndType(int Customer_ID, string Customer_Type)
         {
             Customer_Model Customer_Info_By_PK = new Customer_Model();
 
@@ -409,16 +366,11 @@ namespace Stock_Manage_System_API.DAL
                     if (reader.Read())
                     {
 
-
                         Customer_Info_By_PK.CustomerId = Convert.ToInt32(reader[0]);
                         Customer_Info_By_PK.CustomerName = reader[1].ToString();
                         Customer_Info_By_PK.CustomerType = reader[2].ToString();
                         Customer_Info_By_PK.CustomerContact = reader[3].ToString();
                         Customer_Info_By_PK.CustomerAddress = reader[4].ToString();
-
-
-
-
 
                     }
                 }
@@ -427,11 +379,94 @@ namespace Stock_Manage_System_API.DAL
 
             }
 
+        }
 
+        #endregion
 
+        #region Section: Customer Does Exist
 
+        #region Area: Buyer Customer Exist
 
+        /// <summary>
+        /// Checks if a buyer-type customer with a specific name exists in the system and returns a list of matching customer records.
+        /// </summary>
+        /// <param name="Customer_Name">The name of the buyer-type customer to check for existence.</param>
+        /// <returns>A list of Customer_Model instances matching the specified customer name; can be empty if no matches found.</returns>
+
+        public List<Customer_Model> DoesBuyerCustomerExist(string Customer_Name)
+        {
+
+            List<Customer_Model> List_Of_Customers = new List<Customer_Model>();
+
+            DbCommand dbCommand = Command_Name("API_CUSTOMER_EXIST_IN_SYSTEM_FOR_BUYER");
+
+            sqlDatabase.AddInParameter(dbCommand, "@CUSTOMER_NAME", SqlDbType.NVarChar, Customer_Name);
+
+            using (IDataReader reader = sqlDatabase.ExecuteReader(dbCommand))
+            {
+                while (reader.Read())
+                {
+                    Customer_Model customers = new Customer_Model();
+
+                    customers.CustomerId = Convert.ToInt32(reader[0]);
+                    customers.CustomerName = reader[1].ToString();
+                    customers.CustomerType = reader[2].ToString();
+                    customers.CustomerContact = reader[3].ToString();
+                    customers.CustomerAddress = reader[4].ToString();
+
+                    List_Of_Customers.Add(customers);
+
+                }
+
+                return List_Of_Customers;
+
+            }
 
         }
+
+        #endregion
+
+        #region Area: Seller Customer Exist
+
+        /// <summary>
+        /// Checks if a seller-type customer with a specific name exists in the system and returns a list of matching customer records.
+        /// </summary>
+        /// <param name="Customer_Name">The name of the seller-type customer to check for existence.</param>
+        /// <returns>A list of Customer_Model instances matching the specified customer name; can be empty if no matches found.</returns>
+        public List<Customer_Model> DoesSellerCustomerExist(string Customer_Name)
+        {
+
+            List<Customer_Model> List_Of_Customers = new List<Customer_Model>();
+
+            System.Data.Common.DbCommand dbCommand = Command_Name("API_CUSTOMER_EXIST_IN_SYSTEM_FOR_SELLER");
+
+            sqlDatabase.AddInParameter(dbCommand, "@CUSTOMER_NAME", SqlDbType.NVarChar, Customer_Name);
+
+            using (IDataReader reader = sqlDatabase.ExecuteReader(dbCommand))
+            {
+                while (reader.Read())
+                {
+                    Customer_Model customers = new Customer_Model();
+
+                    customers.CustomerId = Convert.ToInt32(reader[0]);
+                    customers.CustomerName = reader[1].ToString();
+                    customers.CustomerType = reader[2].ToString();
+                    customers.CustomerContact = reader[3].ToString();
+                    customers.CustomerAddress = reader[4].ToString();
+
+                    List_Of_Customers.Add(customers);
+
+                }
+
+                return List_Of_Customers;
+
+            }
+
+        }
+
+        #endregion
+
+        #endregion
+
     }
 }

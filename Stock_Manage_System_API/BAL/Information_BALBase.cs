@@ -1,4 +1,7 @@
-﻿using Stock_Manage_System_API.DAL;
+﻿/// <summary>
+/// Represents the base class for managing information in the business access layer.
+/// </summary>
+using Stock_Manage_System_API.DAL;
 using Stock_Manage_System_API.Models;
 
 namespace Stock_Manage_System_API.BAL
@@ -7,11 +10,17 @@ namespace Stock_Manage_System_API.BAL
     {
         public readonly Information_DALBase information_DALBase = new Information_DALBase();
 
-        public bool Insert_Bank_Infromation(Information_Model infromation_Model)
-        {
-            if (information_DALBase.Insert_Bank_Infromation(infromation_Model))
-            {
 
+        #region Method : Bank Information Insert
+        /// <summary>
+        /// Inserts a new bank information.
+        /// </summary>
+        /// <param name="infromation_Model">The <see cref="Information_Model"/> object containing the bank information to insert.</param>
+        /// <returns><c>true</c> if the bank information was inserted successfully; otherwise, <c>false</c>.</returns>
+        public bool InsertBankInformation(Information_Model infromation_Model)
+        {
+            if (information_DALBase.InsertBankInformation(infromation_Model))
+            {
                 return true;
             }
             else
@@ -19,26 +28,49 @@ namespace Stock_Manage_System_API.BAL
                 return false;
             }
         }
+        #endregion
 
-        public List<Information_Model> Show_All_Save_Informations()
+        #region Method : Show All Informations 
+        /// <summary>
+        /// Retrieves all saved information.
+        /// </summary>
+        /// <returns>A list of <see cref="Information_Model"/> objects containing all saved information.</returns>
+        public List<Information_Model> GetAllSaveInformation()
         {
-            List<Information_Model> information_Models = information_DALBase.Show_All_Save_Informations();
+            List<Information_Model> information_Models = information_DALBase.GetAllSaveInformation();
 
             return information_Models;
         }
 
-        public Information_Model Information_Model(int Information_ID)
+        #endregion
+
+
+        #region Method : Information Show By ID 
+        /// <summary>
+        /// Retrieves the saved information with the specified information ID.
+        /// </summary>
+        /// <param name="Information_ID">The ID of the saved information to retrieve.</param>
+        /// <returns>A <see cref="Information_Model"/> object containing the saved information with the specified information ID.</returns>
+        public Information_Model InformationByID(int Information_ID)
         {
-            Information_Model information_Model = information_DALBase.Information_Model(Information_ID);
+            Information_Model information_Model = information_DALBase.InformationByID(Information_ID);
 
             return information_Model;
         }
+        #endregion
 
-        public bool Delete_Save_Infromation(int Information_ID)
+
+        #region Method : Delete Information
+
+        /// <summary>
+        /// Deletes the saved information with the specified information ID.
+        /// </summary>
+        /// <param name="Information_ID">The ID of the saved information to delete.</param>
+        /// <returns><c>true</c> if the saved information was deleted successfully; otherwise, <c>false</c>.</returns>
+        public bool DeleteInformation(int Information_ID)
         {
-            if (information_DALBase.Delete_Save_Information(Information_ID))
+            if (information_DALBase.DeleteInformation(Information_ID))
             {
-
                 return true;
             }
             else
@@ -47,5 +79,6 @@ namespace Stock_Manage_System_API.BAL
             }
         }
 
+        #endregion
     }
 }

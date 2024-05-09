@@ -11,19 +11,19 @@ namespace Stock_Manage_System_API.BAL
 
         #region Download PDF & Excel For Purchase Invoice
 
-        public byte[] Purchase_Invoice_Statement_PDF()
+        public byte[] PurchaseInvoiceStatementPDF()
         {
-            byte[] Purchase_Invoie_Statement_PDF = download_DALBase.Purchase_Invoice_Statement_PDF();
+            byte[] PurchaseInvoiceStatementPDF = download_DALBase.PurchaseInvoiceStatementPDF();
 
-            return Purchase_Invoie_Statement_PDF;
+            return PurchaseInvoiceStatementPDF;
 
         }
 
-        public byte[] Purchase_Invoice_Statement_EXCEL()
+        public byte[] PurchaseInvoiceStatementEXCEL()
         {
-            byte[] Purchase_Invoice_Statement_EXCEL = download_DALBase.Purchase_Invoice_Statement_EXCEL();
+            byte[] PurchaseInvoiceStatementEXCEL = download_DALBase.PurchaseInvoiceStatementEXCEL();
 
-            return Purchase_Invoice_Statement_EXCEL;
+            return PurchaseInvoiceStatementEXCEL;
         }
 
 
@@ -31,19 +31,19 @@ namespace Stock_Manage_System_API.BAL
 
         #region Download PDF & Excel For Sales Invoice
 
-        public byte[] Sales_Invoice_Statement_PDF()
+        public byte[] SalesInvoiceStatementPDF()
         {
-            byte[] Sales_Invoice_Statement_PDF = download_DALBase.Sales_Invoice_Statement_PDF();
+            byte[] SalesInvoiceStatementPDF = download_DALBase.SalesInvoiceStatementPDF();
 
-            return Sales_Invoice_Statement_PDF;
+            return SalesInvoiceStatementPDF;
 
         }
 
-        public byte[] Sales_Invoice_Statement_EXCEL()
+        public byte[] SalesInvoiceStatementEXCEL()
         {
-            byte[] Sales_Invoice_Statement_EXCEL = download_DALBase.Sales_Invoice_Statement_EXCEL();
+            byte[] SalesInvoiceStatementEXCEL = download_DALBase.SalesInvoiceStatementEXCEL();
 
-            return Sales_Invoice_Statement_EXCEL;
+            return SalesInvoiceStatementEXCEL;
         }
 
         #endregion
@@ -53,36 +53,36 @@ namespace Stock_Manage_System_API.BAL
         #region  Section : Download Customers Statement & Customer Account Statements PDF & Excel
 
         #region Method : Download PDF & Excel Customers Statements
-        public byte[] Customers_Statement_PDF()
+        public byte[] CustomersStatementPDF()
         {
-            byte[] Customers_Statement_PDF = download_DALBase.Customers_Statement_PDF();
+            byte[] CustomersStatementPDF = download_DALBase.CustomersStatementPDF();
 
-            return Customers_Statement_PDF;
+            return CustomersStatementPDF;
         }
 
-        public byte[] Customers_Statement_EXCEL()
+        public byte[] CustomersStatementEXCEL()
         {
-            byte[] Customers_Statement_EXCEL = download_DALBase.Customers_Statement_EXCEL();
+            byte[] CustomersStatementEXCEL = download_DALBase.CustomersStatementEXCEL();
 
-            return Customers_Statement_EXCEL;
+            return CustomersStatementEXCEL;
         }
 
         #endregion
 
         #region Method : Download PDF & Excel Customer Account Statements
 
-        public byte[] Customer_Account_Statement_PDF(int Customer_ID, string Customer_Type)
+        public byte[] CustomerAccountStatementPDF(int Customer_ID, string Customer_Type)
         {
-            byte[] Customer_Account_Statement_PDF = download_DALBase.Customer_Account_Statement_PDF(Customer_ID, Customer_Type);
+            byte[] CustomerAccountStatementPDF = download_DALBase.CustomerAccountStatementPDF(Customer_ID, Customer_Type);
 
-            return Customer_Account_Statement_PDF;
+            return CustomerAccountStatementPDF;
         }
 
-        public byte[] Customer_Account_Statement_EXCEL(int Customer_ID,string Customer_Type)
+        public byte[] CustomerAccountStatementEXCEL(int Customer_ID, string Customer_Type)
         {
-            byte[] Customer_Account_Statement_EXCEL = download_DALBase.Customer_Account_Statement_EXCEL(Customer_ID, Customer_Type);
+            byte[] CustomerAccountStatementEXCEL = download_DALBase.CustomerAccountStatementEXCEL(Customer_ID, Customer_Type);
 
-            return Customer_Account_Statement_EXCEL;
+            return CustomerAccountStatementEXCEL;
         }
 
 
@@ -91,18 +91,18 @@ namespace Stock_Manage_System_API.BAL
         #endregion
 
         #region Section : Download Purchase Stock Statement PDF & Excel
-        public byte[] Purchase_Stocks_Statement_PDF()
+        public byte[] PurchaseStocksStatementPDF()
         {
-            byte[] Purchase_Stocks_Statement_PDF = download_DALBase.Purchase_Stocks_Statement_PDF();
+            byte[] PurchaseStocksStatementPDF = download_DALBase.PurchaseStocksStatementPDF();
 
-            return Purchase_Stocks_Statement_PDF;
+            return PurchaseStocksStatementPDF;
         }
 
-        public byte[] Purchase_Stocks_Statement_EXCEL()
+        public byte[] PurchaseStocksStatementEXCEL()
         {
-            byte[] Purchase_Stocks_Statement_EXCEL = download_DALBase.Purchase_Stocks_Statement_EXCEL();
+            byte[] PurchaseStocksStatementEXCEL = download_DALBase.PurchaseStocksStatementEXCEL();
 
-            return Purchase_Stocks_Statement_EXCEL;
+            return PurchaseStocksStatementEXCEL;
         }
 
         #endregion
@@ -110,18 +110,18 @@ namespace Stock_Manage_System_API.BAL
 
         #region Section : Download Sales Statement PDF & Excel
 
-        public byte[] Sales_Statement_PDF()
+        public byte[] SalesStatementPDF()
         {
-            byte[] Sales_Statement = download_DALBase.Sales_Statement_PDF();
+            byte[] SalesStatementPDF = download_DALBase.SalesStatementPDF();
 
-            return Sales_Statement;
+            return SalesStatementPDF;
         }
 
-        public byte[] Sales_Statement_EXCEL()
+        public byte[] SalesStatementEXCEL()
         {
-            byte[] Sales_Statement = download_DALBase.Sales_Statement_EXCEL();
+            byte[] SalesStatementEXCEL = download_DALBase.SalesStatementEXCEL();
 
-            return Sales_Statement; 
+            return SalesStatementEXCEL;
         }
 
         #endregion
@@ -129,54 +129,54 @@ namespace Stock_Manage_System_API.BAL
 
         #region Section : Download Pending Payments PDF & Excel
 
-        public byte[] Pending_Payments_PDF()
+        public byte[] PendingPaymentsPDF()
         {
-            byte[] Pending_Payments = download_DALBase.Pending_Payments_PDF();
+            byte[] PendingPaymentsPDF = download_DALBase.PendingPaymentsPDF();
 
-            return Pending_Payments;
+            return PendingPaymentsPDF;
         }
 
-        public byte[] Pending_Payments_EXCEL()
+        public byte[] PendingPaymentsEXCEL()
         {
-            byte[] Pending_Payments = download_DALBase.Pending_Payments_EXCEL();
+            byte[] PendingPaymentsEXCEL = download_DALBase.PendingPaymentsEXCEL();
 
-            return Pending_Payments;
+            return PendingPaymentsEXCEL;
         }
 
         #endregion
 
         #region Section : Download Remain Payments PDF & Excel
 
-        public byte[] Remain_Payments_PDF()
+        public byte[] RemainPaymentsPDF()
         {
-            byte[] Remain_Payments = download_DALBase.Remain_Payments_PDF();
+            byte[] RemainPaymentsPDF = download_DALBase.RemainPaymentsPDF();
 
-            return Remain_Payments;
+            return RemainPaymentsPDF;
         }
 
-        public byte[] Remain_Payments_EXCEL()
+        public byte[] RemainPaymentsEXCEL()
         {
-            byte[] Remain_Payments = download_DALBase.Remain_Payments_EXCEL();
+            byte[] RemainPaymentsEXCEL = download_DALBase.RemainPaymentsEXCEL();
 
-            return Remain_Payments;
+            return RemainPaymentsEXCEL;
         }
 
         #endregion
 
         #region Section : Download Paid Payments PDF & Excel
 
-        public byte[] Paid_Payments_PDF()
+        public byte[] PaidPaymentsPDF()
         {
-            byte[] Paid_Payments = download_DALBase.Paid_Payments_PDF();
+            byte[] PaidPaymentsPDF = download_DALBase.PaidPaymentsPDF();
 
-            return Paid_Payments;
+            return PaidPaymentsPDF;
         }
 
-        public byte[] Paid_Payments_EXCEL()
+        public byte[] PaidPaymentsEXCEL()
         {
-            byte[] Paid_Payments = download_DALBase.Paid_Payments_EXCEL();
+            byte[] PaidPaymentsEXCEL = download_DALBase.PaidPaymentsEXCEL();
 
-            return Paid_Payments;
+            return PaidPaymentsEXCEL;
         }
 
         #endregion

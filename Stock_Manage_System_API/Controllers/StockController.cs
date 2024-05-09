@@ -147,7 +147,7 @@ namespace Stock_Manage_System_API.Controllers
         /// <param name="Stock_ID">The ID of the stock to retrieve.</param>
         /// <returns>An IActionResult containing the stock data or a not found error.</returns>
         [HttpGet("{Stock_ID}")]
-        public IActionResult GetPurchaseStockById(int Stock_ID)
+        public IActionResult GetPurchaseStockByID(int Stock_ID)
         {
             Purchase_Stock? show_Purchase_Stock = _stock_BAL.PurchaseStockByID(Stock_ID);
             Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();

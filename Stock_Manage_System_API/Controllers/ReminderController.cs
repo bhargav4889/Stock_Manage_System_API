@@ -5,54 +5,63 @@ using Stock_Manage_System_API.Models;
 
 namespace Stock_Manage_System_API.Controllers
 {
+    /// <summary>
+    /// Controller for managing reminders.
+    /// </summary>
     [ApiController]
     [Route("api/[controller]/[action]")]
     public class ReminderController : Controller
     {
+        /// <summary>
+        /// The reminder business access layer base object.
+        /// </summary>
         private readonly Reminder_BALBase reminder_BALBase = new Reminder_BALBase();
 
+        #region Method : Insert Reminder
+
+        /// <summary>
+        /// Creates a new reminder.
+        /// </summary>
+        /// <param name="reminder">The reminder to create.</param>
+        /// <returns>An HTTP response indicating the success or failure of the operation.</returns>
 
         [HttpPost]
-        public IActionResult Create_Reminder(Reminder_Model reminder)
+        public IActionResult AddReminder(Reminder_Model reminder)
         {
-            bool isSucess =  reminder_BALBase.Insert_Reminder(reminder);
+            bool isSucess = reminder_BALBase.InsertReminder(reminder);
 
-            Dictionary<string,dynamic> res = new Dictionary<string,dynamic>();
+            Dictionary<string, dynamic> res = new Dictionary<string, dynamic>();
 
-            if(isSucess)
+            if (isSucess)
             {
                 res.Add("status", true);
-
                 res.Add("message", "Insert Successfully");
-
                 return Ok(res);
-
             }
-
             else
             {
                 res.Add("status", false);
-
                 res.Add("message", "Error Occured !");
-
                 return BadRequest(res);
             }
         }
 
+        #endregion
 
-        #region UPDATE
+        #region Method : Update Reminder
 
-        // Update purchased stock
+        /// <summary>
+        /// Updates an existing reminder.
+        /// </summary>
+        /// <param name="reminder">The reminder to update.</param>
+        /// <returns>An HTTP response indicating the success or failure of the operation.</returns>
         [HttpPut]
-        public IActionResult Update_Reminder(Reminder_Model reminder)
+        public IActionResult UpdateReminder(Reminder_Model reminder)
         {
-            // Update operation
-            bool is_Success = reminder_BALBase.Update_Reminder(reminder);
+            bool is_Success = reminder_BALBase.UpdateReminder(reminder);
 
-            // Response container
             Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();
 
-            // Check update success
             if (is_Success)
             {
                 response.Add("status", true);
@@ -66,33 +75,32 @@ namespace Stock_Manage_System_API.Controllers
                 return Ok(response);
             }
         }
-
         #endregion
 
-        #region Display All
+        #region Method : Get All Upcoming Reminder
 
-        // Fetch all purchased stocks
+        /// <summary>
+        /// Retrieves all reminders.
+        /// </summary>
+        /// <returns>An HTTP response containing a list of reminders.</returns>
         [HttpGet]
-        public IActionResult Reminders()
+        public IActionResult GetReminders()
         {
-            // Retrieve stocks
-            List<Reminder_Model> reminders = reminder_BALBase.Get_Reminders();
+            List<Reminder_Model> reminders = reminder_BALBase.GetReminders();
 
-            // Response container
             Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();
 
-            // Check stock existence
             if (reminders.Count > 0)
             {
                 response.Add("status", true);
-                response.Add("message", "Data Found!.");
+                response.Add("message", "Data Found!");
                 response.Add("data", reminders);
                 return Ok(response);
             }
             else
             {
                 response.Add("status", false);
-                response.Add("message", "Data Not Found!.");
+                response.Add("message", "Data Not Found!");
                 response.Add("data", "Not Found Data !");
                 return NotFound(response);
             }
@@ -100,52 +108,51 @@ namespace Stock_Manage_System_API.Controllers
 
         #endregion
 
+        #region Method : Get Reminder By ID
 
-        #region Display All
-
-        // Fetch all purchased stocks
+        /// <summary>
+        /// Retrieves a reminder by its ID.
+        /// </summary>
+        /// <param name="Reminder_ID">The ID of the reminder to retrieve.</param>
+        /// <returns>An HTTP response containing the reminder with the specified ID.</returns>
         [HttpGet("{Reminder_ID}")]
-        public IActionResult Get_Reminder_By_ID(int Reminder_ID)
+        public IActionResult GetReminderByID(int Reminder_ID)
         {
-            
-            Reminder_Model reminder = reminder_BALBase.Get_Reminder_By_ID(Reminder_ID);
+            Reminder_Model reminder = reminder_BALBase.GetReminderByID(Reminder_ID);
 
-            // Response container
             Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();
 
-            // Check stock existence
             if (reminder != null && reminder.ReminderId != 0)
             {
                 response.Add("status", true);
-                response.Add("message", "Data Found!.");
+                response.Add("message", "Data Found!");
                 response.Add("data", reminder);
                 return Ok(response);
             }
             else
             {
                 response.Add("status", false);
-                response.Add("message", "Data Not Found!.");
+                response.Add("message", "Data Not Found!");
                 response.Add("data", "Not Found Data !");
                 return NotFound(response);
             }
         }
-
         #endregion
 
-        #region DELETE 
+        #region Method : Delete Reminder
 
-        // Delete a purchased stock
-
+        /// <summary>
+        /// Deletes a reminder by its ID.
+        /// </summary>
+        /// <param name="Reminder_ID">The ID of the reminder to delete.</param>
+        /// <returns>An HTTP response indicating the success or failure of the operation.</returns>
         [HttpDelete]
-        public IActionResult Delete_Reminder(int Reminder_ID)
+        public IActionResult DeleteReminder(int Reminder_ID)
         {
-            // Delete operation
-            bool is_Success = reminder_BALBase.Delete_Reminder(Reminder_ID);
+            bool is_Success = reminder_BALBase.DeleteReminder(Reminder_ID);
 
-            // Response container
             Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();
 
-            // Check delete success
             if (is_Success)
             {
                 response.Add("status", true);
@@ -159,10 +166,6 @@ namespace Stock_Manage_System_API.Controllers
                 return Ok(response);
             }
         }
-
-
         #endregion
-
-
     }
 }

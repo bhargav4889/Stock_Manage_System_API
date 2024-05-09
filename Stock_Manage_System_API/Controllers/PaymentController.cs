@@ -12,10 +12,18 @@ namespace Stock_Manage_System_API.Controllers
     {
         private readonly Payment_BALBase payment_BALBase = new Payment_BALBase();
 
+        #region Section: Get Payment Info By Stock & Customer ID
+
+        /// <summary>
+        /// Gets payment information by stock and customer IDs.
+        /// </summary>
+        /// <param name="Customer_ID">The customer ID.</param>
+        /// <param name="Stock_ID">The stock ID.</param>
+        /// <returns>Payment information as a JSON object.</returns>
         [HttpGet("{Customer_ID}&{Stock_ID}")]
-        public IActionResult Get_Payment_Info(int Customer_ID, int Stock_ID)
+        public IActionResult GetPaymentInfoByStockCustomerID(int Customer_ID, int Stock_ID)
         {
-            Payment_Model payment_Info = payment_BALBase.Get_Payment_Info_By_Stock_Customer_PK(Stock_ID, Customer_ID);
+            Payment_Model payment_Info = payment_BALBase.GetPaymentInfoByStockCustomerId(Stock_ID, Customer_ID);
 
             Dictionary<string, dynamic> res = new Dictionary<string, dynamic>();
 
@@ -45,11 +53,21 @@ namespace Stock_Manage_System_API.Controllers
 
         }
 
+        #endregion
 
+
+        #region Section: Get Remain Payment Info By Stock & Customer ID
+
+        /// <summary>
+        /// Gets the remaining payment information for a specific customer, stock, and payment ID.
+        /// </summary>
+        /// <param name="Customer_ID">The customer ID.</param>
+        /// <param name="Stock_ID">The stock ID.</param>
+        /// <returns>Remaining payment information as a JSON object.</returns>
         [HttpGet("{Customer_ID}&{Stock_ID}")]
-        public IActionResult Get_Remain_Payment_Info(int Customer_ID, int Stock_ID)
+        public IActionResult RemainGetPaymentInfoByCustomerFKAndStockIdAndPaymentID(int Customer_ID, int Stock_ID)
         {
-            Remain_Payment_Model payment_Info = payment_BALBase.Remain_Get_Payment_Info_By_Customer_FK_And_Stock_Id_And_Payment_Id(Customer_ID, Stock_ID);
+            Remain_Payment_Model payment_Info = payment_BALBase.RemainGetPaymentInfoByCustomerFkAndStockIdAndPaymentId(Customer_ID, Stock_ID);
 
             Dictionary<string, dynamic> res = new Dictionary<string, dynamic>();
 
@@ -79,10 +97,20 @@ namespace Stock_Manage_System_API.Controllers
 
         }
 
+        #endregion
+
+        #region Section : Full Payment Infromation
+
+        /// <summary>
+        /// Retrieves full payment information for a specific customer and stock.
+        /// </summary>
+        /// <param name="Customer_ID">The customer ID.</param>
+        /// <param name="Stock_ID">The stock ID.</param>
+        /// <returns>Full payment information as a JSON object.</returns>
         [HttpGet("{Customer_ID}&{Stock_ID}")]
-        public IActionResult Payment_Info_By_Customer_ID_AND_Stock_ID(int Customer_ID, int Stock_ID)
+        public IActionResult GetFullPaymentInfo(int Customer_ID, int Stock_ID)
         {
-            Show_Payment_Info show_Payment_Info = payment_BALBase.Show_All_Payment_Info(Customer_ID, Stock_ID);
+            Show_Payment_Info show_Payment_Info = payment_BALBase.GetFullPaymentInfo(Customer_ID, Stock_ID);
 
             Dictionary<string, dynamic> res = new Dictionary<string, dynamic>();
 
@@ -111,11 +139,19 @@ namespace Stock_Manage_System_API.Controllers
 
 
         }
+        #endregion
 
+
+        #region Section: Display All Pending Customers Payments
+
+        /// <summary>
+        /// Displays all pending customers payments.
+        /// </summary>
+        /// <returns>A list of pending customers payments as a JSON object.</returns>
         [HttpGet]
-        public IActionResult Pending_Customers_Payments()
+        public IActionResult GetPendingCustomersPayments()
         {
-            List<Pending_Customers_Payments> pending_Customers_Payments = payment_BALBase.Pending_Customers_Payments();
+            List<Pending_Customers_Payments> pending_Customers_Payments = payment_BALBase.GetPendingCustomersPayments();
 
             Dictionary<string, dynamic> res = new Dictionary<string, dynamic>();
 
@@ -143,12 +179,18 @@ namespace Stock_Manage_System_API.Controllers
             }
         }
 
+        #endregion
 
+        #region Section: Display All Pending Customers Payments
 
+        /// <summary>
+        /// Displays all remaining customers payments.
+        /// </summary>
+        /// <returns>A list of remaining customers payments as a JSON object.</returns>
         [HttpGet]
-        public IActionResult Remain_Customers_Payments()
+        public IActionResult GetRemainingCustomersPayments()
         {
-            List<Remain_Payment_Model> remain_Payment_Models = payment_BALBase.Remain_Customers_Payments();
+            List<Remain_Payment_Model> remain_Payment_Models = payment_BALBase.GetRemainingCustomersPayments();
 
             Dictionary<string, dynamic> res = new Dictionary<string, dynamic>();
 
@@ -176,11 +218,19 @@ namespace Stock_Manage_System_API.Controllers
             }
         }
 
+        #endregion
 
+
+        #region Section: Display All Pending Customers Payments
+
+        /// <summary>
+        /// Displays all paid customers payments.
+        /// </summary>
+        /// <returns>A list of paid customers payments as a JSON object.</returns>
         [HttpGet]
-        public IActionResult Paid_Customers_Payments()
+        public IActionResult GetPaidCustomersPayments()
         {
-            List<Show_Payment_Info> show_Payment_Infos = payment_BALBase.Paid_Customers_Payments();
+            List<Show_Payment_Info> show_Payment_Infos = payment_BALBase.GetPaidCustomersPayments();
 
             Dictionary<string, dynamic> res = new Dictionary<string, dynamic>();
 
@@ -207,61 +257,68 @@ namespace Stock_Manage_System_API.Controllers
                 return NotFound(res);
             }
         }
+        #endregion
 
 
+        #region Section: Insert Payment
 
+        /// <summary>
+        /// Inserts a new payment record into the database.
+        /// </summary>
+        /// <param name="payment_Model">The payment model object.</param>
+        /// <returns>A dictionary object with status, message, and data properties.</returns>
         [HttpPost]
-
-        public IActionResult Create_Payment(Payment_Model payment_Model)
+        public IActionResult AddPayment(Payment_Model payment_Model)
         {
-            bool IsSuccess = payment_BALBase.Create_Payment(payment_Model);
-
+            bool IsSuccess = payment_BALBase.InsertPayment(payment_Model);
 
             Dictionary<string, dynamic> res = new Dictionary<string, dynamic>();
 
-
             if (IsSuccess)
             {
-
                 res.Add("status", true);
                 res.Add("message", "Data Insert Successfully!");
                 return Ok(res);
             }
             else
             {
-
                 res.Add("status", false);
                 res.Add("message", "Some Error Occured !");
                 return Ok(res);
             }
         }
 
+        #endregion
 
+
+        #region Section : Insert Remain Payment
+
+        /// <summary>
+        /// Inserts a new remaining payment record into the database.
+        /// </summary>
+        /// <param name="remain_Payment_Model">The remain payment model object.</param>
+        /// <returns>A dictionary object with status, message, and data properties.</returns>
         [HttpPost]
-
-        public IActionResult Create_Remain_Payment(Remain_Payment_Model remain_Payment_Model)
+        public IActionResult AddRemainPayment(Remain_Payment_Model remain_Payment_Model)
         {
-            bool IsSuccess = payment_BALBase.Create_Remain_Payment(remain_Payment_Model);
-
+            bool IsSuccess = payment_BALBase.InsertRemainPayment(remain_Payment_Model);
 
             Dictionary<string, dynamic> res = new Dictionary<string, dynamic>();
 
-
             if (IsSuccess)
             {
-
                 res.Add("status", true);
                 res.Add("message", "Data Insert Successfully!");
                 return Ok(res);
             }
             else
             {
-
                 res.Add("status", false);
                 res.Add("message", "Some Error Occured !");
                 return Ok(res);
             }
         }
 
+        #endregion
     }
 }

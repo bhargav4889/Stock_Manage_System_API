@@ -8,13 +8,20 @@ using Stock_Manage_System_API.SMS_Services;
 
 namespace Stock_Manage_System_API.Reminder_Service
 {
+    /// <summary>
+    /// A service for handling reminders.
+    /// </summary>
     public class ReminderService
     {
-
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly string _connectionString;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ReminderService"/> class.
+        /// </summary>
+        /// <param name="emailSender">The email sender to use for sending email reminders.</param>
+        /// <param name="smsSender">The SMS sender to use for sending SMS reminders.</param>
         public ReminderService(IEmailSender emailSender, ISmsSender smsSender)
         {
             _emailSender = emailSender;
@@ -22,16 +29,19 @@ namespace Stock_Manage_System_API.Reminder_Service
             _connectionString = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json")
-                .Build()
+              .Build()
                 .GetConnectionString("MyConnection");
         }
 
+        /// <summary>
+        /// Gets the reminders from the database as a DataTable.
+        /// </summary>
+        /// <returns>A DataTable containing the reminders.</returns>
         public async Task<DataTable> GetRemindersAsync()
         {
             DataTable dataTable = new DataTable();
             try
             {
-                
                 using (var connection = new SqlConnection(_connectionString))
                 {
                     await connection.OpenAsync();
@@ -45,7 +55,6 @@ namespace Stock_Manage_System_API.Reminder_Service
                         }
                     }
                 }
-
             }
             catch (Exception ex)
             {
@@ -54,16 +63,10 @@ namespace Stock_Manage_System_API.Reminder_Service
             return dataTable;
         }
 
-        /*  public async Task SendRemindersAsync()
-          {
-              // Example: Send an email reminder
-              await _emailSender.SendEmailAsync("bhargavkachhela1@gmail.com", "Reminder", "Here's your reminder for the upcoming event.");
-
-              // Example: Send an SMS reminder
-           *//*   await _smsSender.SendSmsAsync("+919664633122", "Reminder: Your appointment is scheduled for tomorrow at 10 AM.");*//*
-          }*/
-
-
+        /// <summary>
+        /// Sends the reminders to the appropriate recipients.
+        /// </summary>
+        /// <returns>A task representing the asynchronous operation.</returns>
         public async Task SendRemindersAsync()
         {
             DataTable reminders = await GetRemindersAsync();
@@ -71,7 +74,6 @@ namespace Stock_Manage_System_API.Reminder_Service
 
             foreach (DataRow row in reminders.Rows)
             {
-
                 string email = row["EMAIL_ADDRESS"].ToString();
                 string subject = $"Reminder! - {row["REMINDER_TYPE"].ToString()}";
                 string body = $"Your reminder for {row["REMINDER_DESCRIPTION"].ToString()}";
@@ -81,11 +83,5 @@ namespace Stock_Manage_System_API.Reminder_Service
                 await _emailSender.SendEmailAsync(email, subject, body);
             }
         }
-
-
-
-
     }
-
-
 }
