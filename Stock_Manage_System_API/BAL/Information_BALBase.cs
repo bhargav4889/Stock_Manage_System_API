@@ -30,6 +30,25 @@ namespace Stock_Manage_System_API.BAL
         }
         #endregion
 
+        #region Method : Bank Information Update
+        /// <summary>
+        /// Update a  bank information.
+        /// </summary>
+        /// <param name="infromation_Model">The <see cref="Information_Model"/> object containing the bank information to Update.</param>
+        /// <returns><c>true</c> if the bank information was update successfully; otherwise, <c>false</c>.</returns>
+        public bool UpdateBankInformation(Information_Model infromation_Model)
+        {
+            if (information_DALBase.UpdateBankInformation(infromation_Model))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        #endregion
+
         #region Method : Show All Informations 
         /// <summary>
         /// Retrieves all saved information.

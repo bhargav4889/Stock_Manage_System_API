@@ -127,6 +127,8 @@ namespace Stock_Manage_System_API.DAL
 
                         Stock_Information.TolatName = dataReader[19].ToString();
 
+                        Stock_Information.PaymentStatus = dataReader[20].ToString();
+
                         List_of_Stock_Model.Add(Stock_Information);
 
                     }

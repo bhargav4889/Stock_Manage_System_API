@@ -208,8 +208,49 @@ namespace Stock_Manage_System_API.DAL
             {
                 while (reader.Read())
                 {
-                    // The method of extracting data is omitted for brevity but follows the same pattern as above.
-                    // paymentInfoList.Add(paymentInfo);
+                    Show_Payment_Info paymentInfo = new Show_Payment_Info
+                    {
+                        PaymentID = reader.GetInt32(reader.GetOrdinal("PAYMENT_ID")),
+                        PaymentDate = reader.GetDateTime(reader.GetOrdinal("PAYMENT_DATE")),
+                        CustomerID = reader.GetInt32(reader.GetOrdinal("CUSTOMER_ID")),
+                        CustomerName = reader.GetString(reader.GetOrdinal("CUSTOMER_NAME")),
+                        ProductID = reader.GetInt32(reader.GetOrdinal("PRODUCT_ID")),
+                        ProductName = reader.GetString(reader.GetOrdinal("PRODUCT_NAME_IN_GUJARATI")),
+                        StockID = reader.GetInt32(reader.GetOrdinal("PUR_STOCK_ID")),
+                        TotalPrice = reader.GetDecimal(reader.GetOrdinal("TOTAL_PRICE")),
+                        AmountPaid = reader.GetDecimal(reader.GetOrdinal("AMOUNT_PAID")),
+                        PaymentMethod = reader.GetString(reader.GetOrdinal("PAYMENT_METHOD")),
+                        BankID = reader.GetInt32(reader.GetOrdinal("BANK_ID")),
+                        BankName = reader.GetString(reader.GetOrdinal("BANK_NAME")),
+                        BankIcon = reader.GetString(reader.GetOrdinal("BANK_ICON")),
+                        BankAcNo = reader.GetString(reader.GetOrdinal("BANK_AC_NO")),
+                        CheqNo = reader.GetString(reader.GetOrdinal("CHEQ_NO")),
+                        RtgsNo = reader.GetString(reader.GetOrdinal("RTGS_NO")),
+                        Payment_Status = reader.GetString(reader.GetOrdinal("PAYMENT_STATUS"))
+                    };
+
+                    int remainPaymentIdOrdinal = reader.GetOrdinal("REMAIN_PAYMENT_ID");
+                    if (!reader.IsDBNull(remainPaymentIdOrdinal))
+                    {
+                        paymentInfo.RemainPaymentID = reader.GetInt32(remainPaymentIdOrdinal);
+                        int remainPaymentDateOrdinal = reader.GetOrdinal("REMAIN_PAYMENT_DATE");
+
+                        if (!reader.IsDBNull(remainPaymentDateOrdinal))
+                        {
+                            paymentInfo.RemainPaymentDate = reader.GetDateTime(remainPaymentDateOrdinal);
+                        }
+
+                        paymentInfo.RemainPaymentAmount = reader.GetDecimal(reader.GetOrdinal("REMAIN_PAYMENT_AMOUNT"));
+                        paymentInfo.RemainPaymentMethod = reader.GetString(reader.GetOrdinal("REMAIN_PAYMENT_METHOD"));
+                        paymentInfo.RemainBankID = reader.GetInt32(reader.GetOrdinal("REMAIN_BANK_ID"));
+                        paymentInfo.RemainBankName = reader.GetString(reader.GetOrdinal("REMAIN_BANK_NAME"));
+                        paymentInfo.RemainBankIcon = reader.GetString(reader.GetOrdinal("REMAIN_BANK_ICON"));
+                        paymentInfo.RemainBankAcNo = reader.GetString(reader.GetOrdinal("REMAIN_BANK_AC_NO"));
+                        paymentInfo.RemainCheqNo = reader.GetString(reader.GetOrdinal("REMAIN_CHEQ_NO"));
+                        paymentInfo.RemainRtgsNo = reader.GetString(reader.GetOrdinal("REMAIN_RTGS_NO"));
+                    }
+
+                    paymentInfoList.Add(paymentInfo);
                 }
                 return paymentInfoList;
             }
@@ -227,28 +268,32 @@ namespace Stock_Manage_System_API.DAL
 
         public bool InsertPayment(Payment_Model payment_Model)
         {
-            DbCommand dbCommand = Command_Name("API_INSERT_PAYMENT");
-
-            sqlDatabase.AddInParameter(dbCommand, "@PaymentDate", SqlDbType.DateTime, payment_Model.Payment_Date);
-
-            sqlDatabase.AddInParameter(dbCommand, "@CustomerID", SqlDbType.Int, payment_Model.Customer_Id);
-            sqlDatabase.AddInParameter(dbCommand, "@ProductID", SqlDbType.Int, payment_Model.Product_Id);
-            sqlDatabase.AddInParameter(dbCommand, "@StockID", SqlDbType.Int, payment_Model.Stock_Id);
-            sqlDatabase.AddInParameter(dbCommand, "@PaidAmount", SqlDbType.Decimal, payment_Model.Paid_Amount);
-            sqlDatabase.AddInParameter(dbCommand, "@RemainAmount", SqlDbType.Decimal, payment_Model.Remain_Amount);
-
-            sqlDatabase.AddInParameter(dbCommand, "@PaymentMethod", SqlDbType.VarChar, payment_Model.Payment_Method);
-            sqlDatabase.AddInParameter(dbCommand, "@BankID", SqlDbType.Int, payment_Model.Bank_Id);
-            sqlDatabase.AddInParameter(dbCommand, "@Bank_AC_No", SqlDbType.VarChar, payment_Model.Bank_Ac_No);
-            sqlDatabase.AddInParameter(dbCommand, "@CHEQ_No", SqlDbType.VarChar, payment_Model.CHEQ_No);
-            sqlDatabase.AddInParameter(dbCommand, "@RTGS_No", SqlDbType.VarChar, payment_Model.RTGS_No);
-
-            if (Convert.ToBoolean(sqlDatabase.ExecuteNonQuery(dbCommand)))
+            try
             {
-                return true;
+                DbCommand dbCommand = Command_Name("API_INSERT_PAYMENT");
+
+                sqlDatabase.AddInParameter(dbCommand, "@PaymentDate", SqlDbType.DateTime, payment_Model.Payment_Date);
+
+                sqlDatabase.AddInParameter(dbCommand, "@CustomerID", SqlDbType.Int, payment_Model.Customer_Id);
+                sqlDatabase.AddInParameter(dbCommand, "@ProductID", SqlDbType.Int, payment_Model.Product_Id);
+                sqlDatabase.AddInParameter(dbCommand, "@StockID", SqlDbType.Int, payment_Model.Stock_Id);
+                sqlDatabase.AddInParameter(dbCommand, "@PaidAmount", SqlDbType.Decimal, payment_Model.Paid_Amount);
+                sqlDatabase.AddInParameter(dbCommand, "@RemainAmount", SqlDbType.Decimal, payment_Model.Remain_Amount);
+
+                sqlDatabase.AddInParameter(dbCommand, "@PaymentMethod", SqlDbType.VarChar, payment_Model.Payment_Method);
+                sqlDatabase.AddInParameter(dbCommand, "@BankID", SqlDbType.Int, payment_Model.Bank_Id);
+                sqlDatabase.AddInParameter(dbCommand, "@Bank_AC_No", SqlDbType.VarChar, payment_Model.Bank_Ac_No);
+                sqlDatabase.AddInParameter(dbCommand, "@CHEQ_No", SqlDbType.VarChar, payment_Model.CHEQ_No);
+                sqlDatabase.AddInParameter(dbCommand, "@RTGS_No", SqlDbType.VarChar, payment_Model.RTGS_No);
+
+                return (Convert.ToBoolean(sqlDatabase.ExecuteNonQuery(dbCommand)));
+               
+               
             }
-            else
+            catch (Exception ex)
             {
+                // Log the exception (you could use any logging framework or custom logging solution)
+                Console.WriteLine("Error: " + ex.Message);
                 return false;
             }
 
@@ -274,9 +319,9 @@ namespace Stock_Manage_System_API.DAL
 
             sqlDatabase.AddInParameter(dbCommand, "@CustomerID", SqlDbType.Int, remain_Payment_Model.Customer_Id);
             sqlDatabase.AddInParameter(dbCommand, "@Remain_PaymentDate", SqlDbType.DateTime, remain_Payment_Model.Remain_Payment_Date);
-           
+
             sqlDatabase.AddInParameter(dbCommand, "@Remain_PayingAmount", SqlDbType.Decimal, remain_Payment_Model.Pay_Amount);
-           
+
 
             sqlDatabase.AddInParameter(dbCommand, "@Remain_PaymentMethod", SqlDbType.VarChar, remain_Payment_Model.Remain_Payment_Method);
             sqlDatabase.AddInParameter(dbCommand, "@Remain_BankID", SqlDbType.Int, remain_Payment_Model.Remain_Bank_Id);
@@ -347,7 +392,7 @@ namespace Stock_Manage_System_API.DAL
                         {
                             show_Payment_Info.RemainPaymentDate = Convert.ToDateTime(reader["REMAIN_PAYMENT_DATE"]);
                         }
-                       
+
 
                         show_Payment_Info.RemainPaymentAmount = Convert.ToDecimal(reader["REMAIN_PAYMENT_AMOUNT"]);
                         show_Payment_Info.RemainPaymentMethod = reader["REMAIN_PAYMENT_METHOD"].ToString();

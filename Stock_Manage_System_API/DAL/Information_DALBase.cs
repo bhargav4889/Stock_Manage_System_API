@@ -68,6 +68,46 @@ namespace Stock_Manage_System_API.DAL
 
         #endregion
 
+        #region Method : Bank Information Update
+
+        /// <summary>
+        /// Update a  bank information.
+        /// </summary>
+        /// <param name="information_Model">The <see cref="Information_Model"/> object containing the bank information to update.</param>
+        /// <returns><c>true</c> if the bank information was update successfully; otherwise, <c>false</c>.</returns>
+        public bool UpdateBankInformation(Information_Model information_Model)
+        {
+            try
+            {
+                DbCommand dbCommand = Command_Name("API_SAVE_INFORMATION_UPDATE");
+
+                sqlDatabase.AddInParameter(dbCommand, "@Information_ID", SqlDbType.Int,information_Model.InformationID);
+
+                sqlDatabase.AddInParameter(dbCommand, "@BANK_ID", SqlDbType.Int, information_Model.BankId);
+
+                sqlDatabase.AddInParameter(dbCommand, "@Account_No", SqlDbType.NVarChar, information_Model.AccountNo);
+
+                sqlDatabase.AddInParameter(dbCommand, "@IFSC_Code", SqlDbType.NVarChar, information_Model.ifsc_code);
+
+                sqlDatabase.AddInParameter(dbCommand, "@Account_Holder_Name", SqlDbType.NVarChar, information_Model.AccountHolderName);
+
+                if (Convert.ToBoolean(sqlDatabase.ExecuteNonQuery(dbCommand)))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        #endregion
+
         #region Method : Show All Informations 
 
         /// <summary>
@@ -145,7 +185,7 @@ namespace Stock_Manage_System_API.DAL
         /// <returns><c>true</c> if the saved information was deleted successfully; otherwise, <c>false</c>.</returns>
         public bool DeleteInformation(int Information_ID)
         {
-            DbCommand dbCommand = Command_Name("API_DISPLAY_SAVE_INFORMATION_BY_ID");
+            DbCommand dbCommand = Command_Name("API_SAVE_INFORMATION_DELETE_BY_ID");
 
             sqlDatabase.AddInParameter(dbCommand, "@Information_ID", SqlDbType.Int, Information_ID);
 

@@ -63,5 +63,34 @@ namespace Stock_Manage_System_API.DAL
 
         #endregion
 
+        #region Method : Upcoming Reminders Show
+
+        public List<Dashbaord_Features_Model.Upcoming_Reminders_Model> UpcomingRemindersList()
+        {
+            List<Dashbaord_Features_Model.Upcoming_Reminders_Model> _Upcoming_ReminderList = new List<Dashbaord_Features_Model.Upcoming_Reminders_Model>();
+
+            DbCommand dbCommand = Command_Name("API_DISPLAY_ALL_UPCOMING_REMINDER");
+
+            using (IDataReader reader = sqlDatabase.ExecuteReader(dbCommand))
+            {
+                while (reader.Read())
+                {
+                    Dashbaord_Features_Model.Upcoming_Reminders_Model _Upcoming_Reminder = new Dashbaord_Features_Model.Upcoming_Reminders_Model();
+
+                    _Upcoming_Reminder.ReminderId = Convert.ToInt32(reader["REMINDER_ID"].ToString());
+                    _Upcoming_Reminder.ReminderDateTime = Convert.ToDateTime(reader["REMINDER_DATETIME"].ToString());
+                    _Upcoming_Reminder.ReminderType = reader["REMINDER_TYPE"].ToString();
+                    _Upcoming_Reminder.ReminderCustomType = reader["REMINDER_CUSTOM_TYPE"].ToString();
+
+
+                    _Upcoming_ReminderList.Add(_Upcoming_Reminder);
+                }
+
+                return _Upcoming_ReminderList;
+            }
+        }
+
+        #endregion
+
     }
 }

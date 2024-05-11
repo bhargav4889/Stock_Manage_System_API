@@ -84,7 +84,7 @@ namespace Stock_Manage_System_API.Controllers
         /// </summary>
         /// <returns>An HTTP response containing a list of reminders.</returns>
         [HttpGet]
-        public IActionResult GetReminders()
+        public IActionResult GetAllReminders()
         {
             List<Reminder_Model> reminders = reminder_BALBase.GetReminders();
 

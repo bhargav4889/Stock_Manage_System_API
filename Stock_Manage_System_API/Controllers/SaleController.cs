@@ -7,7 +7,7 @@ namespace Stock_Manage_System_API.Controllers
 
     [ApiController]
     [Route("api/[controller]/[action]")]
-    public class SalesController : Controller
+    public class SaleController : Controller
     {
 
         public readonly Sales_BALBase sales_BALBase = new Sales_BALBase();
@@ -102,7 +102,7 @@ namespace Stock_Manage_System_API.Controllers
 
         [HttpGet("{Sale_ID}")]
 
-        public IActionResult Get_Sale_By_ID(int Sale_ID)
+        public IActionResult GetSaleByID(int Sale_ID)
         {
             Show_Sale sale = sales_BALBase.GetSaleByID(Sale_ID);
 
@@ -129,7 +129,7 @@ namespace Stock_Manage_System_API.Controllers
 
         [HttpGet("{Sale_ID}&{Customer_ID}")]
 
-        public IActionResult Fetch_Sale_And_Customer_Details(int Sale_ID ,int Customer_ID)
+        public IActionResult GetSaleAndCustomerDetails(int Sale_ID ,int Customer_ID)
         {
             Sale_Customer_Combied_Model sale = sales_BALBase.GetSaleByCustomerAndSaleID(Sale_ID,Customer_ID);
 

@@ -21,9 +21,16 @@ namespace Stock_Manage_System_API.BAL
         #region Method : Sort List of Pending Customer Payments Recent 
         public List<Dashbaord_Features_Model.Pending_Customers_Payment_Sort_List> PendingCustomersPaymentSortList()
         {
-            List<Dashbaord_Features_Model.Pending_Customers_Payment_Sort_List> pending_Customers_Payment_Sort_Lists = Dashbaord_Features_DALBase.PendingCustomersPaymentSortList();
+            return Dashbaord_Features_DALBase.PendingCustomersPaymentSortList();
+        }
 
-            return pending_Customers_Payment_Sort_Lists;
+        #endregion
+
+        #region Method : Upcoming Reminders 
+
+        public List<Dashbaord_Features_Model.Upcoming_Reminders_Model> UpcomingRemindersList()
+        {
+            return Dashbaord_Features_DALBase.UpcomingRemindersList();
         }
 
         #endregion

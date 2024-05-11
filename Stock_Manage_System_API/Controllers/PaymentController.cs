@@ -229,7 +229,7 @@ namespace Stock_Manage_System_API.Controllers
         /// <returns>A list of paid customers payments as a JSON object.</returns>
         [HttpGet]
         public IActionResult GetPaidCustomersPayments()
-        {
+            {
             List<Show_Payment_Info> show_Payment_Infos = payment_BALBase.GetPaidCustomersPayments();
 
             Dictionary<string, dynamic> res = new Dictionary<string, dynamic>();

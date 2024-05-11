@@ -104,9 +104,7 @@ namespace Stock_Manage_System_API.DAL
 
                 sqlDatabase.AddInParameter(dbCommand, "@REMINDER_DESCRIPTION", SqlDbType.VarChar, reminder_info.ReminderDescription);
 
-                sqlDatabase.AddInParameter(dbCommand, "@REMINDER_SET_EMAIL_ADDRESS", SqlDbType.VarChar, reminder_info.SentEmailAddress);
-
-                sqlDatabase.AddInParameter(dbCommand, "@REMINDER_SET_MOBILE_NO", SqlDbType.VarChar, reminder_info.SentPhoneNo);
+    
 
                 if (Convert.ToBoolean(sqlDatabase.ExecuteNonQuery(dbCommand)))
                 {
@@ -138,34 +136,29 @@ namespace Stock_Manage_System_API.DAL
 
             DbCommand dbCommand = Command_Name("API_DISPLAY_ALL_REMINDER");
 
-            Reminder_Model reminder = new Reminder_Model();
-
             using (IDataReader reader = sqlDatabase.ExecuteReader(dbCommand))
             {
                 while (reader.Read())
                 {
-
-                    reminder.ReminderId = Convert.ToInt32(reader["REMINDER_ID"].ToString());
-
-                    reminder.ReminderDateTime = Convert.ToDateTime(reader["REMINDER_DATE_TIME"].ToString());
-
-                    reminder.ReminderType = reader["REMINDER_TYPE"].ToString();
-
-                    reminder.ReminderCustomType = reader["REMINDER_CUSTOM_TYPE"].ToString();
-
-                    reminder.ReminderDescription = reader["REMINDER_DESCRIPTION"].ToString();
-
-                    reminder.SentEmailAddress = reader["EMAIL_ADDRESS"].ToString();
-
-                    reminder.SentPhoneNo = reader["PHONE_NO"].ToString();
+                    // Move the instantiation inside the loop
+                    Reminder_Model reminder = new Reminder_Model
+                    {
+                        ReminderId = Convert.ToInt32(reader["REMINDER_ID"]),
+                        ReminderDateTime = Convert.ToDateTime(reader["REMINDER_DATE_TIME"]),
+                        ReminderType = reader["REMINDER_TYPE"].ToString(),
+                        ReminderCustomType = reader["REMINDER_CUSTOM_TYPE"].ToString(),
+                        ReminderDescription = reader["REMINDER_DESCRIPTION"].ToString(),
+                        SentEmailAddress = reader["EMAIL_ADDRESS"].ToString(),
+                        SentPhoneNo = reader["PHONE_NO"].ToString()
+                    };
 
                     reminders.Add(reminder);
-
                 }
             }
 
             return reminders;
         }
+
 
         #endregion
 
@@ -181,7 +174,7 @@ namespace Stock_Manage_System_API.DAL
 
             try
             {
-                DbCommand dbCommand = Command_Name("API_DISPLAY_ALL_REMINDER");
+                DbCommand dbCommand = Command_Name("API_REMINDER_DELETE");
                 sqlDatabase.AddInParameter(dbCommand, "@REMINDER_ID", SqlDbType.Int, Reminder_ID);
 
                 if (Convert.ToBoolean(sqlDatabase.ExecuteNonQuery(dbCommand)))

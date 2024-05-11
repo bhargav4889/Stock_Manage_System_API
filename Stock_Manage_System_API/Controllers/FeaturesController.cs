@@ -49,5 +49,40 @@ namespace Stock_Manage_System_API.Controllers
             }
         }
         #endregion
+
+
+        #region Method : Upcoming Reminder
+
+        [HttpGet]
+        public IActionResult UpcomingRemindersList()
+        {
+            Features_BALBase dashboard_Features_BALBase = new Features_BALBase();
+
+            List<Dashbaord_Features_Model.Upcoming_Reminders_Model> upcoming_Reminders = dashboard_Features_BALBase.UpcomingRemindersList();
+
+            Dictionary<string, dynamic> res = new Dictionary<string, dynamic>();
+
+            if (upcoming_Reminders.Count > 0 && upcoming_Reminders != null)
+            {
+                res.Add("status", true);
+
+                res.Add("message", "Data Found !.");
+
+                res.Add("data", upcoming_Reminders);
+
+                return Ok(res);
+            }
+            else
+            {
+                res.Add("status", false);
+
+                res.Add("message", "Data Not Found !.");
+
+                res.Add("data", null);
+
+                return Ok(res);
+            }
+        }
+        #endregion
     }
 }

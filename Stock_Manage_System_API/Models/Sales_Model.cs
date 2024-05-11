@@ -29,6 +29,15 @@
 
         public decimal Rate { get; set; }
 
+        public decimal? CGST { get; set; }
+
+        public decimal? SGST { get; set; }
+
+        public decimal? TotalCGSTPrice { get; set; }
+
+        public decimal? TotalSGSTPrice { get; set; }
+
+        public decimal? WithoutGSTPrice { get; set; }
         public decimal Total_Price { get; set; }
 
         public decimal Receive_Amount { get; set; }
@@ -84,7 +93,7 @@
 
         public string? Payment_Method { get; set; }
 
-        public int Receive_Information_ID { get; set; }
+        public int? Receive_Information_ID { get; set; }
 
         public string? Receive_Account_No { get; set; }
 
@@ -100,6 +109,16 @@
         public decimal? Total_Weight { get; set; }
 
         public decimal Rate { get; set; }
+
+        public decimal? CGST { get; set; }
+
+        public decimal? SGST { get; set; }
+
+        public decimal? TotalCGSTPrice { get; set; }
+
+        public decimal? TotalSGSTPrice { get; set; }
+
+        public decimal? WithoutGSTPrice { get; set; }
 
         public decimal Total_Price { get; set; }
 
