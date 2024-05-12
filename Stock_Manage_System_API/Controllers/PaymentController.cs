@@ -181,7 +181,7 @@ namespace Stock_Manage_System_API.Controllers
 
         #endregion
 
-        #region Section: Display All Pending Customers Payments
+        #region Section: Display All Remaining Customers Payments
 
         /// <summary>
         /// Displays all remaining customers payments.
@@ -320,5 +320,98 @@ namespace Stock_Manage_System_API.Controllers
         }
 
         #endregion
+
+        #region Section : Delete Payment When Status is Pending 
+
+        /// <summary>
+        /// Deletes a pending payment and maintains the associated stock status. This method is called when a payment initially marked as 'pending' needs to be removed, often due to errors or changes before finalizing.
+        /// </summary>
+        /// <param name="Payment_ID">The identifier of the payment to delete.</param>
+        /// <param name="Stock_ID">The identifier of the stock associated with the payment.</param>
+        /// <returns>Returns a success status and message if the operation is successful, otherwise returns an error message.</returns>
+        [HttpDelete]
+        public IActionResult DeletePendingStatusPayment(int Stock_ID)
+        {
+            bool IsSuccess = payment_BALBase.DeletePendingStatusPayment(Stock_ID);
+
+            Dictionary<string, dynamic> res = new Dictionary<string, dynamic>();
+
+            if (IsSuccess)
+            {
+                res.Add("status", true);
+                res.Add("message", "Data Delete Successfully!");
+                return Ok(res);
+            }
+            else
+            {
+                res.Add("status", false);
+                res.Add("message", "Some Error Occured !");
+                return Ok(res);
+            }
+        }
+
+        #endregion
+
+        #region Section : Delete Payment When Status is Remain 
+
+        /// <summary>
+        /// Deletes a partially paid (remaining) payment. Useful for removing payments that were mistakenly or incorrectly entered and are yet to be fully paid.
+        /// </summary>
+        /// <param name="Payment_ID">The identifier of the payment to delete.</param>
+        /// <param name="Stock_ID">The identifier of the stock associated with the payment.</param>
+        /// <returns>Returns a success status and message if the operation is successful, otherwise returns an error message.</returns>
+        [HttpDelete]
+        public IActionResult DeleteRemainStatusPayment(int Payment_ID, int Stock_ID)
+        {
+            bool IsSuccess = payment_BALBase.DeleteRemainStatusPayment(Payment_ID, Stock_ID);
+
+            Dictionary<string, dynamic> res = new Dictionary<string, dynamic>();
+
+            if (IsSuccess)
+            {
+                res.Add("status", true);
+                res.Add("message", "Data Delete Successfully!");
+                return Ok(res);
+            }
+            else
+            {
+                res.Add("status", false);
+                res.Add("message", "Some Error Occured !");
+                return Ok(res);
+            }
+        }
+
+        #endregion
+        #region Section : Delete Payment When Status is Paid 
+
+        /// <summary>
+        /// Deletes a fully paid payment entry and reverts the associated stock status to 'pending'. This action is typically used to correct errors after a payment has been fully processed.
+        /// </summary>
+        /// <param name="Payment_ID">The identifier of the payment to delete.</param>
+        /// <param name="Stock_ID">The identifier of the stock associated with the payment.</param>
+        /// <returns>Returns a success status and message if the operation is successful, otherwise returns an error message.</returns>
+        [HttpDelete]
+        public IActionResult DeletePaidStatusPayment(int Payment_ID, int Stock_ID)
+        {
+            bool IsSuccess = payment_BALBase.DeletePaidStatusPayment(Payment_ID, Stock_ID);
+
+            Dictionary<string, dynamic> res = new Dictionary<string, dynamic>();
+
+            if (IsSuccess)
+            {
+                res.Add("status", true);
+                res.Add("message", "Data Delete Successfully!");
+                return Ok(res);
+            }
+            else
+            {
+                res.Add("status", false);
+                res.Add("message", "Some Error Occured !");
+                return Ok(res);
+            }
+        }
+
+        #endregion
+
     }
 }

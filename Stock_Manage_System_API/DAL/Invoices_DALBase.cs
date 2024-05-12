@@ -456,14 +456,9 @@ namespace Stock_Manage_System_API.DAL
 
                 sqlDatabase.AddInParameter(dbCommand, "@INVOICE_DATE", SqlDbType.Date, onlyDate);
 
-                if (sales_Invoice.InvoiceType == "other" && !string.IsNullOrEmpty(sales_Invoice.OtherInvoiceType))
-                {
-                    sqlDatabase.AddInParameter(dbCommand, "@INVOICE_TYPE", SqlDbType.VarChar, sales_Invoice.OtherInvoiceType);
-                }
-                else
-                {
-                    sqlDatabase.AddInParameter(dbCommand, "@INVOICE_TYPE", SqlDbType.VarChar, sales_Invoice.InvoiceType);
-                }
+
+                sqlDatabase.AddInParameter(dbCommand, "@INVOICE_TYPE", SqlDbType.VarChar, sales_Invoice.InvoiceType);
+
 
                 sqlDatabase.AddInParameter(dbCommand, "@BROKER_NAME", SqlDbType.NVarChar, sales_Invoice.BrokerName);
 

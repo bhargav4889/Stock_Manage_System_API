@@ -139,5 +139,98 @@ namespace Stock_Manage_System_API.BAL
 
         #endregion
 
+
+        #region Section : Delete Payment When Status is Paid 
+
+        /// <summary>
+        /// Deletes a payment entry that has been fully paid and resets the associated stock status to 'pending'.
+        /// This function is utilized when a full payment needs to be reversed due to incorrect details or other issues.
+        /// </summary>
+        /// <param name="Payment_ID">The identifier for the payment to be deleted.</param>
+        /// <param name="Stock_ID">The stock ID associated with the payment, which will be reverted to 'pending' status.</param>
+        /// <returns>True if the operation was successful, otherwise false.</returns>
+        public bool DeletePaidStatusPayment(int Payment_ID, int Stock_ID)
+        {
+            try
+            {
+                if (Convert.ToBoolean(_payment_DAL.DeletePaidStatusPayment(Payment_ID, Stock_ID)))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        #endregion
+
+
+        #region Section : Delete Payment When Status is Remain
+
+        /// <summary>
+        /// Deletes a payment entry that is partially paid and remains due to correction or cancellation requirements.
+        /// Useful when initial payment entries are found to be erroneous and need to be removed completely.
+        /// </summary>
+        /// <param name="Payment_ID">The identifier for the payment to be deleted.</param>
+        /// <param name="Stock_ID">The stock ID associated with the payment.</param>
+        /// <returns>True if the operation was successful, otherwise false.</returns>
+        public bool DeleteRemainStatusPayment(int Payment_ID, int Stock_ID)
+        {
+            try
+            {
+                if (Convert.ToBoolean(_payment_DAL.DeleteRemainStatusPayment(Payment_ID, Stock_ID)))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        #endregion
+
+
+        #region Section : Delete Payment When Status is Pending
+
+        /// <summary>
+        /// Deletes a payment entry that is marked as pending. This function is used when a mistake is identified in the payment details before any part of it has been processed as 'paid'.
+        /// </summary>
+        
+        /// <param name="Stock_ID">The stock ID associated with the payment, whose status will remain unchanged since the payment was not processed.</param>
+        /// <returns>True if the operation was successful, otherwise false.</returns>
+        public bool DeletePendingStatusPayment(int Stock_ID)
+        {
+            try
+            {
+                if (Convert.ToBoolean(_payment_DAL.DeletePendingStatusPayment(Stock_ID)))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        #endregion
+
+
     }
 }

@@ -6,6 +6,7 @@ using Stock_Manage_System_API.Email_Services;
 using Stock_Manage_System_API.SMS_Services;
 using Stock_Manage_System_API.Reminder_Service;
 using Microsoft.AspNetCore.Diagnostics;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,6 +57,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("SpecificPolicy", builder =>
+    {
+        builder.WithOrigins("https://localhost:7021") // Specify the allowed origin
+               .AllowAnyMethod()
+               .AllowAnyHeader()
+               .AllowCredentials();
+});
+});
+
+
 var app = builder.Build();
 
 // Exception Handling Middleware
@@ -87,14 +100,16 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// Static Files Configuration
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(Directory.GetCurrentDirectory(), "Images")),
-        
-    RequestPath = "/Images"
-});
+app.UseCors("SpecificPolicy"); // Apply CORS policy
+
+    // Static Files Configuration
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(
+            Path.Combine(Directory.GetCurrentDirectory(), "Images")),
+
+        RequestPath = "/Images"
+    });
 
 app.UseStaticFiles(new StaticFileOptions
 {

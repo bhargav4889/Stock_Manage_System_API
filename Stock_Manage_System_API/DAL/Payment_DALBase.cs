@@ -137,7 +137,9 @@ namespace Stock_Manage_System_API.DAL
                 {
                     Pending_Customers_Payments pendingCustomerPayment = new Pending_Customers_Payments
                     {
+                       
                         StockId = Convert.ToInt32(reader[0]),
+                      
                         StockDate = Convert.ToDateTime(reader[1]),
                         CustomerId = Convert.ToInt32(reader[2]),
                         CustomerName = reader[3].ToString(),
@@ -145,7 +147,8 @@ namespace Stock_Manage_System_API.DAL
                         ProductName = reader[5].ToString(),
                         Location = reader[6].ToString(),
                         TotalPrice = Convert.ToDecimal(reader[7]),
-                        Payment_Status = reader[8].ToString()
+                        Payment_Status = reader[8].ToString(),
+                        
                     };
                     _Customers_Payment_List.Add(pendingCustomerPayment);
                 }
@@ -412,6 +415,109 @@ namespace Stock_Manage_System_API.DAL
 
 
         #endregion
+
+        #region Section : Delete Payment When Status is Pending 
+
+        /// <summary>
+        /// Deletes a payment record and its associated stock record when the payment status is pending.
+        /// This function is typically used in scenarios where a mistake was made during the entry of the payment or stock details,
+        /// allowing for the correction of data by removing erroneous entries.
+        /// </summary>
+        /// <param name="Stock_ID">The ID of the stock associated with the payment to reset its status.</param>
+        /// <returns>True if the operation was successful, otherwise false.</returns>
+        public bool DeletePendingStatusPayment(int Stock_ID)
+        {
+            try
+            {
+                DbCommand dbCommand = Command_Name("API_PAYMENT_DELETE_OF_PENDING_STATUS");
+          
+                sqlDatabase.AddInParameter(dbCommand, "@STOCK_ID", SqlDbType.Int, Stock_ID);
+                if (Convert.ToBoolean(sqlDatabase.ExecuteNonQuery(dbCommand)))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        #endregion
+
+
+        #region Section : Delete Payment When Status is Remain  
+
+        /// <summary>
+        /// Deletes a payment record and rolls back its effects when the payment status is 'remain'.
+        /// This is used when an initial payment was made incorrectly or a mistake was identified after partial payment was completed.
+        /// It enables the restoration of the initial state before the erroneous payment.
+        /// </summary>
+        /// <param name="Payment_ID">The ID of the payment to delete.</param>
+        /// <param name="Stock_ID">The ID of the stock affected by the payment to restore its prior state.</param>
+        /// <returns>True if the operation was successful, otherwise false.</returns>
+        public bool DeleteRemainStatusPayment(int Payment_ID, int Stock_ID)
+        {
+            try
+            {
+                DbCommand dbCommand = Command_Name("API_PAYMENT_DELETE_OF_REMAIN_STATUS");
+                sqlDatabase.AddInParameter(dbCommand, "@PAYMENT_ID", SqlDbType.Int, Payment_ID);
+                sqlDatabase.AddInParameter(dbCommand, "@STOCK_ID", SqlDbType.Int, Stock_ID);
+                if (Convert.ToBoolean(sqlDatabase.ExecuteNonQuery(dbCommand)))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        #endregion
+
+        #region Section : Delete Payment When Status is Paid 
+
+        /// <summary>
+        /// Deletes a fully paid payment record and resets its associated stock record to 'pending' status.
+        /// This function is used when a payment is completed in full but later found to be erroneous.
+        /// It provides a mechanism to roll back the payment status to pending, allowing for corrections or re-assessment.
+        /// </summary>
+        /// <param name="Payment_ID">The ID of the payment to delete.</param>
+        /// <param name="Stock_ID">The ID of the stock associated with the payment, which will have its status reset to pending.</param>
+        /// <returns>True if the operation was successful, otherwise false.</returns>
+        public bool DeletePaidStatusPayment(int Payment_ID, int Stock_ID)
+        {
+            try
+            {
+                DbCommand dbCommand = Command_Name("API_PAYMENT_DELETE_OF_PAID_STATUS");
+                sqlDatabase.AddInParameter(dbCommand, "@PAYMENT_ID", SqlDbType.Int, Payment_ID);
+                sqlDatabase.AddInParameter(dbCommand, "@STOCK_ID", SqlDbType.Int, Stock_ID);
+                if (Convert.ToBoolean(sqlDatabase.ExecuteNonQuery(dbCommand)))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        #endregion
+
 
     }
 }

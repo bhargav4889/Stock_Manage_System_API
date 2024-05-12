@@ -170,6 +170,7 @@ namespace Stock_Manage_System_API.Models
 
     public class Pending_Customers_Payments
     {
+        public int PaymentId { get; set; }
         public int StockId { get; set; }
 
         public DateTime StockDate { get; set; }

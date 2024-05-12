@@ -196,9 +196,8 @@ namespace Stock_Manage_System_API.DAL
                             Sale_Info.Total_Price = Convert.ToDecimal(reader["TOTAL_AMOUNT"]);
                             Sale_Info.Receive_Amount = Convert.ToDecimal(reader["RECEIVE_AMOUNT"]);
                             Sale_Info.Discount = reader["DISCOUNT"] is DBNull ? null : Convert.ToDecimal(reader["DISCOUNT"]);
-                            bool isFullPaymentReceive = !reader.IsDBNull(reader.GetOrdinal("IS_FULL_AMOUNT_RECEIVE")) && reader.GetBoolean(reader.GetOrdinal("IS_FULL_AMOUNT_RECEIVE"));
-                            Sale_Info.IsFullPaymentReceive = isFullPaymentReceive; // Corrected boolean logic
-
+                          
+                            Sale_Info.IsFullPaymentReceive = reader["IS_FULL_AMOUNT_RECEIVE"].ToString();
                             Sale_Info.Payment_Method = reader["RECEIVE_PAYMENT_METHOD"].ToString();
                             Sale_Info.Deducted_Amount = reader["DEDUCT_AMOUNT"] is DBNull ? null : Convert.ToDecimal(reader["DEDUCT_AMOUNT"].ToString());
 

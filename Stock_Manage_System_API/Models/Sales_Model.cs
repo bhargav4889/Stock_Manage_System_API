@@ -17,7 +17,7 @@
 
         public int Receive_Bank_Id { get; set; }
 
-        public int Receive_Information_Id { get; set; }
+        public int? Receive_Information_Id { get; set; }
 
 
         public decimal? Bags { get; set; }
@@ -46,7 +46,7 @@
 
         public decimal? Deducted_Amount { get; set; }
 
-        public bool IsFullPaymentReceive { get; set; }
+        public string? IsFullPaymentReceive { get; set; }
 
 
 
@@ -128,7 +128,7 @@
 
         public decimal? Deducted_Amount { get; set; }
 
-        public bool IsFullPaymentReceive { get; set; }
+        public string? IsFullPaymentReceive { get; set; }
 
         public DateTime? Remain_Payment_Date { get; set; }
 

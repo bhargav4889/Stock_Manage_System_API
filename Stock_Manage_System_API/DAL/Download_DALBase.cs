@@ -428,7 +428,7 @@ namespace Stock_Manage_System_API.DAL
                 row["Receive-Amount"] = sale.Total_Price.ToString("C");
                 row["Receive-Payment-Method"] = sale.Payment_Method;
                 row["Discount"] = sale.Discount.HasValue ? sale.Discount.ToString() : "--";
-                row["Is-FullPayment-Receive"] = sale.IsFullPaymentReceive ? "Yes" : "No";
+                row["Is-FullPayment-Receive"] = sale.ToString();
                 row["Remain-Payment-Date"] = sale.Remain_Payment_Date.HasValue ? sale.Remain_Payment_Date.Value.ToString("dd/MM/yyyy"): "--";
                 row["Remain-Amount"] = sale.Receive_Remain_Amount.HasValue ? sale.Receive_Remain_Amount.Value.ToString("C") : "--";
                 row["Remain-Payment-Method"] = string.IsNullOrEmpty(sale.Remain_Payment_Method) ? "--" : sale.Remain_Payment_Method;
