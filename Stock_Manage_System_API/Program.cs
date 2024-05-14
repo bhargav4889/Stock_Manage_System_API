@@ -7,6 +7,9 @@ using Stock_Manage_System_API.SMS_Services;
 using Stock_Manage_System_API.Reminder_Service;
 using Microsoft.AspNetCore.Diagnostics;
 using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+using Stock_Manage_System_API.BAL;
+using Stock_Manage_System_API.DAL;
+using Stock_Manage_System_API.Login_Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,11 +38,19 @@ builder.Services.AddTransient<ISmsSender>(s => new SmsSender(
     builder.Configuration["TwilioSettings:PhoneNumber"]
 ));
 
+builder.Services.AddScoped<JWT_Service>();
+
+
 // Register ReminderService as Scoped
 builder.Services.AddScoped<ReminderService>();
 
 // Register Background Services
 builder.Services.AddHostedService<ReminderBackgroundProcess>();
+
+// Dependency Injection for DAL and BAL
+// Dependency Injection for DAL and BAL
+builder.Services.AddScoped<IAuthDAL, Auth_DALBase>(); // Register AuthDAL
+builder.Services.AddScoped<IAuthBAL, Auth_BALBase>(); // Register AuthBAL
 
 // JWT Configuration
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
