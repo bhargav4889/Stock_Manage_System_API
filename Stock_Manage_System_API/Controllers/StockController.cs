@@ -1,4 +1,5 @@
 ﻿using Azure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Stock_Manage_System_API.BAL;
 using Stock_Manage_System_API.Models;
@@ -29,6 +30,7 @@ namespace Stock_Manage_System_API.Controllers
         /// </summary>
         /// <returns>An IActionResult containing either the list of stocks or a not found error.</returns>
         [HttpGet]
+        [Authorize]
         public IActionResult GetAllPurchaseStocks()
         {
             List<Purchase_Stock>? stocks_List = _stock_BAL.DisplayAllPurchaseStock();

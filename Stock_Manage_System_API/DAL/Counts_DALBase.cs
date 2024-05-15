@@ -93,6 +93,9 @@ namespace Stock_Manage_System_API.DAL
                         case "PURCHASE_STOCK":
                             allCountsModel.AmountOfPurchasedStock = totalPrice;
                             break;
+                        case "SALE_STOCK":
+                            allCountsModel.AmountOfSaleStock = totalPrice;
+                            break;
                         case "TOTAL_BAGS":
                             allCountsModel.TotalBags = count;
                             break;

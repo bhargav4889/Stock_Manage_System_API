@@ -66,6 +66,103 @@ namespace Stock_Manage_System_API.DAL
             return user_info;
         }
 
+
+        public User_Model GetAuthUserByEmail(string email)
+        {
+            DbCommand dbCommand = Command_Name("API_GET_AUTH_BY_EMAIL");
+            sqlDatabase.AddInParameter(dbCommand, "@Email", SqlDbType.VarChar, email);
+
+            User_Model user_info = null;
+
+            using (IDataReader dataReader = sqlDatabase.ExecuteReader(dbCommand))
+            {
+                if (dataReader.Read())
+                {
+                    user_info = new User_Model
+                    {
+                        Userid = Convert.ToInt32(dataReader["AUTH_ID"]),
+                        Username = dataReader["AUTH_NAME"].ToString(),
+                        Emailaddress = dataReader["AUTH_EMAIL"].ToString()
+                    };
+                }
+            }
+
+            return user_info;
+        }
+
+
+
+
         #endregion
+
+
+
+        public bool SavePasswordResetToken(string email, string token)
+        {
+            DbCommand dbCommand = Command_Name("API_SAVE_PASSWORD_RESET_TOKEN");
+            sqlDatabase.AddInParameter(dbCommand, "@Email", SqlDbType.VarChar, email);
+            sqlDatabase.AddInParameter(dbCommand, "@Token", SqlDbType.VarChar, token);
+            sqlDatabase.AddInParameter(dbCommand, "@Expiration", SqlDbType.DateTime, DateTime.Now.AddHours(1)); // Token expiration set to 1 hour
+
+            int result = sqlDatabase.ExecuteNonQuery(dbCommand);
+            return result > 0;
+        }
+
+
+
+        public bool ValidatePasswordResetToken(string email, string token)
+        {
+            using (DbCommand dbCommand = Command_Name("API_VALIDATE_PASSWORD_RESET_TOKEN"))
+            {
+                sqlDatabase.AddInParameter(dbCommand, "@Email", SqlDbType.VarChar, email);
+                sqlDatabase.AddInParameter(dbCommand, "@Token", SqlDbType.VarChar, token);
+
+                using (IDataReader dataReader = sqlDatabase.ExecuteReader(dbCommand))
+                {
+                    if (dataReader.Read())
+                    {
+                        DateTime expiration = dataReader.GetDateTime(dataReader.GetOrdinal("EXPIRATION"));
+                       
+                        return expiration > DateTime.UtcNow;
+                    }
+                }
+            }
+            return false;
+        }
+    
+
+
+        public bool ChangePassword(string email, string newPassword)
+        {
+            try
+            {
+                DbCommand dbCommand = Command_Name("API_AUTH_CHANGE_PASSWORD");
+                sqlDatabase.AddInParameter(dbCommand, "@Email", SqlDbType.VarChar, email);
+                sqlDatabase.AddInParameter(dbCommand, "@NewPassword", SqlDbType.VarChar, newPassword);
+
+                int rowsAffected = sqlDatabase.ExecuteNonQuery(dbCommand);
+                return rowsAffected > 0;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it as necessary
+                throw new Exception("Error changing password", ex);
+            }
+        }
+
+
+        public bool DeleteToken(string email, string token)
+        {
+            using (DbCommand dbCommand = sqlDatabase.GetStoredProcCommand("API_DELETE_TOKEN"))
+            {
+                sqlDatabase.AddInParameter(dbCommand, "@Email", SqlDbType.VarChar, email);
+                sqlDatabase.AddInParameter(dbCommand, "@Token", SqlDbType.VarChar, token);
+
+                int result = sqlDatabase.ExecuteNonQuery(dbCommand);
+                return result > 0;
+            }
+        }
+
+       
     }
 }

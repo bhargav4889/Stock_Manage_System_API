@@ -27,6 +27,7 @@ namespace Stock_Manage_System_API.Controllers
         /// Retrieves all customers from the database.
         /// </summary>
         /// <returns>A list of all customers or a message indicating no data was found.</returns>
+      /*  [Authorize]*/
         [HttpGet]
         public IActionResult GetAllCustomers()
         {

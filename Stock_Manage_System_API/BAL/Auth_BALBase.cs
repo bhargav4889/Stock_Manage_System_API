@@ -29,5 +29,35 @@ namespace Stock_Manage_System_API.BAL
         {
             return _authDAL.AuthUser(authInfo);
         }
+
+        public User_Model GetAuthUserByEmail(string email)
+        {
+            return _authDAL.GetAuthUserByEmail(email);
+        }
+
+        public bool SavePasswordResetToken(string email, string token)
+        {
+            return _authDAL.SavePasswordResetToken(email, token);
+        }
+
+        public bool ValidatePasswordResetToken(string email, string token)
+        {
+            return _authDAL.ValidatePasswordResetToken(email, token);
+        }
+
+        public bool ChangePassword(string email, string newPassword)
+        {
+            return _authDAL.ChangePassword(email, newPassword);
+        }
+
+        public bool ValidateAndDeleteToken(string email, string token)
+        {
+            if (_authDAL.ValidatePasswordResetToken(email, token))
+            {
+                return _authDAL.DeleteToken(email, token);
+            }
+            return false;
+        }
+
     }
 }

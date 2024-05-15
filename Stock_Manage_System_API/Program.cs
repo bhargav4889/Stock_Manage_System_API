@@ -10,6 +10,7 @@ using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using Stock_Manage_System_API.BAL;
 using Stock_Manage_System_API.DAL;
 using Stock_Manage_System_API.Login_Service;
+using Stock_Manage_System_API.ResetPassword_Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +42,7 @@ builder.Services.AddTransient<ISmsSender>(s => new SmsSender(
 builder.Services.AddScoped<JWT_Service>();
 
 
+
 // Register ReminderService as Scoped
 builder.Services.AddScoped<ReminderService>();
 
@@ -51,6 +53,10 @@ builder.Services.AddHostedService<ReminderBackgroundProcess>();
 // Dependency Injection for DAL and BAL
 builder.Services.AddScoped<IAuthDAL, Auth_DALBase>(); // Register AuthDAL
 builder.Services.AddScoped<IAuthBAL, Auth_BALBase>(); // Register AuthBAL
+
+
+builder.Services.AddScoped<IPasswordResetService, PasswordResetService>();
+
 
 // JWT Configuration
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -67,6 +73,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
     });
+
+
+
 
 builder.Services.AddCors(options =>
 {
