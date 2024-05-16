@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
+using System.Text;
 using Microsoft.Extensions.Configuration;
 using Stock_Manage_System_API.Email_Services;
 using Stock_Manage_System_API.SMS_Services;
@@ -76,9 +77,24 @@ namespace Stock_Manage_System_API.Reminder_Service
             {
                 string email = row["EMAIL_ADDRESS"].ToString();
                 string subject = $"Reminder! - {row["REMINDER_TYPE"].ToString()}";
-                string body = $"Your reminder for {row["REMINDER_DESCRIPTION"].ToString()}";
+                string addtionaltypeinfo = row["REMINDER_CUSTOM_TYPE"].ToString();
 
-                body += $"\n\nAdditional Type Information: {row["REMINDER_CUSTOM_TYPE"].ToString()}";
+                // Construct the HTML body
+                StringBuilder bodyBuilder = new StringBuilder();
+                bodyBuilder.AppendLine("<html><body>");
+                bodyBuilder.AppendLine($"<h2>Reminder: {row["REMINDER_DESCRIPTION"].ToString()}</h2>");
+                bodyBuilder.AppendLine("<p>Dear User,</p>");
+                bodyBuilder.AppendLine("<p>This is a friendly reminder for the following:</p>");
+                bodyBuilder.AppendLine($"<p><strong>Reminder Type:</strong> {row["REMINDER_TYPE"].ToString()}</p>");
+                bodyBuilder.AppendLine($"<p><strong>Description:</strong> {row["REMINDER_DESCRIPTION"].ToString()}</p>");
+                if (addtionaltypeinfo != null || string.IsNullOrEmpty(addtionaltypeinfo))
+                {
+                    bodyBuilder.AppendLine($"<p><strong>Additional Type Information:</strong> {row["REMINDER_CUSTOM_TYPE"].ToString()}</p>");
+                }
+                bodyBuilder.AppendLine("<p>Thank you,</p>");
+                bodyBuilder.AppendLine("</body></html>");
+
+                string body = bodyBuilder.ToString();
 
                 await _emailSender.SendEmailAsync(email, subject, body);
             }

@@ -126,7 +126,7 @@ namespace Stock_Manage_System_API.Email_Services
             if (actionsData != null && actionsData.Rows.Count > 0)
             {
                 string subject = $"Daily Reporting - {DateTime.Now:yyyy-MM-dd}";
-                string body = "Attached is your daily report of the recent activities.";
+                string body = "Here Previous Activity Reports.";
 
                 // Call the method to create PDF and get the attachment and MemoryStream
                 var (attachment, memoryStream) = await Create_Reporting_PDF(actionsData);
