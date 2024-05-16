@@ -9,6 +9,7 @@ namespace Stock_Manage_System_API.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
+    [Authorize]
     public class CustomersController : Controller
     {
         private readonly Customers_BALBase _customers_BALBase;

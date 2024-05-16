@@ -11,6 +11,7 @@ namespace Stock_Manage_System_API.Controllers
     /// </summary>
     [ApiController]
     [Route("api/[controller]/[action]")]
+    [Authorize]
     public class StockController : Controller
     {
         private readonly Stock_BALBase _stock_BAL;

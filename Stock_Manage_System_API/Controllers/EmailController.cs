@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 using Stock_Manage_System_API.Email_Services;
 
@@ -9,6 +10,7 @@ namespace Stock_Manage_System_API.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
+    [Authorize]
     public class EmailController : Controller
     {
         private IEmailSender _emailSender;

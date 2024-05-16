@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Stock_Manage_System_API.BAL;
 using Stock_Manage_System_API.Models;
 using System.Net;
@@ -10,7 +11,7 @@ namespace Stock_Manage_System_API.Controllers
     /// </summary>
     [ApiController]
     [Route("api/[controller]/[action]")]
-
+    [Authorize]
     public class BankController : Controller
     {
         /// <summary>

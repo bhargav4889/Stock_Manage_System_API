@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Stock_Manage_System_API.BAL;
 using Stock_Manage_System_API.DAL;
 using Stock_Manage_System_API.Models;
@@ -9,6 +10,7 @@ namespace Stock_Manage_System_API.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
+    [Authorize]
     public class DownloadController : Controller
     {
         private readonly Download_BALbase download_BALbase = new Download_BALbase();

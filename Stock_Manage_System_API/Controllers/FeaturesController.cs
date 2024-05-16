@@ -1,6 +1,7 @@
 ﻿/// <summary>
 /// Represents the Features controller for managing features in the API.
 /// </summary>
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Stock_Manage_System_API.BAL;
 using Stock_Manage_System_API.Models;
@@ -9,6 +10,7 @@ namespace Stock_Manage_System_API.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
+    [Authorize]
     public class FeaturesController : Controller
     {
         /// <summary>

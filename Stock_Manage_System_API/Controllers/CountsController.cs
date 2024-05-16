@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Stock_Manage_System_API.BAL;
 
 using Stock_Manage_System_API.Models;
@@ -10,6 +11,7 @@ namespace Stock_Manage_System_API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class CountsController : Controller
     {
         #region BAL Class Instance
