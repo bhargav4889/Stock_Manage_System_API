@@ -5,12 +5,12 @@ using System.Text;
 using Stock_Manage_System_API.Email_Services;
 using Stock_Manage_System_API.SMS_Services;
 using Stock_Manage_System_API.Reminder_Service;
-using Microsoft.AspNetCore.Diagnostics;
-using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using Stock_Manage_System_API.BAL;
 using Stock_Manage_System_API.DAL;
 using Stock_Manage_System_API.Login_Service;
 using Stock_Manage_System_API.ResetPassword_Service;
+using Microsoft.AspNetCore.Diagnostics;
+using Stock_Manage_System_API;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,24 +39,25 @@ builder.Services.AddTransient<ISmsSender>(s => new SmsSender(
     builder.Configuration["TwilioSettings:PhoneNumber"]
 ));
 
+// Register JWT Service
 builder.Services.AddScoped<JWT_Service>();
-
-
 
 // Register ReminderService as Scoped
 builder.Services.AddScoped<ReminderService>();
 
+// Register DailyEmailService
+builder.Services.AddScoped<DailyEmailService>();
+
 // Register Background Services
+builder.Services.AddHostedService<DailyEmailBackgroundService>();
 builder.Services.AddHostedService<ReminderBackgroundProcess>();
 
 // Dependency Injection for DAL and BAL
-// Dependency Injection for DAL and BAL
-builder.Services.AddScoped<IAuthDAL, Auth_DALBase>(); // Register AuthDAL
-builder.Services.AddScoped<IAuthBAL, Auth_BALBase>(); // Register AuthBAL
+builder.Services.AddScoped<IAuthDAL, Auth_DALBase>();
+builder.Services.AddScoped<IAuthBAL, Auth_BALBase>();
 
-
+// Register Password Reset Service
 builder.Services.AddScoped<IPasswordResetService, PasswordResetService>();
-
 
 // JWT Configuration
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -74,20 +75,16 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-
-
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("SpecificPolicy", builder =>
     {
-        builder.WithOrigins("https://localhost:7021") // Specify the allowed origin
+        builder.WithOrigins("https://localhost:7021")
                .AllowAnyMethod()
                .AllowAnyHeader()
                .AllowCredentials();
+    });
 });
-});
-
 
 var app = builder.Build();
 
@@ -120,22 +117,20 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.UseCors("SpecificPolicy"); // Apply CORS policy
+app.UseCors("SpecificPolicy");
 
-    // Static Files Configuration
-    app.UseStaticFiles(new StaticFileOptions
-    {
-        FileProvider = new PhysicalFileProvider(
-            Path.Combine(Directory.GetCurrentDirectory(), "Images")),
-
-        RequestPath = "/Images"
-    });
+// Static Files Configuration
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "Images")),
+    RequestPath = "/Images"
+});
 
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(
         Path.Combine(Directory.GetCurrentDirectory(), "Fonts")),
-
     RequestPath = "/Fonts"
 });
 

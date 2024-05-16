@@ -425,11 +425,13 @@ namespace Stock_Manage_System_API.DAL
                 row["Rate"] = sale.Rate;
                 row["Weight"] = sale.Total_Weight.Value.ToString();
                 row["Total-Amount"] = sale.Total_Price.ToString("C");
-                row["Receive-Amount"] = sale.Total_Price.ToString("C");
-                row["Receive-Payment-Method"] = sale.Payment_Method;
-                row["Discount"] = sale.Discount.HasValue ? sale.Discount.ToString() : "--";
-                row["Is-FullPayment-Receive"] = sale.ToString();
-                row["Remain-Payment-Date"] = sale.Remain_Payment_Date.HasValue ? sale.Remain_Payment_Date.Value.ToString("dd/MM/yyyy"): "--";
+                row["Receive-Amount"] = sale.Receive_Amount.ToString("C");
+                row["Receive-Payment-Method"] = string.IsNullOrEmpty(sale.Payment_Method) ? "--" : sale.Payment_Method;
+                row["Discount"] = sale.Discount != 0 ? sale.Discount?.ToString("C") : "--";
+                row["Is-FullPayment-Receive"] = sale.IsFullPaymentReceive.ToString();
+                // Assuming `sale.Remain_Payment_Date` is of type `DateTime?` (nullable DateTime)
+                row["Remain-Payment-Date"] = sale.Remain_Payment_Date.HasValue ? sale.Remain_Payment_Date.Value.ToString("dd/MM/yyyy") : "--";  
+
                 row["Remain-Amount"] = sale.Receive_Remain_Amount.HasValue ? sale.Receive_Remain_Amount.Value.ToString("C") : "--";
                 row["Remain-Payment-Method"] = string.IsNullOrEmpty(sale.Remain_Payment_Method) ? "--" : sale.Remain_Payment_Method;
                 row["Deducted-Amount"] = sale.Deducted_Amount.HasValue ? sale.Deducted_Amount.Value.ToString("C") : "--";

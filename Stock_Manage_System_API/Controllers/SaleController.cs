@@ -80,7 +80,7 @@ namespace Stock_Manage_System_API.Controllers
 
             Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();
 
-            if(sales.Count > 0)
+            if (sales.Count > 0)
             {
                 response.Add("status", true);
                 response.Add("message", "data found !");
@@ -129,9 +129,9 @@ namespace Stock_Manage_System_API.Controllers
 
         [HttpGet("{Sale_ID}&{Customer_ID}")]
 
-        public IActionResult GetSaleAndCustomerDetails(int Sale_ID ,int Customer_ID)
+        public IActionResult GetSaleAndCustomerDetails(int Sale_ID, int Customer_ID)
         {
-            Sale_Customer_Combied_Model sale = sales_BALBase.GetSaleByCustomerAndSaleID(Sale_ID,Customer_ID);
+            Sale_Customer_Combied_Model sale = sales_BALBase.GetSaleByCustomerAndSaleID(Sale_ID, Customer_ID);
 
             Dictionary<string, dynamic> response = new Dictionary<string, dynamic>();
 

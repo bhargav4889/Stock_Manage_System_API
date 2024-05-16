@@ -386,7 +386,7 @@ namespace Stock_Manage_System_API.DAL
                     Sale_Info.sale.TotalCGSTPrice = Convert.ToDecimal(reader["TOTAL_CGST_PRICE"]);
                     Sale_Info.sale.TotalSGSTPrice = Convert.ToDecimal(reader["TOTAL_SGST_PRICE"]);
                     Sale_Info.sale.WithoutGSTPrice = Convert.ToDecimal(reader["WITHOUT_GST_PRICE"]);
-
+                    Sale_Info.sale.Receive_Information_Id = reader.IsDBNull(reader.GetOrdinal("INFORMATION_ID")) ? (int?)null : Convert.ToInt32(reader["INFORMATION_ID"]);
                     Sale_Info.sale.Total_Weight = Convert.ToDecimal(reader["TOTAL_WEIGHT"]);
                     Sale_Info.sale.Total_Price = Convert.ToDecimal(reader["TOTAL_AMOUNT"]);
                     Sale_Info.sale.Receive_Amount = Convert.ToDecimal(reader["RECEIVE_AMOUNT"]);
@@ -465,7 +465,8 @@ namespace Stock_Manage_System_API.DAL
         {
             List<Show_Sale> List_of_Sales_Info = new List<Show_Sale>();
 
-            DbCommand dbCommand = Command_Name("API_DISPLAY_ALL_SALES");
+            // Create a command to execute the stored procedure
+            DbCommand dbCommand = sqlDatabase.GetStoredProcCommand("API_DISPLAY_ALL_SALES");
 
             using (IDataReader reader = sqlDatabase.ExecuteReader(dbCommand))
             {
@@ -487,7 +488,15 @@ namespace Stock_Manage_System_API.DAL
                         BagPerKg = Convert.ToDecimal(reader["BAG_PER_KG"]),
                         Rate = Convert.ToDecimal(reader["RATE"]),
                         Total_Weight = Convert.ToDecimal(reader["TOTAL_WEIGHT"]),
-                        Total_Price = Convert.ToDecimal(reader["TOTAL_AMOUNT"])
+                        Total_Price = Convert.ToDecimal(reader["TOTAL_AMOUNT"]),
+                        Payment_Method = reader["RECEIVE_PAYMENT_METHOD"].ToString(),
+                        Receive_Amount = Convert.ToDecimal(reader["RECEIVE_AMOUNT"]),
+                        IsFullPaymentReceive = reader["IS_FULL_AMOUNT_RECEIVE"].ToString(),
+                        Discount = Convert.ToDecimal(reader["DISCOUNT"]),
+                        Deducted_Amount = Convert.ToDecimal(reader["DEDUCT_AMOUNT"]),
+                        Remain_Payment_Date = reader["REMAIN_PAYMENT_DATE"] != DBNull.Value ? (DateTime?)Convert.ToDateTime(reader["REMAIN_PAYMENT_DATE"]) : null,
+                        Remain_Payment_Method = reader["REMAIN_PAYMENT_METHOD"] != DBNull.Value ? reader["REMAIN_PAYMENT_METHOD"].ToString() : string.Empty,
+                        Receive_Remain_Amount = reader["REMAIN_AMOUNT"] != DBNull.Value ? Convert.ToDecimal(reader["REMAIN_AMOUNT"]) : 0m
                     };
 
                     List_of_Sales_Info.Add(saleInfo);
@@ -496,6 +505,7 @@ namespace Stock_Manage_System_API.DAL
 
             return List_of_Sales_Info;
         }
+
         #endregion
     }
 }

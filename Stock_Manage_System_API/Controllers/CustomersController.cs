@@ -27,7 +27,7 @@ namespace Stock_Manage_System_API.Controllers
         /// Retrieves all customers from the database.
         /// </summary>
         /// <returns>A list of all customers or a message indicating no data was found.</returns>
-      /*  [Authorize]*/
+        
         [HttpGet]
         public IActionResult GetAllCustomers()
         {
@@ -62,6 +62,7 @@ namespace Stock_Manage_System_API.Controllers
         /// <param name="Customer_Type">The type of the customer.</param>
         /// <returns>Account details including purchased stock information or a message if no data is found.</returns>
         [HttpGet("{Customer_ID}&{Customer_Type}")]
+        [Authorize]
         public IActionResult GetAccountDetails(int Customer_ID, string Customer_Type)
         {
             var customerDetails = _customers_BALBase.RetrieveAccountDetails(Customer_ID, Customer_Type);
