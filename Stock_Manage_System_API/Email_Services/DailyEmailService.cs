@@ -116,6 +116,10 @@ namespace Stock_Manage_System_API.Email_Services
             }
         }
 
+        /// <summary>
+        /// Sends the daily email with the report attached as a PDF.
+        /// </summary>
+        /// <param name="recipientEmail">The email address of the recipient.</param>
         public async Task SendDailyActionsEmailAsync(string recipientEmail)
         {
             DataTable actionsData = await Get_Recent_Actions();
@@ -124,9 +128,17 @@ namespace Stock_Manage_System_API.Email_Services
                 string subject = $"Daily Reporting - {DateTime.Now:yyyy-MM-dd}";
                 string body = "Attached is your daily report of the recent activities.";
 
+                // Call the method to create PDF and get the attachment and MemoryStream
                 var (attachment, memoryStream) = await Create_Reporting_PDF(actionsData);
+
+                // Send email with attachment
                 await _emailSender.SendEmailWithAttachmentAsync(recipientEmail, subject, body, attachment);
             }
+            else
+            {
+                
+            }
         }
+
     }
 }
