@@ -1,15 +1,21 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Stock_Manage_System_API.Email_Services;
-using Stock_Manage_System_API.SMS_Services;
-using Stock_Manage_System_API.Reminder_Service;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.Extensions.FileProviders;
 using Stock_Manage_System_API.BAL;
 using Stock_Manage_System_API.DAL;
+using Stock_Manage_System_API.Email_Services;
 using Stock_Manage_System_API.Login_Service;
+using Stock_Manage_System_API.Reminder_Service;
 using Stock_Manage_System_API.ResetPassword_Service;
-using Microsoft.AspNetCore.Diagnostics;
+using Stock_Manage_System_API.SMS_Services;
 using Stock_Manage_System_API;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -79,7 +85,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("SpecificPolicy", builder =>
     {
-        builder.WithOrigins("https://localhost:7021")
+        builder.WithOrigins("https://shree-ganesh-agro-management.somee.com/")
                .AllowAnyMethod()
                .AllowAnyHeader()
                .AllowCredentials();
@@ -100,17 +106,8 @@ if (!app.Environment.IsDevelopment())
     }));
 }
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-if (!app.Environment.IsDevelopment())
-{
-    app.UseHttpsRedirection();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -119,19 +116,36 @@ app.MapControllers();
 
 app.UseCors("SpecificPolicy");
 
-// Static Files Configuration
-app.UseStaticFiles(new StaticFileOptions
+// Function to configure static files for a given directory and request path
+void ConfigureStaticFiles(string directoryName, string requestPath)
 {
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(Directory.GetCurrentDirectory(), "Images")),
-    RequestPath = "/Images"
-});
+    var currentDirectory = Directory.GetCurrentDirectory();
+    var directoryPath = Path.Combine(currentDirectory, directoryName);
 
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(
-        Path.Combine(Directory.GetCurrentDirectory(), "Fonts")),
-    RequestPath = "/Fonts"
-});
+    if (!Directory.Exists(directoryPath))
+    {
+        Console.WriteLine($"Warning: The directory '{directoryPath}' does not exist. Creating it now...");
+        Directory.CreateDirectory(directoryPath);
+        Console.WriteLine($"Info: Created directory '{directoryPath}'.");
+    }
+
+    try
+    {
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            FileProvider = new PhysicalFileProvider(directoryPath),
+            RequestPath = requestPath
+        });
+        Console.WriteLine($"Info: Configured static files for '{directoryName}' at '{requestPath}'.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error: Failed to configure static files for '{directoryName}' at '{requestPath}'. Exception: {ex.Message}");
+    }
+}
+
+// Configure static files for Images and Fonts
+ConfigureStaticFiles("Images", "/Images");
+ConfigureStaticFiles("Fonts", "/Fonts");
 
 app.Run();

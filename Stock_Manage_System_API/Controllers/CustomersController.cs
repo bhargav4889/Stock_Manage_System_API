@@ -273,7 +273,7 @@ namespace Stock_Manage_System_API.Controllers
                 res.Add("status", false);
                 res.Add("message", "Data Not Found!");
                 res.Add("data", "No Data!");
-                return Ok(res);
+                return NotFound(res);
             }
         }
 

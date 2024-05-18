@@ -11,7 +11,7 @@ namespace Stock_Manage_System_API.Controllers
     /// </summary>
     [ApiController]
     [Route("api/[controller]/[action]")]
-    [Authorize]
+    [Authorize] 
     public class BankController : Controller
     {
         /// <summary>

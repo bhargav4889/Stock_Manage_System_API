@@ -84,20 +84,24 @@ namespace Stock_Manage_System_API.Reminder_Service
                 bodyBuilder.AppendLine("<html><body>");
                 bodyBuilder.AppendLine($"<h2>Reminder: {row["REMINDER_DESCRIPTION"].ToString()}</h2>");
                 bodyBuilder.AppendLine("<p>Dear User,</p>");
-                bodyBuilder.AppendLine("<p>This is a friendly reminder for the following:</p>");
+                bodyBuilder.AppendLine("<p>This is a your reminder for the following:</p>");
                 bodyBuilder.AppendLine($"<p><strong>Reminder Type:</strong> {row["REMINDER_TYPE"].ToString()}</p>");
                 bodyBuilder.AppendLine($"<p><strong>Description:</strong> {row["REMINDER_DESCRIPTION"].ToString()}</p>");
-                if (addtionaltypeinfo != null || string.IsNullOrEmpty(addtionaltypeinfo))
+
+                // Add "Additional Type Information" only if it is not null or empty
+                if (!string.IsNullOrEmpty(addtionaltypeinfo))
                 {
-                    bodyBuilder.AppendLine($"<p><strong>Additional Type Information:</strong> {row["REMINDER_CUSTOM_TYPE"].ToString()}</p>");
+                    bodyBuilder.AppendLine($"<p><strong>Additional Type Information:</strong> {addtionaltypeinfo}</p>");
                 }
-                bodyBuilder.AppendLine("<p>Thank you,</p>");
+
+                bodyBuilder.AppendLine("<p>Thank you,<br/> Stock Manage System</p>");
                 bodyBuilder.AppendLine("</body></html>");
 
                 string body = bodyBuilder.ToString();
 
                 await _emailSender.SendEmailAsync(email, subject, body);
             }
+
         }
     }
 }

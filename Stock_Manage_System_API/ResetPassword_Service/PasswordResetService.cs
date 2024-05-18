@@ -24,7 +24,7 @@ namespace Stock_Manage_System_API.ResetPassword_Service
 
             var token = Guid.NewGuid().ToString(); // Generate a unique token
             _authBAL.SavePasswordResetToken(email, token);
-            var resetLink = $"https://localhost:7021/Auth/ChangePassword?token={token}&email={email}";
+            var resetLink = $"https://shree-ganesh-agro-management.somee.com/Auth/ChangePassword?token={token}&email={email}";
 
             var message = $"<p>Hello,{user.Username}<br/>Please reset your password by clicking <a href='{resetLink}'>here</a>.</p>";
             await _emailSender.SendEmailAsync(email, "Password Reset", message);
