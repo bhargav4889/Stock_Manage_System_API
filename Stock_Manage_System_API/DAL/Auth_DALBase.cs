@@ -102,11 +102,20 @@ namespace Stock_Manage_System_API.DAL
             DbCommand dbCommand = Command_Name("API_SAVE_PASSWORD_RESET_TOKEN");
             sqlDatabase.AddInParameter(dbCommand, "@Email", SqlDbType.VarChar, email);
             sqlDatabase.AddInParameter(dbCommand, "@Token", SqlDbType.VarChar, token);
-            sqlDatabase.AddInParameter(dbCommand, "@Expiration", SqlDbType.DateTime, DateTime.Now.AddHours(1)); // Token expiration set to 1 hour
+
+            // Convert current UTC time to Indian Standard Time (UTC+5:30)
+            TimeZoneInfo indianZone = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+            DateTime currentTimeUtc = DateTime.UtcNow;
+            DateTime currentTimeIst = TimeZoneInfo.ConvertTimeFromUtc(currentTimeUtc, indianZone);
+
+            // Set expiration time to 10 minutes from current IST time
+            DateTime expirationTimeIst = currentTimeIst.AddMinutes(10);
+            sqlDatabase.AddInParameter(dbCommand, "@Expiration", SqlDbType.DateTime, expirationTimeIst);
 
             int result = sqlDatabase.ExecuteNonQuery(dbCommand);
             return result > 0;
         }
+
 
 
 

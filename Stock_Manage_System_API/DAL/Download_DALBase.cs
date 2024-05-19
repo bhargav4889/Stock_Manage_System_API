@@ -11,6 +11,7 @@ using Stock_Manage_System_API.Models;
 using System.Data;
 using System.Data.Common;
 using System.Drawing;
+using System.Globalization;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Xml.Linq;
@@ -74,8 +75,8 @@ namespace Stock_Manage_System_API.DAL
                 row["Product-Grade"] = invoice.ProductGrade;
                 row["Bags"] = invoice.Bags.HasValue ? invoice.Bags.ToString() : "--";
                 row["Bag-Per-Kg"] = invoice.BagPerKg.HasValue ? invoice.BagPerKg.ToString() : "--";
-                row["Weight"] = invoice.TotalWeight.ToString("C");
-                row["Total-Price"] = invoice.TotalPrice.ToString("C");
+                row["Weight"] = invoice.TotalWeight.ToString("C", new CultureInfo("hi-IN"));
+                row["Total-Price"] = invoice.TotalPrice.ToString("C", new CultureInfo("hi-IN"));
                 row["Vehicle-Name"] = invoice.VehicleName;
                 row["Vehicle-No"] = invoice.VehicleNo;
                 row["Tolat"] = invoice.TolatName;
@@ -134,7 +135,7 @@ namespace Stock_Manage_System_API.DAL
 
 
                 row["Invoice-Type"] = invoice.InvoiceType;
-                row["Broker-Name"] = invoice.BrokerName;
+                row["Broker-Name"] = string.IsNullOrEmpty(invoice.BrokerName) ? "--" : invoice.BrokerName;
                 row["Party-Name"] = invoice.PartyName;
                 row["Party-GSTNO"] = invoice.PartyGstNo;
                 row["Party-Address"] = invoice.PartyAddress;
@@ -145,7 +146,7 @@ namespace Stock_Manage_System_API.DAL
                 row["Weight"] = invoice.TotalWeight;
                 row["SGST"] = invoice.SGST.HasValue ? invoice.SGST.ToString() : "--";
                 row["CGST"] = invoice.CGST.HasValue ? invoice.CGST.ToString() : "--";
-                row["Total-Price"] = invoice.TotalPrice.ToString("C");
+                row["Total-Price"] = invoice.TotalPrice.ToString("C", new CultureInfo("hi-IN"));
                 row["Vehicle-Name"] = invoice.VehicleName;
                 row["Vehicle-No"] = invoice.VehicleNo;
                 row["Driver-Name"] = invoice.DriverName;
@@ -424,17 +425,17 @@ namespace Stock_Manage_System_API.DAL
                 row["Bag-Per-Kg"] = sale.BagPerKg.HasValue ? sale.BagPerKg.ToString() : "--";
                 row["Rate"] = sale.Rate;
                 row["Weight"] = sale.Total_Weight.Value.ToString();
-                row["Total-Amount"] = sale.Total_Price.ToString("C");
-                row["Receive-Amount"] = sale.Receive_Amount.ToString("C");
+                row["Total-Amount"] = sale.Total_Price.ToString("C", new CultureInfo("hi-IN"));
+                row["Receive-Amount"] = sale.Receive_Amount.ToString("C", new CultureInfo("hi-IN"));
                 row["Receive-Payment-Method"] = string.IsNullOrEmpty(sale.Payment_Method) ? "--" : sale.Payment_Method;
-                row["Discount"] = sale.Discount != 0 ? sale.Discount?.ToString("C") : "--";
+                row["Discount"] = sale.Discount != 0 ? sale.Discount?.ToString("C", new CultureInfo("hi-IN")) : "--";
                 row["Is-FullPayment-Receive"] = sale.IsFullPaymentReceive.ToString();
                 // Assuming `sale.Remain_Payment_Date` is of type `DateTime?` (nullable DateTime)
                 row["Remain-Payment-Date"] = sale.Remain_Payment_Date.HasValue ? sale.Remain_Payment_Date.Value.ToString("dd/MM/yyyy") : "--";  
 
-                row["Remain-Amount"] = sale.Receive_Remain_Amount.HasValue ? sale.Receive_Remain_Amount.Value.ToString("C") : "--";
+                row["Remain-Amount"] = sale.Receive_Remain_Amount.HasValue ? sale.Receive_Remain_Amount.Value.ToString("C", new CultureInfo("hi-IN")) : "--";
                 row["Remain-Payment-Method"] = string.IsNullOrEmpty(sale.Remain_Payment_Method) ? "--" : sale.Remain_Payment_Method;
-                row["Deducted-Amount"] = sale.Deducted_Amount.HasValue ? sale.Deducted_Amount.Value.ToString("C") : "--";
+                row["Deducted-Amount"] = sale.Deducted_Amount.HasValue ? sale.Deducted_Amount.Value.ToString("C", new CultureInfo("hi-IN")) : "--";
 
                 dataTable.Rows.Add(row);
             }
@@ -468,7 +469,7 @@ namespace Stock_Manage_System_API.DAL
                 row["Stock-Date"] = payments.StockDate.ToString("dd/MM/yyyy");
                 row["Customer-Name"] = payments.CustomerName;
                 row["Product"] = payments.ProductName;
-                row["Total-Amount"] = payments.TotalPrice.ToString("C");
+                row["Total-Amount"] = payments.TotalPrice.ToString("C", new CultureInfo("hi-IN"));
                 row["Payment-Status"] = payments.Payment_Status;
 
                 dataTable.Rows.Add(row);
@@ -502,9 +503,9 @@ namespace Stock_Manage_System_API.DAL
                 row["Customer-Name"] = payments.Customer_Name;
                 row["Payment-Date"] = payments.Payment_Date.ToString("dd/MM/yyyy");
                 row["Product"] = payments.Product_Name;
-                row["Total-Amount"] = payments.Total_Amount.ToString("C");
-                row["Paid-Amount"] = payments.Paid_Amount.ToString("C");
-                row["Remain-Amount"] = payments.Remain_Amount.ToString("C");
+                row["Total-Amount"] = payments.Total_Amount.ToString("C", new CultureInfo("hi-IN"));
+                row["Paid-Amount"] = payments.Paid_Amount.ToString("C", new CultureInfo("hi-IN"));
+                row["Remain-Amount"] = payments.Remain_Amount.ToString("C", new CultureInfo("hi-IN"));
                 row["Payment-Method"] = payments.First_Payment_Method;
                 row["Payment-Status"] = payments.Remain_Payment_Status;
 
@@ -541,20 +542,11 @@ namespace Stock_Manage_System_API.DAL
                 row["Customer-Name"] = payments.CustomerName;
                 row["Payment-Date"] = payments.PaymentDate.ToString("dd/MM/yyyy");
                 row["Product"] = payments.ProductName;
-                row["Total-Amount"] = payments.TotalPrice.ToString("C");
-                row["Paid-Amount"] = payments.AmountPaid.ToString("C");
+                row["Total-Amount"] = payments.TotalPrice.ToString("C", new CultureInfo("hi-IN"));
+                row["Paid-Amount"] = payments.AmountPaid.ToString("C", new CultureInfo("hi-IN"));
 
                 row["First-Payment-Method"] = payments.PaymentMethod;
-
-                // Assuming payments is the object containing the data
-                if (payments.RemainPaymentDate != null)
-                {
-                    row["Remain-Payment-Date"] = payments.RemainPaymentDate.ToString("dd/MM/yyyy");
-                }
-                else
-                {
-                    row["Remain-Payment-Date"] = "--";
-                }
+                row["Remain-Payment-Date"] = payments.RemainPaymentDate.HasValue ? payments.RemainPaymentDate.Value.ToString("dd/MM/yyyy") : "--";
 
                 // Use the null-coalescing operator to simplify the null check
                 row["Remain-Payment-Method"] = payments.RemainPaymentMethod?.ToString() ?? "--";

@@ -26,9 +26,15 @@ namespace Stock_Manage_System_API.ResetPassword_Service
             _authBAL.SavePasswordResetToken(email, token);
             var resetLink = $"https://shree-ganesh-agro-management.somee.com/Auth/ChangePassword?token={token}&email={email}";
 
-            var message = $"<p>Hello,{user.Username}<br/>Please reset your password by clicking <a href='{resetLink}'>here</a>.</p>";
-            await _emailSender.SendEmailAsync(email, "Password Reset", message);
+            var message = $@"
+    <p>Hello, {user.Username},<br/>
+    Please reset your password by clicking <a href='{resetLink}'>here</a>.</p>
+    <br/>
+    <p style='color:red;'>This link is valid for up to 10 minutes.</p>";
+
+            await _emailSender.SendEmailAsync(email, "Change Your Account Password", message);
             return true; // User found and email sent
+
         }
 
 

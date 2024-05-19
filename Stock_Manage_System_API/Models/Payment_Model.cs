@@ -151,7 +151,7 @@ namespace Stock_Manage_System_API.Models
         public int RemainPaymentID { get; set; }
 
         public string RemainBankName { get; set; }
-        public DateTime RemainPaymentDate { get; set; }
+        public DateTime? RemainPaymentDate { get; set; }
         public decimal? RemainPaymentAmount { get; set; }
         public string RemainPaymentMethod { get; set; }
 

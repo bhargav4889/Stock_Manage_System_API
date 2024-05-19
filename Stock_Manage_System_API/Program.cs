@@ -85,7 +85,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("SpecificPolicy", builder =>
     {
-        builder.WithOrigins("https://shree-ganesh-agro-management.somee.com/")
+        builder.WithOrigins("https://shree-ganesh-agro-management.somee.com")
                .AllowAnyMethod()
                .AllowAnyHeader()
                .AllowCredentials();
